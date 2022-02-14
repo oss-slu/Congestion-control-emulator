@@ -11,6 +11,8 @@ import traceback
 from subprocess import PIPE
 from collections import namedtuple
 
+from matplotlib import cm
+
 import arg_parser
 import context
 from helpers import utils, kernel_ctl
@@ -774,6 +776,9 @@ def run_tests(args):
     metadata_path = path.join(args.data_dir, 'pantheon_metadata.json')
     utils.save_test_metadata(meta, metadata_path)
 
+    if args.mode == 'local':
+        setIPv4Forwarding();
+
     # run tests
     for run_id in xrange(args.start_run_id,
                          args.start_run_id + args.run_times):
@@ -783,6 +788,9 @@ def run_tests(args):
         else:
             Test(args, run_id, None).run()
 
+def setIPv4Forwarding():
+    cmd = ['sudo', 'sysctl', '-w', 'net.ipv4.ip_forward=1']
+    call(cmd)
 
 def pkill(args):
     sys.stderr.write('Cleaning up using pkill...'

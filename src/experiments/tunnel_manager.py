@@ -62,7 +62,7 @@ def main():
                         cmd_to_run[i] = t[0] + '=' + path.expanduser(t[1])
 
                 procs[tun_id] = Popen(cmd_to_run, stdin=PIPE,
-                                      stdout=PIPE, preexec_fn=os.setsid)
+                                      stdout=PIPE, preexec_fn=os.setsid, shell=True)
             elif cmd[2] == 'python':  # run python scripts inside tunnel
                 if tun_id not in procs:
                     sys.stderr.write(

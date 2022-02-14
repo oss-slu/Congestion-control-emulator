@@ -58,6 +58,9 @@ run `src/wrappers/<cc>.py deps` to print a dependency list. You could install
 them by yourself, or run
 
 ```
+sh tools/install_deps.sh
+cd third_party/pantheon-tunnel
+sudo ./autogen.sh && ./configure && make -j && sudo make install
 src/experiments/setup.py --install-deps (--all | --schemes "<cc1> <cc2> ...")
 ```
 
