@@ -60,9 +60,9 @@ def main():
                         '--egress-log' in cmd_to_run[i]):
                         t = cmd_to_run[i].split('=')
                         cmd_to_run[i] = t[0] + '=' + path.expanduser(t[1])
-
+                
                 procs[tun_id] = Popen(cmd_to_run, stdin=PIPE,
-                                      stdout=PIPE, preexec_fn=os.setsid, shell=True)
+                                      stdout=PIPE, preexec_fn=os.setsid)
             elif cmd[2] == 'python':  # run python scripts inside tunnel
                 if tun_id not in procs:
                     sys.stderr.write(

@@ -19,18 +19,18 @@ schemes:
     name: PCC-Allegro
     color: cyan
     marker: '>'
-  verus:
-    name: Verus
-    color: skyblue
-    marker: 'H'
+  # verus:
+  #   name: Verus
+  #   color: skyblue
+  #   marker: 'H'
   sprout:
     name: Sprout
     color: orange
     marker: 'p'
-  quic:
-    name: QUIC Cubic
-    color: magenta
-    marker: '8'
+  # quic:
+  #   name: QUIC Cubic
+  #   color: magenta
+  #   marker: '8'
   scream:
     name: SCReAM
     color: pink
@@ -39,14 +39,14 @@ schemes:
     name: WebRTC media
     color: brown
     marker: 'v'
-  copa:
-    name: Copa
-    color: red
-    marker: 'o'
-  taova:
-    name: TaoVA-100x
-    color: gray
-    marker: 'd'
+  # copa:
+  #   name: Copa
+  #   color: red
+  #   marker: 'o'
+  # taova:
+  #   name: TaoVA-100x
+  #   color: gray
+  #   marker: 'd'
   vivace:
     name: PCC-Vivace
     color: blue
