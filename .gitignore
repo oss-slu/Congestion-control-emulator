@@ -128,3 +128,5 @@ Session.vim
 
 # Auto-generated tag files
 tags
+
+third_party/
