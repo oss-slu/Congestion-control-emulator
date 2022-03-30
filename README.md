@@ -67,3 +67,31 @@ Also on line 649, set it to:
 ```cplusplus
 timer.expires_from_now (boost::posix_time::milliseconds(int(timeouttimer)));
 ```
+
+### Pantheon Testing
+
+Some pantheon testing and analysis commands
+```bash
+$ src/experiments/test.py local --all -f=20 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving.down'
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving.2016' --uplink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving-2016.up' --downlink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving-2016.down'
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/TMobile-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-LTE-driving.down '
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.short' --uplink-trace='/usr/share/mahimahi/traces/TMobile-LTE-short.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-LTE-short.down'
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.umts.driving' --uplink-trace='/usr/share/mahimahi/traces/TMobile-UMTS-driving.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-UMTS-driving.down'
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.evdo.driving' --uplink-trace='/usr/share/mahimahi/traces/Verizon-EVDO-driving.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-EVDO-driving.down'
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/Verizon-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-LTE-driving.down' 
+$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.short' --uplink-trace='/usr/share/mahimahi/traces/Verizon-LTE-short.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-LTE-short.down' 
+```
+
+### Pantheon Analysis
+
+Some pantheon analysis commands
+```bash
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving.2016'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.driving'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.short'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.umts.driving'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.evdo.driving'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.driving'
+$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.short'
+```

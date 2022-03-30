@@ -39,10 +39,10 @@ schemes:
     name: WebRTC media
     color: brown
     marker: 'v'
-  # copa:
-  #   name: Copa
-  #   color: red
-  #   marker: 'o'
+  copa:
+    name: Copa
+    color: red
+    marker: 'o'
   # taova:
   #   name: TaoVA-100x
   #   color: gray
@@ -67,3 +67,7 @@ schemes:
     name: FillP-Sheep
     color: violet
     marker: 'D'
+  # mimic:
+  #   name: Mimic
+  #   color: purple
+  #   marker: 'M'
