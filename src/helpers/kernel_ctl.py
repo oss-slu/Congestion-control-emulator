@@ -1,6 +1,6 @@
 import sys
 
-from subprocess_wrappers import call, check_output, check_call
+from helpers.subprocess_wrappers import call, check_output, check_call
 
 
 def load_kernel_module(module):
@@ -11,7 +11,7 @@ def load_kernel_module(module):
 def enable_congestion_control(cc):
     cc_list = check_output('sysctl net.ipv4.tcp_allowed_congestion_control',
                            shell=True)
-    cc_list = cc_list.split('=')[-1].split()
+    cc_list = cc_list.decode().split('=')[-1].split()
 
     # return if cc is already in the allowed congestion control list
     if cc in cc_list:
@@ -24,7 +24,7 @@ def enable_congestion_control(cc):
 
 def check_qdisc(qdisc):
     curr_qdisc = check_output('sysctl net.core.default_qdisc', shell=True)
-    curr_qdisc = curr_qdisc.split('=')[-1].strip()
+    curr_qdisc = curr_qdisc.decode().split('=')[-1].strip()
 
     if qdisc != curr_qdisc:
         sys.exit('Error: current qdisc %s is not %s' % (curr_qdisc, qdisc))

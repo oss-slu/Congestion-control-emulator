@@ -4,7 +4,7 @@ from os import path
 import sys
 
 import arg_parser
-import context
+import helpers.context as context
 from helpers import utils
 from helpers.subprocess_wrappers import call, check_call, check_output
 
@@ -13,7 +13,7 @@ def install_deps(cc_src):
     deps = check_output([cc_src, 'deps']).strip()
 
     if deps:
-        if call('sudo apt-get -y install ' + deps, shell=True) != 0:
+        if call('sudo apt-get -y install ' + deps.decode(), shell=True) != 0:
             sys.stderr.write('Some dependencies failed to install '
                              'but assuming things okay.\n')
 

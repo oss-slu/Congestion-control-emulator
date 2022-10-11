@@ -6,8 +6,7 @@ from subprocess import check_call
 
 import arg_parser
 import context
-from helpers import utils
-
+import helpers.utils as utils
 
 def main():
     args = arg_parser.receiver_first()
