@@ -1,0 +1,335 @@
+[
+  {
+    "No.": 1,
+    "Time": 0,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.26.9",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "51408  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092140651 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 4,
+    "Time": 1.376,
+    "Source": "10.184.236.92",
+    "Destination": "35.190.80.1",
+    "Protocol": "TCP",
+    "Length": 54,
+    "Info": "51353  >  443 [ACK] Seq=1 Ack=1 Win=2048 Len=0"
+  },
+  {
+    "No.": 5,
+    "Time": 1.405,
+    "Source": "10.184.236.92",
+    "Destination": "142.250.112.188",
+    "Protocol": "TCP",
+    "Length": 54,
+    "Info": "51348  >  443 [ACK] Seq=1 Ack=1 Win=2048 Len=0"
+  },
+  {
+    "No.": 6,
+    "Time": 1.423,
+    "Source": "35.190.80.1",
+    "Destination": "10.184.236.92",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "[TCP ACKed unseen segment] 443  >  51353 [ACK] Seq=1 Ack=2 Win=261 Len=0 TSval=280926120 TSecr=1091870856"
+  },
+  {
+    "No.": 7,
+    "Time": 1.439,
+    "Source": "142.250.112.188",
+    "Destination": "10.184.236.92",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "[TCP ACKed unseen segment] 443  >  51348 [ACK] Seq=1 Ack=2 Win=265 Len=0 TSval=3726811230 TSecr=1091780609"
+  },
+  {
+    "No.": 16,
+    "Time": 3.806,
+    "Source": "10.184.236.92",
+    "Destination": "162.159.135.234",
+    "Protocol": "TLSv1.2",
+    "Length": 105,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 17,
+    "Time": 3.865,
+    "Source": "162.159.135.234",
+    "Destination": "10.184.236.92",
+    "Protocol": "TLSv1.2",
+    "Length": 87,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 18,
+    "Time": 3.865,
+    "Source": "10.184.236.92",
+    "Destination": "162.159.135.234",
+    "Protocol": "TCP",
+    "Length": 54,
+    "Info": "51224  >  443 [ACK] Seq=52 Ack=34 Win=4095 Len=0"
+  },
+  {
+    "No.": 22,
+    "Time": 4.423,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092145069 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 27,
+    "Time": 4.847,
+    "Source": "108.157.142.77",
+    "Destination": "10.184.236.92",
+    "Protocol": "TLSv1.2",
+    "Length": 90,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 28,
+    "Time": 4.847,
+    "Source": "10.184.236.92",
+    "Destination": "108.157.142.77",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "51226  >  443 [ACK] Seq=1 Ack=25 Win=2047 Len=0 TSval=1092145491 TSecr=3561473171"
+  },
+  {
+    "No.": 29,
+    "Time": 4.847,
+    "Source": "10.184.236.92",
+    "Destination": "108.157.142.77",
+    "Protocol": "TLSv1.2",
+    "Length": 94,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 30,
+    "Time": 4.858,
+    "Source": "108.157.142.77",
+    "Destination": "10.184.236.92",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "443  >  51226 [ACK] Seq=25 Ack=29 Win=206 Len=0 TSval=3561473182 TSecr=1092145491"
+  },
+  {
+    "No.": 32,
+    "Time": 5.039,
+    "Source": "108.157.142.77",
+    "Destination": "10.184.236.92",
+    "Protocol": "TLSv1.2",
+    "Length": 113,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 33,
+    "Time": 5.039,
+    "Source": "10.184.236.92",
+    "Destination": "108.157.142.77",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "51226  >  443 [ACK] Seq=29 Ack=72 Win=2047 Len=0 TSval=1092145682 TSecr=3561473318"
+  },
+  {
+    "No.": 34,
+    "Time": 5.04,
+    "Source": "10.184.236.92",
+    "Destination": "108.157.142.77",
+    "Protocol": "TLSv1.2",
+    "Length": 116,
+    "Info": "Application Data"
+  },
+  {
+    "No.": 35,
+    "Time": 5.132,
+    "Source": "108.157.142.77",
+    "Destination": "10.184.236.92",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "443  >  51226 [ACK] Seq=72 Ack=79 Win=206 Len=0 TSval=3561473411 TSecr=1092145682"
+  },
+  {
+    "No.": 38,
+    "Time": 5.427,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092146069 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 41,
+    "Time": 5.875,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092146516 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 42,
+    "Time": 5.88,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092146521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 43,
+    "Time": 6.428,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092147069 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 46,
+    "Time": 6.877,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092147517 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 47,
+    "Time": 6.881,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092147521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 48,
+    "Time": 7.429,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092148069 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 49,
+    "Time": 7.879,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092148517 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 50,
+    "Time": 7.883,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092148521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 52,
+    "Time": 8.432,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092149070 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 54,
+    "Time": 8.88,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092149517 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 55,
+    "Time": 8.885,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092149521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 56,
+    "Time": 9.434,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092150070 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 57,
+    "Time": 9.882,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092150518 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 58,
+    "Time": 9.885,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092150521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 59,
+    "Time": 9.984,
+    "Source": "10.184.236.92",
+    "Destination": "185.199.110.133",
+    "Protocol": "TCP",
+    "Length": 54,
+    "Info": "51264  >  443 [ACK] Seq=1 Ack=1 Win=5816 Len=0"
+  },
+  {
+    "No.": 60,
+    "Time": 10.027,
+    "Source": "185.199.110.133",
+    "Destination": "10.184.236.92",
+    "Protocol": "TCP",
+    "Length": 66,
+    "Info": "[TCP ACKed unseen segment] 443  >  51264 [ACK] Seq=1 Ack=2 Win=356 Len=0 TSval=3748726322 TSecr=1091803454"
+  },
+  {
+    "No.": 68,
+    "Time": 10.884,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.53.127",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51410  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092151518 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 69,
+    "Time": 10.888,
+    "Source": "10.184.236.92",
+    "Destination": "10.178.14.225",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51411  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092151521 TSecr=0 SACK_PERM=1"
+  },
+  {
+    "No.": 75,
+    "Time": 11.438,
+    "Source": "10.184.236.92",
+    "Destination": "10.176.0.218",
+    "Protocol": "TCP",
+    "Length": 78,
+    "Info": "[TCP Retransmission] 51409  >  7000 [SYN] Seq=0 Win=65535 Len=0 MSS=1460 WS=64 TSval=1092152071 TSecr=0 SACK_PERM=1"
+  }
+]
