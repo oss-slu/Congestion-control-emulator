@@ -28,6 +28,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
 /* Define to 1 if you have the `memset' function. */
 #define HAVE_MEMSET 1
 
@@ -54,9 +57,6 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
-
-/* Define to 1 if you have the <stdio.h> header file. */
-#define HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -92,10 +92,10 @@
 #define HAVE__BOOL 1
 
 /* path to ip */
-#define IP "/usr/sbin/ip"
+#define IP "/sbin/ip"
 
 /* path to iptables */
-#define IPTABLES "/usr/sbin/iptables"
+#define IPTABLES "/sbin/iptables"
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -104,7 +104,7 @@
 #define MOD_AUTHZ_CORE "/usr/lib/apache2/modules/mod_authz_core.so"
 
 /* path to apache2 mod_deepcgi */
-#define MOD_DEEPCGI "/usr/local/lib//libmod_deepcgi.so"
+/* #undef MOD_DEEPCGI */
 
 /* mod_prefork.so */
 #define MOD_MPM_PREFORK "/usr/lib/apache2/modules/mod_mpm_prefork.so"
@@ -113,10 +113,10 @@
 #define MOD_SSL "/usr/lib/apache2/modules/mod_ssl.so"
 
 /* path to ssl certificate file */
-#define MOD_SSL_CERTIFICATE_FILE "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+//#undef MOD_SSL_CERTIFICATE_FILE
 
 /* path to ssl key */
-#define MOD_SSL_KEY "/etc/ssl/private/ssl-cert-snakeoil.key"
+/* #undef MOD_SSL_KEY */
 
 /* Name of package */
 #define PACKAGE "mahimahi"
@@ -140,11 +140,9 @@
 #define PACKAGE_VERSION "0.98"
 
 /* path to mm-replayserver */
-#define REPLAYSERVER "/usr/local/bin/mm-replayserver"
+/* #undef REPLAYSERVER */
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
-   required in a freestanding environment). This macro is provided for
-   backward compatibility; new code need not use it. */
+/* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
@@ -174,7 +172,7 @@
 /* #undef inline */
 #endif
 
-/* Define as a signed integer type capable of holding a process identifier. */
+/* Define to `int' if <sys/types.h> does not define. */
 /* #undef pid_t */
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
