@@ -92,10 +92,10 @@
 #define HAVE__BOOL 1
 
 /* path to ip */
-#define IP "/sbin/ip"
+#define IP "/usr/sbin/ip"
 
 /* path to iptables */
-#define IPTABLES "/sbin/iptables"
+#define IPTABLES "/usr/sbin/iptables"
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -104,7 +104,7 @@
 #define MOD_AUTHZ_CORE "/usr/lib/apache2/modules/mod_authz_core.so"
 
 /* path to apache2 mod_deepcgi */
-/* #undef MOD_DEEPCGI */
+#define MOD_DEEPCGI "/usr/local/lib//libmod_deepcgi.so"
 
 /* mod_prefork.so */
 #define MOD_MPM_PREFORK "/usr/lib/apache2/modules/mod_mpm_prefork.so"
@@ -113,10 +113,10 @@
 #define MOD_SSL "/usr/lib/apache2/modules/mod_ssl.so"
 
 /* path to ssl certificate file */
-//#undef MOD_SSL_CERTIFICATE_FILE
+#define MOD_SSL_CERTIFICATE_FILE "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 
 /* path to ssl key */
-/* #undef MOD_SSL_KEY */
+#define MOD_SSL_KEY "/etc/ssl/private/ssl-cert-snakeoil.key"
 
 /* Name of package */
 #define PACKAGE "mahimahi"
@@ -140,7 +140,7 @@
 #define PACKAGE_VERSION "0.98"
 
 /* path to mm-replayserver */
-/* #undef REPLAYSERVER */
+#define REPLAYSERVER "/usr/local/bin/mm-replayserver"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

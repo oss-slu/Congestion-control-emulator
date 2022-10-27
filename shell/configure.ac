@@ -120,5 +120,6 @@ AC_CONFIG_FILES([Makefile
 		 src/util/Makefile
 		 src/packet/Makefile
 		 src/frontend/Makefile
+     src/graphing/Makefile
 		 ])
 AC_OUTPUT

@@ -112,7 +112,7 @@
 #undef MOD_SSL
 
 /* path to ssl certificate file */
-//#undef MOD_SSL_CERTIFICATE_FILE
+#undef MOD_SSL_CERTIFICATE_FILE
 
 /* path to ssl key */
 #undef MOD_SSL_KEY
