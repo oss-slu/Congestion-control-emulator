@@ -92,10 +92,10 @@
 #define HAVE__BOOL 1
 
 /* path to ip */
-#define IP "/usr/sbin/ip"
+#define IP "/sbin/ip"
 
 /* path to iptables */
-#define IPTABLES "/usr/sbin/iptables"
+#define IPTABLES "/sbin/iptables"
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
