@@ -180,7 +180,7 @@ class Plot(object):
                 cc_id += 1
 
         for cc in self.cc_schemes:
-            for run_id in xrange(1, 1 + self.run_times):
+            for run_id in range(1, 1 + self.run_times):
                 perf_data[cc][run_id] = perf_data[cc][run_id].get()
 
                 if perf_data[cc][run_id] is None:

@@ -86,7 +86,7 @@ class Test(object):
             self.flow_objs = {}
             cc_src_remote_dir = ''
             if self.mode == 'remote':
-                cc_src_remote_dir = r['base_dir']
+                cc_src_remote_dir = self.r['base_dir']
 
             tun_id = 1
             for flow in args.test_config['flows']:
