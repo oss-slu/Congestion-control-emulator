@@ -37,7 +37,7 @@ make_sure_dir_exists(tmp_dir)
 
 def parse_config():
     with open(path.join(context.src_dir, 'config.yml')) as config:
-        return yaml.load(config)
+        return yaml.load(config, Loader=yaml.Loader)
 
 
 def update_submodules():
@@ -105,7 +105,7 @@ def who_runs_first(cc):
     cc_src = path.join(context.src_dir, 'wrappers', cc + '.py')
 
     cmd = [cc_src, 'run_first']
-    run_first = check_output(cmd).strip()
+    run_first = check_output(cmd).strip().decode("utf-8")
 
     if run_first == 'receiver':
         run_second = 'sender'
@@ -196,7 +196,7 @@ def get_git_summary(mode='local', remote_path=None):
                 '--- remote git summary ---\n%s\n' % remote_git_summary)
             sys.exit('Repository differed between local and remote sides')
 
-    return local_git_summary
+    return local_git_summary.decode("utf-8")
 
 
 def save_test_metadata(meta, metadata_path):
@@ -217,7 +217,7 @@ def save_test_metadata(meta, metadata_path):
 
     with open(metadata_path, 'w') as metadata_fh:
         json.dump(meta, metadata_fh, sort_keys=True, indent=4,
-                  separators=(',', ': '))
+                  separators=[',', ': '] )
 
 
 def get_sys_info():

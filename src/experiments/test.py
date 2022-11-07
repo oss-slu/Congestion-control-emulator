@@ -276,12 +276,12 @@ class Test(object):
         ts_manager = self.ts_manager
 
         while True:
-            running = ts_manager.stdout.readline()
-            if 'tunnel manager is running' in running:
+            running = ts_manager.stdout.readline().decode("utf-8")
+            if "tunnel manager is running" in running:
                 sys.stderr.write(running)
                 break
 
-        ts_manager.stdin.write('prompt [tsm]\n')
+        ts_manager.stdin.write(b'prompt [tsm]\n')
         ts_manager.stdin.flush()
 
         # run tunnel client manager
@@ -300,12 +300,12 @@ class Test(object):
         tc_manager = self.tc_manager
 
         while True:
-            running = tc_manager.stdout.readline()
+            running = tc_manager.stdout.readline().decode("utf-8")
             if 'tunnel manager is running' in running:
                 sys.stderr.write(running)
                 break
 
-        tc_manager.stdin.write('prompt [tcm]\n')
+        tc_manager.stdin.write(b'prompt [tcm]\n')
         tc_manager.stdin.flush()
 
         return ts_manager, tc_manager
