@@ -88,7 +88,7 @@ class PlotThroughputTime(object):
             throughput[flow_id] = []
 
             max_bin_id = max(departures[flow_id].keys())
-            for bin_id in xrange(0, max_bin_id + 1):
+            for bin_id in range(0, max_bin_id + 1):
                 time_sec = (start_ts + bin_id * self.ms_per_bin) / 1000.0
                 clock_time[flow_id].append(time_sec)
 
