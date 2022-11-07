@@ -329,12 +329,12 @@ class Test(object):
                     ts_cmd += ' --interface=' + self.local_if
 
         ts_cmd = 'tunnel %s %s\n' % (tun_id, ts_cmd)
-        ts_manager.stdin.write(ts_cmd)
+        ts_manager.stdin.write(ts_cmd.encode('utf-8'))
         ts_manager.stdin.flush()
 
         # read the command to run tunnel client
         readline_cmd = 'tunnel %s readline\n' % tun_id
-        ts_manager.stdin.write(readline_cmd)
+        ts_manager.stdin.write(readline_cmd.encode('utf-8'))
         ts_manager.stdin.flush()
 
         cmd_to_run_tc = ts_manager.stdout.readline().split()
@@ -349,7 +349,8 @@ class Test(object):
             else:
                 cmd_to_run_tc[1] = self.local_addr
 
-        cmd_to_run_tc_str = ' '.join(cmd_to_run_tc)
+        cmd_to_run_tc_str = ' '.join(i.decode("utf-8")
+                                     for i in cmd_to_run_tc if type(i) is bytes)
 
         if self.server_side == self.sender_side:
             tc_cmd = '%s --ingress-log=%s --egress-log=%s' % (
@@ -383,10 +384,10 @@ class Test(object):
                 sys.stderr.write('Unable to establish tunnel\n')
                 return False
 
-            tc_manager.stdin.write(tc_cmd)
+            tc_manager.stdin.write(tc_cmd.encode("utf-8"))
             tc_manager.stdin.flush()
             while True:
-                tc_manager.stdin.write(readline_cmd)
+                tc_manager.stdin.write(readline_cmd.encode("utf-8"))
                 tc_manager.stdin.flush()
 
                 signal.signal(signal.SIGALRM, utils.timeout_handler)

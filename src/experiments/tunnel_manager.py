@@ -79,7 +79,8 @@ def main():
                     sys.stderr.write(
                         'error: run tunnel client or server first\n')
 
-                sys.stdout.write(procs[tun_id].stdout.readline())
+                sys.stdout.write(
+                    procs[tun_id].stdout.readline().decode('utf-8'))
                 sys.stdout.flush()
             else:
                 sys.stderr.write('unknown command after "tunnel ID": %s\n'
