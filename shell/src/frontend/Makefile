@@ -89,7 +89,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-pc-linux-gnu
 host_triplet = x86_64-pc-linux-gnu
-bin_PROGRAMS = mm-link$(EXEEXT)
+bin_PROGRAMS = mm-link$(EXEEXT) mm-loss$(EXEEXT) mm-delay$(EXEEXT)
 subdir = src/frontend
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -150,6 +150,18 @@ mm_link_DEPENDENCIES = ../util/libutil.a ../packet/libpacket.a \
 mm_link_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(mm_link_LDFLAGS) $(LDFLAGS) -o $@
+am_mm_loss_OBJECTS = lossshell.$(OBJEXT) loss_queue.$(OBJEXT)
+mm_loss_OBJECTS = $(am_mm_loss_OBJECTS)
+mm_loss_DEPENDENCIES = ../util/libutil.a ../packet/libpacket.a
+mm_loss_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(mm_loss_LDFLAGS) $(LDFLAGS) -o $@
+am_mm_delay_OBJECTS = delayshell.$(OBJEXT) delay_queue.$(OBJEXT)
+mm_delay_OBJECTS = $(am_mm_delay_OBJECTS)
+mm_delay_DEPENDENCIES = ../util/libutil.a ../packet/libpacket.a
+mm_delay_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(mm_delay_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -202,8 +214,10 @@ AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(libmod_deepcgi_la_SOURCES) $(mm_link_SOURCES)
-DIST_SOURCES = $(libmod_deepcgi_la_SOURCES) $(mm_link_SOURCES)
+SOURCES = $(libmod_deepcgi_la_SOURCES) $(mm_link_SOURCES) \
+	$(mm_loss_SOURCES) $(mm_delay_SOURCES)
+DIST_SOURCES = $(libmod_deepcgi_la_SOURCES) $(mm_link_SOURCES) \
+	$(mm_loss_SOURCES) $(mm_delay_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -381,6 +395,12 @@ AM_CXXFLAGS = $(PICKY_CXXFLAGS)
 mm_link_SOURCES = linkshell.cc link_queue.hh link_queue.cc
 mm_link_LDADD = -lrt ../util/libutil.a ../packet/libpacket.a ../graphing/libgraph.a $(XCBPRESENT_LIBS) $(XCB_LIBS) $(PANGOCAIRO_LIBS)
 mm_link_LDFLAGS = -pthread
+mm_loss_SOURCES = lossshell.cc loss_queue.hh loss_queue.cc
+mm_loss_LDADD = -lrt ../util/libutil.a ../packet/libpacket.a
+mm_loss_LDFLAGS = -pthread
+mm_delay_SOURCES = delayshell.cc delay_queue.hh delay_queue.cc
+mm_delay_LDADD = -lrt ../util/libutil.a ../packet/libpacket.a
+mm_delay_LDFLAGS = -pthread
 lib_LTLIBRARIES = libmod_deepcgi.la
 libmod_deepcgi_la_SOURCES = mod_deepcgi.c replayserver_filename.cc
 libmod_deepcgi_la_CFLAGS = -I/usr/include/apache2 $(libapr1_CFLAGS)
@@ -510,6 +530,14 @@ mm-link$(EXEEXT): $(mm_link_OBJECTS) $(mm_link_DEPENDENCIES) $(EXTRA_mm_link_DEP
 	@rm -f mm-link$(EXEEXT)
 	$(AM_V_CXXLD)$(mm_link_LINK) $(mm_link_OBJECTS) $(mm_link_LDADD) $(LIBS)
 
+mm-loss$(EXEEXT): $(mm_loss_OBJECTS) $(mm_loss_DEPENDENCIES) $(EXTRA_mm_loss_DEPENDENCIES) 
+	@rm -f mm-loss$(EXEEXT)
+	$(AM_V_CXXLD)$(mm_loss_LINK) $(mm_loss_OBJECTS) $(mm_loss_LDADD) $(LIBS)
+
+mm-delay$(EXEEXT): $(mm_delay_OBJECTS) $(mm_delay_DEPENDENCIES) $(EXTRA_mm_delay_DEPENDENCIES) 
+	@rm -f mm-delay$(EXEEXT)
+	$(AM_V_CXXLD)$(mm_delay_LINK) $(mm_delay_OBJECTS) $(mm_delay_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -520,6 +548,8 @@ include ./$(DEPDIR)/libmod_deepcgi_la-mod_deepcgi.Plo
 include ./$(DEPDIR)/libmod_deepcgi_la-replayserver_filename.Plo
 include ./$(DEPDIR)/link_queue.Po
 include ./$(DEPDIR)/linkshell.Po
+include ./$(DEPDIR)/loss_queue.Po
+include ./$(DEPDIR)/lossshell.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -801,6 +831,10 @@ install-exec-hook:
 
 	chown root $(DESTDIR)$(bindir)/mm-link
 	chmod u+s $(DESTDIR)$(bindir)/mm-link
+	chown root $(DESTDIR)$(bindir)/mm-loss
+	chmod u+s $(DESTDIR)$(bindir)/mm-loss
+	chown root $(DESTDIR)$(bindir)/mm-delay
+	chmod u+s $(DESTDIR)$(bindir)/mm-delay
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

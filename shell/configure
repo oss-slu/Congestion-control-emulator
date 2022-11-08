@@ -595,7 +595,7 @@ PACKAGE_STRING='mahimahi 0.98'
 PACKAGE_BUGREPORT='mahimahi@mit.edu'
 PACKAGE_URL=''
 
-#ac_unique_file="src/frontend/delayshell.cc"
+ac_unique_file="src/frontend/delayshell.cc"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
