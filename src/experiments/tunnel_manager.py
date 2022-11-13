@@ -68,7 +68,7 @@ def main():
                     sys.stderr.write(
                         'error: run tunnel client or server first\n')
 
-                procs[tun_id].stdin.write(cmd_to_run + '\n')
+                procs[tun_id].stdin.write(str(cmd_to_run + '\n').encode("utf-8"))
                 procs[tun_id].stdin.flush()
             elif cmd[2] == 'readline':  # readline from stdout of tunnel
                 if len(cmd) != 3:
