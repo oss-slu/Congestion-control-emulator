@@ -40,6 +40,7 @@ def parse_config():
         return yaml.load(config, Loader=yaml.Loader)
 
 
+
 def update_submodules():
     cmd = 'git submodule update --init --recursive'
     check_call(cmd, shell=True)
@@ -216,8 +217,10 @@ def save_test_metadata(meta, metadata_path):
         meta['downlink_trace'] = path.basename(meta['downlink_trace'])
 
     with open(metadata_path, 'w') as metadata_fh:
-        json.dump(meta, metadata_fh, sort_keys=True, indent=4,
-                  separators=[',', ': '] )
+
+        json.dump(str(meta), metadata_fh, sort_keys=True, indent=4,
+                  separators=(',', ': '))
+
 
 
 def get_sys_info():
