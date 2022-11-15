@@ -23,10 +23,10 @@ schemes:
   #   name: Verus
   #   color: skyblue
   #   marker: 'H'
-  sprout:
-    name: Sprout
-    color: orange
-    marker: 'p'
+  #sprout:
+  #  name: Sprout
+  #  color: orange
+  #  marker: 'p'
   # quic:
   #   name: QUIC Cubic
   #   color: magenta
@@ -35,14 +35,14 @@ schemes:
     name: SCReAM
     color: pink
     marker: '1'
-  #webrtc:
-  #  name: WebRTC media
-  #  color: brown
-  #  marker: 'v'
-  copa:
-    name: Copa
-    color: red
-    marker: 'o'
+  webrtc:
+    name: WebRTC media
+    color: brown
+    marker: 'v'
+  #copa:
+  #  name: Copa
+  #  color: red
+  #  marker: 'o'
   # taova:
   #   name: TaoVA-100x
   #   color: gray
