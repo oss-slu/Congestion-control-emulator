@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''REMOVE ME: Example file to add a new congestion control scheme.
 
@@ -24,7 +24,7 @@ def main():
 
     # [optional] dependencies of Debian packages
     if args.option == 'deps':
-        print 'iperf3 mahimahi mininet build-essential flex bison ifupdown  net-tools python3-dev xterm python3-opengl nvidia-cuda-dev libcudart10.1 mlocate'
+        print ('iperf3 mahimahi mininet build-essential flex bison ifupdown  net-tools python3-dev xterm python3-opengl nvidia-cuda-dev libcudart10.1 mlocate')
         return
 
     # [optional] persistent setup that only needs to be run once
