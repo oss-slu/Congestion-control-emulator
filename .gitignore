@@ -31,9 +31,9 @@ Makefile.in
 /compile
 /src/protobufs/http_record.pb.cc
 /src/protobufs/http_record.pb.h
-/src/frontend/mm-delay
-/src/frontend/mm-loss
-/src/frontend/mm-link
+/shell/src/frontend/mm-delay
+/shell/src/frontend/mm-loss
+/shell/src/frontend/mm-link
 /src/frontend/mm-onoff
 /src/frontend/mm-intermittent
 /src/frontend/mm-meter
