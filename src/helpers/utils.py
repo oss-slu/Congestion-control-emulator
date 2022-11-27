@@ -37,11 +37,9 @@ make_sure_dir_exists(tmp_dir)
 
 def parse_config():
     with open(path.join(context.src_dir, 'config.yml')) as config:
-<<<<<<< HEAD
-        return yaml.load(config, Loader=yaml.Loader)
-=======
+
         return yaml.load(config, Loader = yaml.Loader)
->>>>>>> link_shell
+
 
 
 def update_submodules():
@@ -220,13 +218,10 @@ def save_test_metadata(meta, metadata_path):
         meta['downlink_trace'] = path.basename(meta['downlink_trace'])
 
     with open(metadata_path, 'w') as metadata_fh:
-<<<<<<< HEAD
-        json.dump(meta, metadata_fh, sort_keys=True, indent=4,
-                  separators=[',', ': '] )
-=======
+
         json.dump(str(meta), metadata_fh, sort_keys=True, indent=4,
                   separators=(',', ': '))
->>>>>>> link_shell
+
 
 
 def get_sys_info():

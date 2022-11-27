@@ -231,10 +231,10 @@ class Plot(object):
             ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
 
     def plot_throughput_delay(self, data):
-        min_raw_delay = sys.maxint
-        min_mean_delay = sys.maxint
-        max_raw_delay = -sys.maxint
-        max_mean_delay = -sys.maxint
+        min_raw_delay = sys.maxsize
+        min_mean_delay = sys.maxsize
+        max_raw_delay = -sys.maxsize
+        max_mean_delay = -sys.maxsize
 
         fig_raw, ax_raw = plt.subplots()
         fig_mean, ax_mean = plt.subplots()

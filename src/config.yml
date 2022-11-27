@@ -35,7 +35,6 @@ schemes:
     name: SCReAM
     color: pink
     marker: '1'
-<<<<<<< HEAD
   webrtc:
     name: WebRTC media
     color: brown
@@ -44,16 +43,6 @@ schemes:
   #  name: Copa
   #  color: red
   #  marker: 'o'
-=======
-  #webrtc:
-  #  name: WebRTC media
-  #  color: brown
-  #  marker: 'v'
-  copa:
-    name: Copa
-    color: red
-    marker: 'o'
->>>>>>> link_shell
   # taova:
   #   name: TaoVA-100x
   #   color: gray

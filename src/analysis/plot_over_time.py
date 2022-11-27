@@ -115,7 +115,7 @@ class PlotThroughputTime(object):
                 tunnel_log_path = path.join(
                     self.data_dir, datalink_fmt_str % (cc, run_id))
                 clock_time, throughput = self.parse_tunnel_log(tunnel_log_path)
-
+                
                 min_time = None
                 max_time = None
                 max_tput = None
@@ -165,7 +165,8 @@ class PlotThroughputTime(object):
             'Saved pantheon_throughput_time in %s\n' % self.data_dir)
 
         plt.close('all')
-
+#TODO: Export schemes, clock_time, throughput to a log file for traffic predictions
+        #TODO: Running for all log files
 
 def main():
     args = arg_parser.parse_over_time()
