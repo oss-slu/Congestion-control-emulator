@@ -52,7 +52,7 @@ Makefile.in
 .DS_Store
 
 /tmp/
-
+/out*/
 
 
 ##### Python

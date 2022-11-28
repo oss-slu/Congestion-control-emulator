@@ -1,6 +1,0 @@
-libmod_deepcgi_la-replayserver_filename.lo: replayserver_filename.cc \
- /usr/include/stdc-predef.h ../../config.h
-
-/usr/include/stdc-predef.h:
-
-../../config.h:
