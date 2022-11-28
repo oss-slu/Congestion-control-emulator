@@ -42,24 +42,24 @@ Makefile.in
 /src/frontend/mm-replayserver
 /src/frontend/.libs
 
-/src/shell/.DS_Store
-/src/shell/Makefile.in
-/src/shell/configure.sub
-/src/shell/aclocal.m4
-/src/shell/compile
-/src/shell/config.guess
-/src/shell/Makefile
-/src/shell/Makefile.in
-/src/shell/stamp-h1
-/src/shell/missing
-/src/shell/config.h
-/src/shell/configure
-/src/shell/config.h.in
-/src/shell/config.status
-/src/shell/install-sh
-/src/shell/libtool
-/src/shell/decomp
-/src/shell/ltmain.sh
+/shell/.DS_Store
+/shell/Makefile.in
+/shell/configure.sub
+/shell/aclocal.m4
+/shell/compile
+/shell/config.guess
+/shell/Makefile
+/shell/Makefile.in
+/shell/stamp-h1
+/shell/missing
+/shell/config.h
+/shell/configure
+/shell/config.h.in
+/shell/config.status
+/shell/install-sh
+/shell/libtool
+/shell/decomp
+/shell/ltmain.sh
 
 
 
