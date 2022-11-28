@@ -1,0 +1,18 @@
+# 'mm-tunnelserver' '--ingress-log=/capstone/Congestion-control-emulator/tmp/fillp_sheep_datalink_run1_flow1_uid55e4bcdd-e361-42c3-8425-33bd30e2f4c7.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/fillp_sheep_acklink_run1_flow1_uid55e4bcdd-e361-42c3-8425-33bd30e2f4c7.log.egress' egress: 1669653701187.608
+5154.170 - 0 - 224
+5155.081 - 1 - 224
+5156.073 - 2 - 224
+5157.326 - 3 - 224
+5158.595 - 4 - 224
+5159.483 - 5 - 224
+5160.101 - 6 - 224
+5161.247 - 7 - 224
+5162.109 - 8 - 224
+5163.098 - 9 - 224
+5235.305 - 10 - 116
+5683.231 - 11 - 128
+6166.145 - 12 - 128
+6646.448 - 13 - 128
+7127.215 - 14 - 128
+7584.633 - 15 - 128
+8065.444 - 16 - 128

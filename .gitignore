@@ -8,39 +8,39 @@
 Makefile
 Makefile.in
 
-/INSTALL
-/aclocal.m4
-/ar-lib
-/autom4te.cache
-/config.h
-/config.h.in
-/config.h.in~
-/config.log
-/config.status
-/config.guess
-/config.sub
-/configure
-/depcomp
-/install-sh
-/missing
-/mahimahi-*.tar.gz
-/stamp-h1
-/libtool
-/ltmain.sh
+*/INSTALL
+*/aclocal.m4
+*/ar-lib
+*/autom4te.cache
+*/config.h
+*/config.h.in
+*/config.h.in~
+*/config.log
+*/config.status
+*/config.guess
+*/config.sub
+*/configure
+*/depcomp
+*/install-sh
+*/missing
+*/mahimahi-*.tar.gz
+*/stamp-h1
+*/libtool
+*/ltmain.sh
 
-/compile
-/src/protobufs/http_record.pb.cc
-/src/protobufs/http_record.pb.h
-/src/frontend/mm-delay
-/src/frontend/mm-loss
-/src/frontend/mm-link
-/src/frontend/mm-onoff
-/src/frontend/mm-intermittent
-/src/frontend/mm-meter
-/src/frontend/mm-webrecord
-/src/frontend/mm-webreplay
-/src/frontend/mm-replayserver
-/src/frontend/.libs
+*/compile
+*/src/protobufs/http_record.pb.cc
+*/src/protobufs/http_record.pb.h
+*/src/frontend/mm-delay
+*/src/frontend/mm-loss
+*/src/frontend/mm-link
+*/src/frontend/mm-onoff
+*/src/frontend/mm-intermittent
+*/src/frontend/mm-meter
+*/src/frontend/mm-webrecord
+*/src/frontend/mm-webreplay
+*/src/frontend/mm-replayserver
+*/src/frontend/.libs
 
 
 
@@ -51,8 +51,8 @@ Makefile.in
 .vscode/
 .DS_Store
 
-/tmp/
-/out*/
+*/tmp/
+*/out*/
 
 
 ##### Python

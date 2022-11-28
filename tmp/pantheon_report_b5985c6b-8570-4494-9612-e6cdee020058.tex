@@ -1,0 +1,314 @@
+\documentclass{article}
+\usepackage{pdfpages, graphicx, float}
+\usepackage{tabularx, pdflscape}
+\usepackage{textcomp}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\PantheonFig}[1]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{#1}{\includegraphics[width=\textwidth]{#1}}{Figure is missing}
+\end{figure}}
+
+\begin{document}
+\centerline{\textbf{\large{Pantheon Report}}}
+\vspace{20pt}
+
+Generated at 2022-11-28 07:14:21 (UTC).
+
+Tested in mahimahi: \texttt{mm-link ATT-LTE-driving-2016.up ATT-LTE-driving-2016.down}
+
+Repeated the test of 12 congestion control schemes once.
+
+Each test lasted for 5 seconds running 1 flow.
+
+\begin{verbatim}
+System info:
+Linux 5.15.49-linuxkit
+net.ipv4.tcp_rmem = 4096	131072	6291456
+net.ipv4.tcp_wmem = 4096	16384	4194304
+\end{verbatim}
+
+\begin{verbatim}
+Git summary:
+branch: delay_shell @ 317485de0467b5d0740d6a03462603a5e7811367
+third_party/fillp @ d6da1459332fcee56963885d7eba17e6a32d4519
+third_party/fillp-sheep @ 0e5bb722943babcd2b090d2c64fcd45e12e923f9
+third_party/genericCC @ d0153f8e594aa89e93b032143cedbdfe58e562f4
+ M makefile
+third_party/indigo @ 463d89b09699a57bfdfbae351646df6a60040b90
+third_party/libutp @ b3465b942e2826f2b179eaab4a906ce6bb7cf3cf
+third_party/pantheon-tunnel @ f866d3f58d27afd942717625ee3a354cc2e802bd
+ M configure.ac
+third_party/pcc @ 1afc958fa0d66d18b623c091a55fec872b4981e1
+ M receiver/src/buffer.h
+ M receiver/src/core.cpp
+ M sender/src/buffer.h
+ M sender/src/core.cpp
+third_party/pcc-experimental @ cd43e34e3f5f5613e8acd08fab92c4eb24f974ab
+third_party/proto-quic @ 77961f1a82733a86b42f1bc8143ebc978f3cff42
+ M depot_tools/annotated_gclient.py
+ M depot_tools/gn
+ M proto_quic_tools/sync.sh
+ M src/third_party/protobuf/python/google/protobuf/internal/reflection_test.py
+third_party/scream-reproduce @ f099118d1421aa3131bf11ff1964974e1da3bdb2
+ M src/ScreamClient
+ M src/ScreamServer
+third_party/sprout @ 366e35c6178b01e31d4a46ad18c74f9415f19a26
+ M src/examples/cellsim.cc
+ M src/examples/sproutbt2.cc
+ M src/network/sproutconn.cc
+third_party/verus @ d4b447ea74c6c60a261149af2629562939f9a494
+ M src/verus_server.cpp
+third_party/vivace @ 2baf86211435ae071a32f96b7d8c504587f5d7f4
+third_party/webrtc @ 3f0cc2a9061a41b6f9dde4735770d143a1fa2851
+\end{verbatim}
+
+\newpage
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pantheon_summary_mean.pdf}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pantheon_summary.pdf}
+
+\newpage
+
+\begin{landscape}
+\centering
+\begin{tabularx}{0.9\linewidth}{ c | c | Y | Y | Y }
+& & \multicolumn{1}{c|}{mean avg tput (Mbit/s)} & \multicolumn{1}{c|}{mean 95th-\%ile delay (ms)} & \multicolumn{1}{c}{mean loss rate (\%)} \\
+scheme & \# runs & flow 1 & flow 1 & flow 1 \\
+\hline
+TCP BBR & 0 & N/A & N/A & N/A \\
+TCP Cubic & 0 & N/A & N/A & N/A \\
+FillP & 0 & N/A & N/A & N/A \\
+FillP-Sheep & 0 & N/A & N/A & N/A \\
+Indigo & 0 & N/A & N/A & N/A \\
+LEDBAT & 0 & N/A & N/A & N/A \\
+PCC-Allegro & 0 & N/A & N/A & N/A \\
+PCC-Expr & 0 & N/A & N/A & N/A \\
+SCReAM & 0 & N/A & N/A & N/A \\
+TCP Vegas & 0 & N/A & N/A & N/A \\
+PCC-Vivace & 0 & N/A & N/A & N/A \\
+WebRTC media & 1 & 0.00 & 840.35 & 0.00 \\
+\end{tabularx}
+\end{landscape}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP BBR
+
+Start at: 2022-11-28 07:02:05
+End at: 2022-11-28 07:02:10
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP BBR --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/bbr_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/bbr_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Cubic
+
+Start at: 2022-11-28 07:01:46
+End at: 2022-11-28 07:01:51
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Cubic --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/cubic_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/cubic_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP
+
+Start at: 2022-11-28 07:03:07
+End at: 2022-11-28 07:03:12
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP-Sheep
+
+Start at: 2022-11-28 07:03:25
+End at: 2022-11-28 07:03:30
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP-Sheep --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_sheep_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_sheep_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of Indigo
+
+Start at: 2022-11-28 07:03:16
+End at: 2022-11-28 07:03:21
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of Indigo --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/indigo_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/indigo_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of LEDBAT
+
+Start at: 2022-11-28 07:02:14
+End at: 2022-11-28 07:02:19
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of LEDBAT --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/ledbat_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/ledbat_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Allegro
+
+Start at: 2022-11-28 07:02:22
+End at: 2022-11-28 07:02:27
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Allegro --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Expr
+
+Start at: 2022-11-28 07:02:58
+End at: 2022-11-28 07:03:03
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Expr --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_experimental_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_experimental_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of SCReAM
+
+Start at: 2022-11-28 07:02:31
+End at: 2022-11-28 07:02:36
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of SCReAM --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/scream_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/scream_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Vegas
+
+Start at: 2022-11-28 07:01:56
+End at: 2022-11-28 07:02:01
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Vegas --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vegas_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vegas_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Vivace
+
+Start at: 2022-11-28 07:02:49
+End at: 2022-11-28 07:02:54
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Vivace --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vivace_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vivace_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of WebRTC media
+
+Start at: 2022-11-28 07:02:40
+End at: 2022-11-28 07:02:45
+
+# Below is generated by plot.py at 2022-11-28 07:14:21
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 4.61 Mbit/s
+Average throughput: 0.00 Mbit/s (0.1% utilization)
+95th percentile per-packet one-way delay: 840.347 ms
+Loss rate: 0.00%
+-- Flow 1:
+Average throughput: 0.00 Mbit/s
+95th percentile per-packet one-way delay: 840.347 ms
+Loss rate: 0.00%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of WebRTC media --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/webrtc_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/webrtc_datalink_delay_run1.png}
+
+\newpage
+
+\end{document}
