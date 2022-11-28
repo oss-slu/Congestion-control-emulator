@@ -142,7 +142,7 @@ class PlotThroughputTime(object):
         xmax = int(math.ceil(total_max_time))
         ax.set_xlim(xmin, xmax)
 
-        new_xticks = range(xmin, xmax, 10)
+        new_xticks = list(range(xmin, xmax, 10))
         ax.set_xticks(new_xticks)
         formatter = ticker.FuncFormatter(lambda x, pos: x - xmin)
         ax.xaxis.set_major_formatter(formatter)

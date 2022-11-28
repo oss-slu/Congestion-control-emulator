@@ -756,7 +756,7 @@ def run_tests(args):
         config = utils.parse_config()
         schemes_config = config['schemes']
 
-        cc_schemes = schemes_config.keys()
+        cc_schemes = list(schemes_config.keys())
         if args.random_order:
             random.shuffle(cc_schemes)
     elif args.schemes is not None:
