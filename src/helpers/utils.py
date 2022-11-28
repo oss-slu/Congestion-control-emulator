@@ -219,19 +219,19 @@ def save_test_metadata(meta, metadata_path):
 
     with open(metadata_path, 'w') as metadata_fh:
 
-        json.dump(str(meta), metadata_fh, sort_keys=True, indent=4,
+        json.dump(meta, metadata_fh, sort_keys=True, indent=4,
                   separators=(',', ': '))
 
 
 
 def get_sys_info():
     sys_info = ''
-    sys_info += check_output(['uname', '-sr'])
-    sys_info += check_output(['sysctl', 'net.core.default_qdisc'])
-    sys_info += check_output(['sysctl', 'net.core.rmem_default'])
-    sys_info += check_output(['sysctl', 'net.core.rmem_max'])
-    sys_info += check_output(['sysctl', 'net.core.wmem_default'])
-    sys_info += check_output(['sysctl', 'net.core.wmem_max'])
-    sys_info += check_output(['sysctl', 'net.ipv4.tcp_rmem'])
-    sys_info += check_output(['sysctl', 'net.ipv4.tcp_wmem'])
+    sys_info += check_output(['uname', '-sr']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.core.default_qdisc']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.core.rmem_default']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.core.rmem_max']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.core.wmem_default']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.core.wmem_max']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.ipv4.tcp_rmem']).decode("utf-8")
+    sys_info += check_output(['sysctl', 'net.ipv4.tcp_wmem']).decode("utf-8")
     return sys_info
