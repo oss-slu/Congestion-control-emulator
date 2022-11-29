@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from os import path
 import sys
@@ -151,8 +151,8 @@ class TunnelGraph(object):
                 self.avg_capacity = sum(capacities.values()) / delta
 
             # transform capacities into a list
-            capacity_bins = capacities.keys()
-            for bin_id in xrange(min(capacity_bins), max(capacity_bins) + 1):
+            capacity_bins = list(capacities.keys())
+            for bin_id in range(min(capacity_bins), max(capacity_bins) + 1):
                 self.link_capacity.append(
                     capacities.get(bin_id, 0) / us_per_bin)
                 self.link_capacity_t.append(self.bin_to_s(bin_id))
@@ -189,8 +189,8 @@ class TunnelGraph(object):
                     flow_arrivals = sum(arrivals[flow_id].values())
                     self.avg_ingress[flow_id] = flow_arrivals / delta
 
-                ingress_bins = arrivals[flow_id].keys()
-                for bin_id in xrange(min(ingress_bins), max(ingress_bins) + 1):
+                ingress_bins = list(arrivals[flow_id].keys())
+                for bin_id in range(min(ingress_bins), max(ingress_bins) + 1):
                     self.ingress_tput[flow_id].append(
                         arrivals[flow_id].get(bin_id, 0) / us_per_bin)
                     self.ingress_t[flow_id].append(self.bin_to_s(bin_id))
@@ -206,12 +206,12 @@ class TunnelGraph(object):
                     flow_departures = sum(departures[flow_id].values())
                     self.avg_egress[flow_id] = flow_departures / delta
 
-                egress_bins = departures[flow_id].keys()
+                egress_bins = list(departures[flow_id].keys())
 
                 self.egress_tput[flow_id].append(0.0)
                 self.egress_t[flow_id].append(self.bin_to_s(min(egress_bins)))
 
-                for bin_id in xrange(min(egress_bins), max(egress_bins) + 1):
+                for bin_id in range(min(egress_bins), max(egress_bins) + 1):
                     self.egress_tput[flow_id].append(
                         departures[flow_id].get(bin_id, 0) / us_per_bin)
                     self.egress_t[flow_id].append(self.bin_to_s(bin_id + 1))

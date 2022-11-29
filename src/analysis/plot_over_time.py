@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 from os import path
@@ -88,7 +88,7 @@ class PlotThroughputTime(object):
             throughput[flow_id] = []
 
             max_bin_id = max(departures[flow_id].keys())
-            for bin_id in xrange(0, max_bin_id + 1):
+            for bin_id in range(0, max_bin_id + 1):
                 time_sec = (start_ts + bin_id * self.ms_per_bin) / 1000.0
                 clock_time[flow_id].append(time_sec)
 
@@ -111,11 +111,11 @@ class PlotThroughputTime(object):
         for cc in self.cc_schemes:
             cc_name = schemes_config[cc]['name']
 
-            for run_id in xrange(1, self.run_times + 1):
+            for run_id in range(1, self.run_times + 1):
                 tunnel_log_path = path.join(
                     self.data_dir, datalink_fmt_str % (cc, run_id))
                 clock_time, throughput = self.parse_tunnel_log(tunnel_log_path)
-
+                
                 min_time = None
                 max_time = None
                 max_tput = None
@@ -142,7 +142,7 @@ class PlotThroughputTime(object):
         xmax = int(math.ceil(total_max_time))
         ax.set_xlim(xmin, xmax)
 
-        new_xticks = range(xmin, xmax, 10)
+        new_xticks = list(range(xmin, xmax, 10))
         ax.set_xticks(new_xticks)
         formatter = ticker.FuncFormatter(lambda x, pos: x - xmin)
         ax.xaxis.set_major_formatter(formatter)
@@ -165,7 +165,8 @@ class PlotThroughputTime(object):
             'Saved pantheon_throughput_time in %s\n' % self.data_dir)
 
         plt.close('all')
-
+#TODO: Export schemes, clock_time, throughput to a log file for traffic predictions
+        #TODO: Running for all log files
 
 def main():
     args = arg_parser.parse_over_time()

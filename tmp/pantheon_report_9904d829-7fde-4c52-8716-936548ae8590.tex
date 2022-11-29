@@ -1,0 +1,2764 @@
+\documentclass{article}
+\usepackage{pdfpages, graphicx, float}
+\usepackage{tabularx, pdflscape}
+\usepackage{textcomp}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\PantheonFig}[1]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{#1}{\includegraphics[width=\textwidth]{#1}}{Figure is missing}
+\end{figure}}
+
+\begin{document}
+\centerline{\textbf{\large{Pantheon Report}}}
+\vspace{20pt}
+
+Generated at 2022-11-28 17:02:52 (UTC).
+
+Tested in mahimahi: \texttt{mm-link ATT-LTE-driving-2016.up ATT-LTE-driving-2016.down}
+
+Repeated the test of 12 congestion control schemes once.
+
+Each test lasted for 10 seconds running 1 flow.
+
+\begin{verbatim}
+System info:
+Linux 5.15.49-linuxkit
+net.ipv4.tcp_rmem = 4096	131072	6291456
+net.ipv4.tcp_wmem = 4096	16384	4194304
+\end{verbatim}
+
+\begin{verbatim}
+Git summary:
+branch: delay_shell @ d286d018d0da924cdfde872c1956b8225925cac2
+third_party/fillp @ d6da1459332fcee56963885d7eba17e6a32d4519
+third_party/fillp-sheep @ 0e5bb722943babcd2b090d2c64fcd45e12e923f9
+third_party/genericCC @ d0153f8e594aa89e93b032143cedbdfe58e562f4
+ M analyze_pcap.py
+ M automatic-tests.py
+ M automatic-tests_vary-mahimahi-configs.py
+ M makefile
+ M parsing_scripts/analyse_data.py
+ M parsing_scripts/auto-plot.py
+ M parsing_scripts/automatic-tests.py
+ M parsing_scripts/parse_ctcp_output.py
+ M parsing_scripts/parse_tcptrace.py
+ M parsing_scripts/plot_vary_mahimahi_configs.py
+ M random-range-tests.py
+ M test-suite-client.py
+ M test-suite-server.py
+third_party/indigo @ 463d89b09699a57bfdfbae351646df6a60040b90
+ M dagger/dagger.py
+ M dagger/models.py
+ M dagger/run_sender.py
+ M dagger/train.py
+ M dagger/worker.py
+ M env/environment.py
+ M env/receiver.py
+ M env/run_receiver.py
+ M env/sender.py
+ M helpers/generate_trace.py
+ M helpers/my_gce_helper.py
+ M tests/test_environment.py
+ M tests/test_helpers.py
+ M tests/test_sender.py
+third_party/libutp @ b3465b942e2826f2b179eaab4a906ce6bb7cf3cf
+ M parse_log.py
+third_party/pantheon-tunnel @ f866d3f58d27afd942717625ee3a354cc2e802bd
+ M configure.ac
+third_party/pcc @ 1afc958fa0d66d18b623c091a55fec872b4981e1
+ M convergence/reset_convergence.py
+ M live_plot_tcp_pcc.py
+ M receiver/src/buffer.h
+ M receiver/src/core.cpp
+ M sender/src/buffer.h
+ M sender/src/core.cpp
+ M tune_bw_rtt_loss.py
+third_party/pcc-experimental @ cd43e34e3f5f5613e8acd08fab92c4eb24f974ab
+third_party/proto-quic @ 77961f1a82733a86b42f1bc8143ebc978f3cff42
+ M depot_tools/ENV/lib/python2.7/distutils/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/descriptor.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/descriptor_pool.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/internal/cpp_message.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/internal/decoder.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/internal/python_message.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/internal/type_checkers.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/message_factory.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/reflection.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/text_encoding.py
+ M depot_tools/ENV/lib/python2.7/site-packages/google/protobuf/text_format.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/__main__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches/redis_cache.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/cachecontrol/compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/cachecontrol/controller.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/cachecontrol/serialize.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/certifi/__main__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/certifi/core.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/_backport/shutil.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/_backport/sysconfig.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/_backport/tarfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/database.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/index.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/locators.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/metadata.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/resources.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/util.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/distlib/wheel.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/constants.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/_base.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/alphabeticalattributes.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/inject_meta_charset.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/lint.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/optionaltags.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/sanitizer.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/whitespace.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/html5parser.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/ihatexml.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/inputstream.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/sanitizer.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/serializer/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/serializer/htmlserializer.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/tokenizer.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treeadapters/sax.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treebuilders/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treebuilders/_base.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treebuilders/dom.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treebuilders/etree.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treebuilders/etree_lxml.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/_base.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/dom.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/etree.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/genshistream.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/lxmletree.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/treewalkers/pulldom.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/trie/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/trie/_base.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/trie/datrie.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/trie/py.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/html5lib/utils.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/ipaddress.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/linklockfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/mkdirlockfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/pidlockfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/sqlitelockfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/lockfile/symlinklockfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/__about__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/_compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/_structures.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/specifiers.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/packaging/version.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/pkg_resources.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/progress/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/progress/bar.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/progress/counter.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/progress/helpers.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/progress/spinner.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/adapters.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/certs.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/cookies.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/models.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/chardet/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/chardet/chardetect.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/chardet/compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/_collections.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/connection.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/connectionpool.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/contrib/ntlmpool.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/fields.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/packages/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/packages/ordered_dict.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/packages/six.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/poolmanager.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/request.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/response.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/packages/urllib3/util/retry.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/sessions.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/structures.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/requests/utils.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/_vendor/six.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/basecommand.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/baseparser.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/cmdoptions.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/completion.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/freeze.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/help.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/install.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/list.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/search.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/show.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/uninstall.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/unzip.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/wheel.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/commands/zip.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/compat/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/compat/dictconfig.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/download.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/exceptions.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/index.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/locations.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/operations/freeze.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/pep425tags.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/req/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/req/req_file.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/req/req_install.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/req/req_set.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/req/req_uninstall.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/status_codes.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/appdirs.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/build.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/deprecation.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/logging.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/outdated.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/utils/ui.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/vcs/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/vcs/bazaar.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/vcs/git.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/vcs/mercurial.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/vcs/subversion.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pip/wheel.py
+ M depot_tools/ENV/lib/python2.7/site-packages/pkg_resources.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/__about__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/__init__.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/_compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/_structures.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/specifiers.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/_vendor/packaging/version.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/alias.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/bdist_egg.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/easy_install.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/egg_info.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/install_egg_info.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/rotate.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/saveopts.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/setopt.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/command/upload_docs.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/compat.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/dist.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/package_index.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/ssl_support.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/svn_utils.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/tests/server.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/tests/test_msvc9compiler.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/tests/test_packageindex.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/tests/test_sdist.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/tests/test_svn.py
+ M depot_tools/ENV/lib/python2.7/site-packages/setuptools/unicode_utils.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/bdist_wheel.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/install.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/metadata.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/pkginfo.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/signatures/djbec.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/test/complex-dist/setup.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/test/headers.dist/setup.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/test/simple.dist/setup.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/test/test_wheelfile.py
+ M depot_tools/ENV/lib/python2.7/site-packages/wheel/util.py
+ M depot_tools/ENV/lib/python2.7/site.py
+ M depot_tools/PRESUBMIT.py
+ M depot_tools/annotated_gclient.py
+ M depot_tools/apply_issue.py
+ M depot_tools/auth.py
+ M depot_tools/buildbucket.py
+ M depot_tools/checkout.py
+ M depot_tools/chrome-update.py
+ M depot_tools/cit.py
+ M depot_tools/clang_format.py
+ M depot_tools/commit_queue.py
+ M depot_tools/cpplint.py
+ M depot_tools/dart_format.py
+ M depot_tools/depot-tools-auth.py
+ M depot_tools/download_from_google_storage.py
+ M depot_tools/drover.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/__main__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/aclhelpers.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/acls.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/anon.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/command_opts.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/crc32c.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/creds.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/dev.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/encoding.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/metadata.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/naming.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/prod.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/projects.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/security.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/subdirs.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/support.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/throttling.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/versions.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/addlhelp/wildcards.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/boto_resumable_upload.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/boto_translation.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/bucket_listing_ref.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cat_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cloud_api.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cloud_api_delegator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cloud_api_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/command.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/command_argument.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/command_runner.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/acl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/cat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/compose.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/config.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/cors.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/cp.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/defacl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/du.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/hash.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/help.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/lifecycle.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/logging.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/ls.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/mb.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/mv.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/notification.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/perfdiag.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/rb.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/rm.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/rsync.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/setmeta.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/signurl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/stat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/update.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/version.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/versioning.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/commands/web.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/copy_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cred_types.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/cs_api_map.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/daisy_chain_wrapper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/devshell_auth_plugin.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/exception.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/file_part.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/gcs_json_api.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/gcs_json_media.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/hashing_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/help_provider.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/ls_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/name_expansion.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/no_op_auth_plugin.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/no_op_credentials.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/parallelism_framework_util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/plurality_checkable_iterator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/project_id.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/sig_handling.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/storage_uri_builder.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/storage_url.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/mock_cloud_api.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_Doption.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_acl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_cat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_command_runner.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_compose.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_copy_helper_funcs.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_cors.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_cp.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_creds_config.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_daisy_chain_wrapper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_defacl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_du.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_file_part.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_gsutil.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_hash.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_hashing_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_help.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_lifecycle.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_logging.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_ls.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_mb.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_mv.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_naming.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_notification.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_parallelism_framework.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_perfdiag.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_plurality_checkable_iterator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_rb.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_resumable_streaming.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_rm.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_rsync.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_rsync_funcs.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_setmeta.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_signurl.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_stat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_storage_url.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_tabcomplete.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_trace.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_tracker_file.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_update.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_versioning.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_web.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/test_wildcard_iterator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/testcase/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/testcase/base.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/testcase/integration_testcase.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/testcase/unit_testcase.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tests/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/third_party/storage_apitools/storage_v1_client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/third_party/storage_apitools/storage_v1_messages.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/tracker_file.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/translation_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/gslib/wildcard_iterator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/app2.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/base_api.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/base_cli.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/batch.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/credentials_lib.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/encoding.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/extra_types.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/http_wrapper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/stream_slice.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/testing/mock.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/testing/testclient/fusiontables_v1_client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/testing/testclient/fusiontables_v1_messages.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/transfer.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/transfer_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/base/py/util_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/gen/gen_client_lib.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/gen/message_registry.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/gen/service_registry.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/gen/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/scripts/oauth2l.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/apitools/scripts/oauth2l_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/ez_setup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/run_pylint.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/samples/storage_sample/downloads_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/samples/storage_sample/storage/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/samples/storage_sample/storage/storage_v1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/samples/storage_sample/storage/storage_v1_client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/apitools/samples/storage_sample/storage/storage_v1_messages.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/auth.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/cloudfront/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/cloudsearch/search.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/cloudsearch2/layer1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/cloudsearch2/search.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/compat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/dynamodb/item.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/dynamodb/table.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/dynamodb/types.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/dynamodb2/items.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/dynamodb2/table.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ec2/buyreservation.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ec2/cloudwatch/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ec2/ec2object.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ec2/reservedinstance.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ecs/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/emr/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/exception.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/fps/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/fps/response.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/glacier/layer1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/glacier/response.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/gs/bucket.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/gs/resumable_upload_handler.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/iam/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/manage/cmdshell.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/manage/propget.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/manage/server.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/manage/test_manage.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/manage/volume.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mashups/interactive.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mashups/iobject.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mashups/order.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mashups/server.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mturk/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mturk/question.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mws/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mws/exception.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/mws/response.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/pyami/config.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/pyami/copybot.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/pyami/installers/ubuntu/installer.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/pyami/launch_ami.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/rds/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/rds/parametergroup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/regioninfo.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/requestlog.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/resultset.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/roboto/awsqueryrequest.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/roboto/awsqueryservice.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/roboto/param.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/bucket.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/bucketlogging.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/key.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/keyfile.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/s3/resumable_download_handler.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/blob.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/manager/sdbmanager.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/manager/xmlmanager.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/model.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/query.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/db/sequence.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/domain.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sdb/queryresultset.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/services/bs.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/services/result.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/services/submit.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/ses/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sns/connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sqs/message.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/sqs/queue.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/utils.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/boto/vendored/six.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/scripts/git-release-notes.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/scripts/rebuild_endpoints.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/setup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/db/test_lists.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/db/test_password.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/db/test_query.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/db/test_sequence.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/devpay/test_s3.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/fps/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/cloudformation/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/ec2/autoscale/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/ec2/cloudwatch/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/ec2/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_basic.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_generation_conditionals.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_resumable_downloads.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_resumable_uploads.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_storage_uri.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/test_versioning.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/gs/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/mws/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/rds/test_db_subnet_group.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/rds/test_promote_modify.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/route53/test_health_check.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/route53/test_zone.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_bucket.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_connect_to_region.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_cors.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_key.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_mfa.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_multidelete.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_multipart.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/s3/test_pool.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/integration/sdb/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/_init_environment.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/all_tests.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/cleanup_tests.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/common.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/create_hit_external.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/create_hit_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/create_hit_with_qualifications.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/hit_persistence.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/selenium_support.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/mturk/test_disable_hit.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/auth/test_sigv4.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/beanstalk/test_layer1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudformation/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudformation/test_stack.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudfront/test_signed_urls.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch/test_document.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch/test_exceptions.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch/test_search.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch2/test_document.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch2/test_exceptions.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/cloudsearch2/test_search.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/dynamodb/test_batch.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/dynamodb/test_types.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/dynamodb2/test_table.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/ec2/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/ec2/test_networkinterface.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/ec2/test_reservedinstance.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/ec2/test_volume.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/emr/test_emr_responses.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/emr/test_instance_group_args.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/glacier/test_layer1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/glacier/test_layer2.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/glacier/test_response.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/glacier/test_writer.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/iam/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/kms/test_kms.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/mturk/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/mws/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/mws/test_response.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/provider/test_provider.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/rds/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/route53/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/s3/test_bucket.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/s3/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/s3/test_key.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/sns/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/sqs/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/sqs/test_message.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/swf/test_layer1_decisions.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/swf/test_layer2_base.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/swf/test_layer2_domain.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/swf/test_layer2_types.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/test_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/utils/test_utils.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_customergateway.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_dhcpoptions.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_internetgateway.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_routetable.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_subnet.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_vpc.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_vpc_peering_connection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_vpnconnection.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/boto/tests/unit/vpc/test_vpngateway.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/docs/source/conf.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/docs/source/make_predefined_table.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python2/crcmod/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python2/crcmod/_crcfunpy.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python2/crcmod/crcmod.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python2/crcmod/predefined.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python2/crcmod/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python3/crcmod/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python3/crcmod/crcmod.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python3/crcmod/predefined.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod/python3/crcmod/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod_osx/crcmod/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod_osx/crcmod/_crcfunpy.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod_osx/crcmod/crcmod.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod_osx/crcmod/predefined.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/crcmod_osx/crcmod/test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/gcs-oauth2-boto-plugin/gcs_oauth2_boto_plugin/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/gcs-oauth2-boto-plugin/gcs_oauth2_boto_plugin/oauth2_client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/gcs-oauth2-boto-plugin/gcs_oauth2_boto_plugin/oauth2_helper.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/gcs-oauth2-boto-plugin/gcs_oauth2_boto_plugin/oauth2_plugin.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/gcs-oauth2-boto-plugin/gcs_oauth2_boto_plugin/test_oauth2_client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2/iri2uri.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2/socks.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2/test/functional/test_proxies.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2/test/miniserver.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python2/httplib2test_appengine.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python3/httplib2/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/python3/httplib2test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/httplib2/upload-diffs.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/docs/conf.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/crypt.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/django_orm.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/locked_file.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/multistore_file.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/old_run.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/oauth2client/tools.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/samples/call_compute_service.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/samples/oauth2_for_devices.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/scripts/fetch_gae_sdk.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/setup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_appengine.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_crypt.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_devshell.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_django_orm.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_file.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_gce.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_keyring.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/oauth2client/tests/test_oauth2client.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/appstats/protorpc_appstats/__init__.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/quotas/backend/quotas/main.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/quotas/backend/quotas/services.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/quotas/backend/quotas/services_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/client/fetch_descriptor.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/client/main.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/server/model.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/server/model_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/server/tunes_db.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/demos/tunes_db/server/tunes_db_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/ez_setup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/gen_protorpc.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/definition_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/descriptor.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/descriptor_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/end2end_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/generate_proto.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/generate_proto_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/generate_python.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/generate_python_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/generate_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/messages.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/messages_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/protobuf_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/protojson_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/protourlencode.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/protourlencode_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/registry.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/registry_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/remote.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/remote_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/test_util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/transport.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/transport_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/util_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/webapp/forms_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/webapp/service_handlers_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/webapp_test_util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/wsgi/service_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/protorpc/protorpc/wsgi/util_test.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/pyasn1_modules/pem.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/cmpdump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/crldump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/crmfdump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/ocspclient.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/ocspreqdump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/ocsprspdump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/ocspserver.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/pkcs10dump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/pkcs1dump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/pkcs7dump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/pkcs8dump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/snmpget.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1-modules/tools/x509dump.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/pyasn1/codec/ber/decoder.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/pyasn1/debug.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/pyasn1/type/univ.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/codec/ber/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/codec/cer/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/codec/der/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/codec/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/pyasn1/test/type/suite.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/python-gflags/gflags.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/python-gflags/gflags2man.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/retry-decorator/retry_decorator/retry_decorator.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/create_timing_table.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/doc/conf.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/_compat.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/_version133.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/_version200.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/cli.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/key.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/parallel.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/pkcs1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/prime.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/transform.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/rsa/util.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/constants.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/py2kconstants.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/py3kconstants.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/test_bigfile.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/test_integers.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/test_pkcs1.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/test_strings.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/rsa/tests/test_varblock.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/six/documentation/conf.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/six/setup.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/six/six.py
+ M depot_tools/external_bin/gsutil/gsutil_4.15/gsutil/third_party/six/test_six.py
+ M depot_tools/fetch.py
+ M depot_tools/fetch_configs/config_util.py
+ M depot_tools/fix_encoding.py
+ M depot_tools/gcl.py
+ M depot_tools/gclient-new-workdir.py
+ M depot_tools/gclient.py
+ M depot_tools/gclient_scm.py
+ M depot_tools/gclient_utils.py
+ M depot_tools/gerrit_util.py
+ M depot_tools/git_auto_svn.py
+ M depot_tools/git_cache.py
+ M depot_tools/git_cherry_pick_upload.py
+ M depot_tools/git_cl.py
+ M depot_tools/git_common.py
+ M depot_tools/git_drover.py
+ M depot_tools/git_find_releases.py
+ M depot_tools/git_footers.py
+ M depot_tools/git_freezer.py
+ M depot_tools/git_hyper_blame.py
+ M depot_tools/git_map.py
+ M depot_tools/git_map_branches.py
+ M depot_tools/git_mark_merge_base.py
+ M depot_tools/git_nav_downstream.py
+ M depot_tools/git_number.py
+ M depot_tools/git_rebase_update.py
+ M depot_tools/git_rename_branch.py
+ M depot_tools/git_reparent_branch.py
+ M depot_tools/git_retry.py
+ M depot_tools/git_try.py
+ M depot_tools/git_upstream_diff.py
+ M depot_tools/gn
+ M depot_tools/gn.py
+ M depot_tools/gsutil.py
+ M depot_tools/luci_hacks/luci_recipe_run.py
+ M depot_tools/luci_hacks/trigger_luci_job.py
+ M depot_tools/man/src/filter_demo_output.py
+ M depot_tools/my_activity.py
+ M depot_tools/my_reviews.py
+ M depot_tools/owners.py
+ M depot_tools/owners_finder.py
+ M depot_tools/patch.py
+ M depot_tools/presubmit_canned_checks.py
+ M depot_tools/presubmit_support.py
+ M depot_tools/recipe_modules/bot_update/api.py
+ M depot_tools/recipe_modules/bot_update/resources/bot_update.py
+ M depot_tools/recipe_modules/bot_update/test_api.py
+ M depot_tools/recipe_modules/gclient/api.py
+ M depot_tools/recipe_modules/gclient/config.py
+ M depot_tools/recipe_modules/git/api.py
+ M depot_tools/recipe_modules/rietveld/api.py
+ M depot_tools/rietveld.py
+ M depot_tools/roll_dep.py
+ M depot_tools/roll_dep_svn.py
+ M depot_tools/scm.py
+ M depot_tools/subcommand.py
+ M depot_tools/subprocess2.py
+ M depot_tools/testing_support/auto_stub.py
+ M depot_tools/testing_support/coverage_utils.py
+ M depot_tools/testing_support/fake_repos.py
+ M depot_tools/testing_support/filesystem_mock.py
+ M depot_tools/testing_support/gerrit_test_case.py
+ M depot_tools/testing_support/get_appengine.py
+ M depot_tools/testing_support/git_test_utils.py
+ M depot_tools/testing_support/local_rietveld.py
+ M depot_tools/testing_support/patches_data.py
+ M depot_tools/testing_support/super_mox.py
+ M depot_tools/testing_support/trial_dir.py
+ M depot_tools/tests/checkout_test.py
+ M depot_tools/tests/download_from_google_storage_unittests.py
+ M depot_tools/tests/fix_encoding_test.py
+ M depot_tools/tests/gclient_scm_test.py
+ M depot_tools/tests/gclient_smoketest.py
+ M depot_tools/tests/gclient_test.py
+ M depot_tools/tests/gclient_utils_test.py
+ M depot_tools/tests/git_cl_test.py
+ M depot_tools/tests/git_common_test.py
+ M depot_tools/tests/git_dates_test.py
+ M depot_tools/tests/git_drover_test.py
+ M depot_tools/tests/git_hyper_blame_test.py
+ M depot_tools/tests/git_number_test.py
+ M depot_tools/tests/git_rebase_update_test.py
+ M depot_tools/tests/gsutil_test.py
+ M depot_tools/tests/owners_finder_test.py
+ M depot_tools/tests/owners_unittest.py
+ M depot_tools/tests/patch_test.py
+ M depot_tools/tests/presubmit_unittest.py
+ M depot_tools/tests/rietveld_test.py
+ M depot_tools/tests/scm_unittest.py
+ M depot_tools/tests/subprocess2_test.py
+ M depot_tools/tests/trychange_unittest.py
+ M depot_tools/tests/upload_to_google_storage_unittests.py
+ M depot_tools/third_party/boto/__init__.py
+ M depot_tools/third_party/boto/auth.py
+ M depot_tools/third_party/boto/auth_handler.py
+ M depot_tools/third_party/boto/connection.py
+ M depot_tools/third_party/boto/core/auth.py
+ M depot_tools/third_party/boto/core/credentials.py
+ M depot_tools/third_party/boto/ecs/__init__.py
+ M depot_tools/third_party/boto/ecs/item.py
+ M depot_tools/third_party/boto/exception.py
+ M depot_tools/third_party/boto/file/__init__.py
+ M depot_tools/third_party/boto/file/bucket.py
+ M depot_tools/third_party/boto/file/connection.py
+ M depot_tools/third_party/boto/file/key.py
+ M depot_tools/third_party/boto/fps/connection.py
+ M depot_tools/third_party/boto/fps/response.py
+ M depot_tools/third_party/boto/gs/bucket.py
+ M depot_tools/third_party/boto/gs/cors.py
+ M depot_tools/third_party/boto/gs/key.py
+ M depot_tools/third_party/boto/gs/resumable_upload_handler.py
+ M depot_tools/third_party/boto/https_connection.py
+ M depot_tools/third_party/boto/jsonresponse.py
+ M depot_tools/third_party/boto/manage/cmdshell.py
+ M depot_tools/third_party/boto/manage/propget.py
+ M depot_tools/third_party/boto/manage/server.py
+ M depot_tools/third_party/boto/manage/task.py
+ M depot_tools/third_party/boto/manage/test_manage.py
+ M depot_tools/third_party/boto/manage/volume.py
+ M depot_tools/third_party/boto/mashups/interactive.py
+ M depot_tools/third_party/boto/mashups/iobject.py
+ M depot_tools/third_party/boto/mashups/order.py
+ M depot_tools/third_party/boto/mashups/server.py
+ M depot_tools/third_party/boto/provider.py
+ M depot_tools/third_party/boto/pyami/bootstrap.py
+ M depot_tools/third_party/boto/pyami/config.py
+ M depot_tools/third_party/boto/pyami/copybot.py
+ M depot_tools/third_party/boto/pyami/launch_ami.py
+ M depot_tools/third_party/boto/pyami/startup.py
+ M depot_tools/third_party/boto/resultset.py
+ M depot_tools/third_party/boto/roboto/awsqueryrequest.py
+ M depot_tools/third_party/boto/roboto/awsqueryservice.py
+ M depot_tools/third_party/boto/roboto/param.py
+ M depot_tools/third_party/boto/s3/bucket.py
+ M depot_tools/third_party/boto/s3/bucketlogging.py
+ M depot_tools/third_party/boto/s3/connection.py
+ M depot_tools/third_party/boto/s3/key.py
+ M depot_tools/third_party/boto/s3/keyfile.py
+ M depot_tools/third_party/boto/s3/lifecycle.py
+ M depot_tools/third_party/boto/s3/multipart.py
+ M depot_tools/third_party/boto/s3/resumable_download_handler.py
+ M depot_tools/third_party/boto/services/bs.py
+ M depot_tools/third_party/boto/services/result.py
+ M depot_tools/third_party/boto/services/submit.py
+ M depot_tools/third_party/boto/ses/__init__.py
+ M depot_tools/third_party/boto/ses/connection.py
+ M depot_tools/third_party/boto/sts/__init__.py
+ M depot_tools/third_party/boto/sts/connection.py
+ M depot_tools/third_party/boto/sts/credentials.py
+ M depot_tools/third_party/boto/utils.py
+ M depot_tools/third_party/coverage/backward.py
+ M depot_tools/third_party/coverage/cmdline.py
+ M depot_tools/third_party/coverage/collector.py
+ M depot_tools/third_party/coverage/config.py
+ M depot_tools/third_party/coverage/control.py
+ M depot_tools/third_party/coverage/fullcoverage/encodings.py
+ M depot_tools/third_party/coverage/misc.py
+ M depot_tools/third_party/coverage/parser.py
+ M depot_tools/third_party/coverage/phystokens.py
+ M depot_tools/third_party/coverage/results.py
+ M depot_tools/third_party/coverage/xmlreport.py
+ M depot_tools/third_party/fancy_urllib/__init__.py
+ M depot_tools/third_party/gsutil/gslib/bucket_listing_ref.py
+ M depot_tools/third_party/gsutil/gslib/command.py
+ M depot_tools/third_party/gsutil/gslib/commands/cat.py
+ M depot_tools/third_party/gsutil/gslib/commands/chacl.py
+ M depot_tools/third_party/gsutil/gslib/commands/config.py
+ M depot_tools/third_party/gsutil/gslib/commands/cp.py
+ M depot_tools/third_party/gsutil/gslib/commands/disablelogging.py
+ M depot_tools/third_party/gsutil/gslib/commands/enablelogging.py
+ M depot_tools/third_party/gsutil/gslib/commands/getversioning.py
+ M depot_tools/third_party/gsutil/gslib/commands/help.py
+ M depot_tools/third_party/gsutil/gslib/commands/ls.py
+ M depot_tools/third_party/gsutil/gslib/commands/mb.py
+ M depot_tools/third_party/gsutil/gslib/commands/perfdiag.py
+ M depot_tools/third_party/gsutil/gslib/commands/rb.py
+ M depot_tools/third_party/gsutil/gslib/commands/rm.py
+ M depot_tools/third_party/gsutil/gslib/commands/setcors.py
+ M depot_tools/third_party/gsutil/gslib/commands/setmeta.py
+ M depot_tools/third_party/gsutil/gslib/commands/setversioning.py
+ M depot_tools/third_party/gsutil/gslib/commands/setwebcfg.py
+ M depot_tools/third_party/gsutil/gslib/commands/update.py
+ M depot_tools/third_party/gsutil/gslib/exception.py
+ M depot_tools/third_party/gsutil/gslib/help_provider.py
+ M depot_tools/third_party/gsutil/gslib/name_expansion.py
+ M depot_tools/third_party/gsutil/gslib/plurality_checkable_iterator.py
+ M depot_tools/third_party/gsutil/gslib/project_id.py
+ M depot_tools/third_party/gsutil/gslib/thread_pool.py
+ M depot_tools/third_party/gsutil/gslib/util.py
+ M depot_tools/third_party/gsutil/gslib/wildcard_iterator.py
+ M depot_tools/third_party/gsutil/oauth2_plugin/oauth2_client.py
+ M depot_tools/third_party/gsutil/oauth2_plugin/oauth2_client_test.py
+ M depot_tools/third_party/gsutil/oauth2_plugin/oauth2_helper.py
+ M depot_tools/third_party/gsutil/oauth2_plugin/oauth2_plugin.py
+ M depot_tools/third_party/gsutil/plugins/sso_auth.py
+ M depot_tools/third_party/httplib2/__init__.py
+ M depot_tools/third_party/httplib2/iri2uri.py
+ M depot_tools/third_party/httplib2/socks.py
+ M depot_tools/third_party/logilab/astroid/__init__.py
+ M depot_tools/third_party/logilab/astroid/brain/builtin_inference.py
+ M depot_tools/third_party/logilab/astroid/brain/py2stdlib.py
+ M depot_tools/third_party/logilab/astroid/brain/pynose.py
+ M depot_tools/third_party/logilab/astroid/builder.py
+ M depot_tools/third_party/logilab/astroid/inspector.py
+ M depot_tools/third_party/logilab/astroid/manager.py
+ M depot_tools/third_party/logilab/astroid/modutils.py
+ M depot_tools/third_party/logilab/astroid/node_classes.py
+ M depot_tools/third_party/logilab/astroid/raw_building.py
+ M depot_tools/third_party/logilab/astroid/scoped_nodes.py
+ M depot_tools/third_party/logilab/astroid/utils.py
+ M depot_tools/third_party/logilab/common/clcommands.py
+ M depot_tools/third_party/logilab/common/cli.py
+ M depot_tools/third_party/logilab/common/compat.py
+ M depot_tools/third_party/logilab/common/configuration.py
+ M depot_tools/third_party/logilab/common/date.py
+ M depot_tools/third_party/logilab/common/dbf.py
+ M depot_tools/third_party/logilab/common/debugger.py
+ M depot_tools/third_party/logilab/common/decorators.py
+ M depot_tools/third_party/logilab/common/fileutils.py
+ M depot_tools/third_party/logilab/common/graph.py
+ M depot_tools/third_party/logilab/common/modutils.py
+ M depot_tools/third_party/logilab/common/optik_ext.py
+ M depot_tools/third_party/logilab/common/optparser.py
+ M depot_tools/third_party/logilab/common/pytest.py
+ M depot_tools/third_party/logilab/common/registry.py
+ M depot_tools/third_party/logilab/common/shellutils.py
+ M depot_tools/third_party/logilab/common/sphinx_ext.py
+ M depot_tools/third_party/logilab/common/table.py
+ M depot_tools/third_party/logilab/common/tasksqueue.py
+ M depot_tools/third_party/logilab/common/testlib.py
+ M depot_tools/third_party/logilab/common/textutils.py
+ M depot_tools/third_party/logilab/common/tree.py
+ M depot_tools/third_party/logilab/common/umessage.py
+ M depot_tools/third_party/logilab/common/ureports/__init__.py
+ M depot_tools/third_party/logilab/common/ureports/html_writer.py
+ M depot_tools/third_party/logilab/common/ureports/text_writer.py
+ M depot_tools/third_party/logilab/common/urllib2ext.py
+ M depot_tools/third_party/logilab/common/vcgutils.py
+ M depot_tools/third_party/logilab/common/xmlrpcutils.py
+ M depot_tools/third_party/oauth2client/appengine.py
+ M depot_tools/third_party/oauth2client/client.py
+ M depot_tools/third_party/oauth2client/clientsecrets.py
+ M depot_tools/third_party/oauth2client/crypt.py
+ M depot_tools/third_party/oauth2client/django_orm.py
+ M depot_tools/third_party/oauth2client/file.py
+ M depot_tools/third_party/oauth2client/gce.py
+ M depot_tools/third_party/oauth2client/keyring_storage.py
+ M depot_tools/third_party/oauth2client/locked_file.py
+ M depot_tools/third_party/oauth2client/multistore_file.py
+ M depot_tools/third_party/oauth2client/old_run.py
+ M depot_tools/third_party/oauth2client/tools.py
+ M depot_tools/third_party/oauth2client/util.py
+ M depot_tools/third_party/oauth2client/xsrfutil.py
+ M depot_tools/third_party/protobuf26/descriptor.py
+ M depot_tools/third_party/protobuf26/descriptor_pool.py
+ M depot_tools/third_party/protobuf26/internal/cpp_message.py
+ M depot_tools/third_party/protobuf26/internal/decoder.py
+ M depot_tools/third_party/protobuf26/internal/python_message.py
+ M depot_tools/third_party/protobuf26/internal/type_checkers.py
+ M depot_tools/third_party/protobuf26/message_factory.py
+ M depot_tools/third_party/protobuf26/reflection.py
+ M depot_tools/third_party/protobuf26/text_encoding.py
+ M depot_tools/third_party/protobuf26/text_format.py
+ M depot_tools/third_party/pylint.py
+ M depot_tools/third_party/pylint/__pkginfo__.py
+ M depot_tools/third_party/pylint/checkers/base.py
+ M depot_tools/third_party/pylint/checkers/classes.py
+ M depot_tools/third_party/pylint/checkers/design_analysis.py
+ M depot_tools/third_party/pylint/checkers/format.py
+ M depot_tools/third_party/pylint/checkers/imports.py
+ M depot_tools/third_party/pylint/checkers/logging.py
+ M depot_tools/third_party/pylint/checkers/python3.py
+ M depot_tools/third_party/pylint/checkers/similar.py
+ M depot_tools/third_party/pylint/checkers/strings.py
+ M depot_tools/third_party/pylint/checkers/utils.py
+ M depot_tools/third_party/pylint/checkers/variables.py
+ M depot_tools/third_party/pylint/config.py
+ M depot_tools/third_party/pylint/epylint.py
+ M depot_tools/third_party/pylint/gui.py
+ M depot_tools/third_party/pylint/lint.py
+ M depot_tools/third_party/pylint/pyreverse/diagrams.py
+ M depot_tools/third_party/pylint/pyreverse/main.py
+ M depot_tools/third_party/pylint/pyreverse/utils.py
+ M depot_tools/third_party/pylint/pyreverse/writer.py
+ M depot_tools/third_party/pylint/reporters/__init__.py
+ M depot_tools/third_party/pylint/reporters/json.py
+ M depot_tools/third_party/pylint/reporters/text.py
+ M depot_tools/third_party/pylint/testutils.py
+ M depot_tools/third_party/pylint/utils.py
+ M depot_tools/third_party/pymox/mox.py
+ M depot_tools/third_party/pymox/mox_test.py
+ M depot_tools/third_party/pymox/mox_test_helper.py
+ M depot_tools/third_party/pymox/stubout.py
+ M depot_tools/third_party/pymox/stubout_test.py
+ M depot_tools/third_party/retry_decorator/decorators.py
+ M depot_tools/third_party/simplejson/__init__.py
+ M depot_tools/third_party/simplejson/decoder.py
+ M depot_tools/third_party/simplejson/encoder.py
+ M depot_tools/third_party/simplejson/ordered_dict.py
+ M depot_tools/third_party/simplejson/tool.py
+ M depot_tools/third_party/six/__init__.py
+ M depot_tools/third_party/upload.py
+ M depot_tools/trychange.py
+ M depot_tools/upload_to_google_storage.py
+ M depot_tools/watchlists.py
+ M depot_tools/win_toolchain/get_toolchain_if_necessary.py
+ M depot_tools/win_toolchain/package_from_installed.py
+ M proto_quic_tools/sync.sh
+ M proto_quic_tools/update.py
+ M src/base/android/jni_generator/jni_generator.py
+ M src/base/android/jni_generator/jni_generator_tests.py
+ M src/base/third_party/libevent/event_rpcgen.py
+ M src/build/android/adb_command_line.py
+ M src/build/android/adb_logcat_monitor.py
+ M src/build/android/adb_logcat_printer.py
+ M src/build/android/adb_reverse_forwarder.py
+ M src/build/android/asan_symbolize.py
+ M src/build/android/binary_size/apk_downloader.py
+ M src/build/android/devil_chromium.py
+ M src/build/android/emma_coverage_stats.py
+ M src/build/android/emma_coverage_stats_test.py
+ M src/build/android/findbugs_diff.py
+ M src/build/android/generate_emma_html.py
+ M src/build/android/gradle/generate_gradle.py
+ M src/build/android/gradle/gn_to_cmake.py
+ M src/build/android/gyp/aar.py
+ M src/build/android/gyp/copy_ex.py
+ M src/build/android/gyp/create_java_binary_script.py
+ M src/build/android/gyp/create_stack_script.py
+ M src/build/android/gyp/create_test_runner_script.py
+ M src/build/android/gyp/create_tool_wrapper.py
+ M src/build/android/gyp/emma_instr.py
+ M src/build/android/gyp/find.py
+ M src/build/android/gyp/gcc_preprocess.py
+ M src/build/android/gyp/generate_copy_ex_outputs.py
+ M src/build/android/gyp/generate_v14_compatible_resources.py
+ M src/build/android/gyp/jar_toc.py
+ M src/build/android/gyp/java_cpp_enum.py
+ M src/build/android/gyp/java_cpp_enum_tests.py
+ M src/build/android/gyp/java_google_api_keys.py
+ M src/build/android/gyp/lint.py
+ M src/build/android/gyp/package_resources.py
+ M src/build/android/gyp/process_resources.py
+ M src/build/android/gyp/util/build_utils.py
+ M src/build/android/gyp/util/md5_check.py
+ M src/build/android/gyp/util/md5_check_test.py
+ M src/build/android/gyp/write_build_config.py
+ M src/build/android/incremental_install/create_install_script.py
+ M src/build/android/lighttpd_server.py
+ M src/build/android/lint/suppress.py
+ M src/build/android/method_count.py
+ M src/build/android/play_services/update.py
+ M src/build/android/play_services/update_test.py
+ M src/build/android/pylib/chrome_test_server_spawner.py
+ M src/build/android/pylib/content_settings.py
+ M src/build/android/pylib/device_settings.py
+ M src/build/android/pylib/gtest/gtest_test_instance.py
+ M src/build/android/pylib/gtest/gtest_test_instance_test.py
+ M src/build/android/pylib/instrumentation/instrumentation_test_instance.py
+ M src/build/android/pylib/instrumentation/instrumentation_test_instance_test.py
+ M src/build/android/pylib/linker/test_case.py
+ M src/build/android/pylib/local/device/local_device_gtest_run.py
+ M src/build/android/pylib/local/device/local_device_instrumentation_test_run.py
+ M src/build/android/pylib/local/device/local_device_perf_test_run.py
+ M src/build/android/pylib/local/device/local_device_test_run.py
+ M src/build/android/pylib/local/device/local_device_test_run_test.py
+ M src/build/android/pylib/perf/perf_test_instance.py
+ M src/build/android/pylib/pexpect.py
+ M src/build/android/pylib/results/flakiness_dashboard/json_results_generator.py
+ M src/build/android/pylib/results/flakiness_dashboard/json_results_generator_unittest.py
+ M src/build/android/pylib/results/json_results.py
+ M src/build/android/pylib/results/json_results_test.py
+ M src/build/android/pylib/results/presentation/test_results_presentation.py
+ M src/build/android/pylib/results/report_results.py
+ M src/build/android/pylib/symbols/elf_symbolizer.py
+ M src/build/android/pylib/symbols/elf_symbolizer_unittest.py
+ M src/build/android/pylib/utils/argparse_utils.py
+ M src/build/android/pylib/utils/command_option_parser.py
+ M src/build/android/pylib/utils/decorators_test.py
+ M src/build/android/pylib/utils/device_dependencies_test.py
+ M src/build/android/pylib/utils/dexdump_test.py
+ M src/build/android/pylib/utils/emulator.py
+ M src/build/android/pylib/utils/proguard_test.py
+ M src/build/android/pylib/valgrind_tools.py
+ M src/build/android/resource_sizes.py
+ M src/build/android/stacktrace/java_deobfuscate.py
+ M src/build/android/stacktrace/stackwalker.py
+ M src/build/android/test_runner.py
+ M src/build/android/update_verification.py
+ M src/build/apply_locales.py
+ M src/build/check_gn_headers.py
+ M src/build/check_gn_headers_unittest.py
+ M src/build/check_return_value.py
+ M src/build/compiler_version.py
+ M src/build/config/get_host_byteorder.py
+ M src/build/config/ios/codesign.py
+ M src/build/config/ios/find_signing_identity.py
+ M src/build/config/ios/write_framework_hmap.py
+ M src/build/config/linux/pkg-config.py
+ M src/build/config/mac/package_framework.py
+ M src/build/config/mac/prepare_framework_version.py
+ M src/build/config/mac/sdk_info.py
+ M src/build/config/posix/sysroot_ld_path.py
+ M src/build/copy_test_data_ios.py
+ M src/build/detect_host_arch.py
+ M src/build/download_nacl_toolchains.py
+ M src/build/env_dump.py
+ M src/build/experimental/install-build-deps.py
+ M src/build/extract_from_cab.py
+ M src/build/find_depot_tools.py
+ M src/build/fix_gn_headers.py
+ M src/build/fuchsia/update_sdk.py
+ M src/build/get_landmines.py
+ M src/build/get_syzygy_binaries.py
+ M src/build/gn_helpers.py
+ M src/build/gn_run_binary.py
+ M src/build/gyp_chromium.py
+ M src/build/gyp_helper.py
+ M src/build/gypi_to_gn.py
+ M src/build/inverse_depth.py
+ M src/build/landmine_utils.py
+ M src/build/linux/dump_app_syms.py
+ M src/build/linux/install-chromeos-fonts.py
+ M src/build/linux/rewrite_dirs.py
+ M src/build/linux/sysroot_scripts/build_and_upload.py
+ M src/build/linux/sysroot_scripts/install-sysroot.py
+ M src/build/linux/sysroot_scripts/merge-package-lists.py
+ M src/build/linux/unbundle/remove_bundled_libraries.py
+ M src/build/linux/unbundle/replace_gn_files.py
+ M src/build/mac/find_sdk.py
+ M src/build/mac/should_use_hermetic_xcode.py
+ M src/build/mac/tweak_info_plist.py
+ M src/build/mac_toolchain.py
+ M src/build/package_mac_toolchain.py
+ M src/build/print_python_deps.py
+ M src/build/protoc_java.py
+ M src/build/redirect_stdout.py
+ M src/build/rm.py
+ M src/build/symlink.py
+ M src/build/toolchain/clang_static_analyzer_wrapper.py
+ M src/build/toolchain/get_concurrent_links.py
+ M src/build/toolchain/mac/compile_xcassets.py
+ M src/build/toolchain/mac/filter_libtool.py
+ M src/build/toolchain/mac/get_tool_mtime.py
+ M src/build/toolchain/mac/linker_driver.py
+ M src/build/toolchain/win/setup_toolchain.py
+ M src/build/toolchain/win/tool_wrapper.py
+ M src/build/util/lastchange.py
+ M src/build/util/lib/common/perf_tests_results_helper.py
+ M src/build/util/lib/common/unittest_util.py
+ M src/build/util/lib/common/unittest_util_test.py
+ M src/build/util/lib/common/util.py
+ M src/build/util/version.py
+ M src/build/vs_toolchain.py
+ M src/build/win/copy_cdb_to_output.py
+ M src/build/win/merge_pgc_files.py
+ M src/build/win/message_compiler.py
+ M src/build/win/run_pgo_profiling_benchmarks.py
+ M src/build/win/use_ansi_codes.py
+ M src/build/win_is_xtree_patched.py
+ M src/buildtools/checkdeps/builddeps.py
+ M src/buildtools/checkdeps/checkdeps.py
+ M src/buildtools/checkdeps/checkdeps_test.py
+ M src/buildtools/checkdeps/cpp_checker.py
+ M src/buildtools/checkdeps/graphdeps.py
+ M src/buildtools/checkdeps/java_checker.py
+ M src/buildtools/checkdeps/proto_checker.py
+ M src/buildtools/checkdeps/results.py
+ M src/buildtools/checkdeps/rules.py
+ M src/net/android/tools/proxy_test_cases.py
+ M src/net/data/certificate_policies_unittest/generate_policies.py
+ M src/net/data/name_constraints_unittest/generate_name_constraints.py
+ M src/net/data/parse_certificate_unittest/rebase-errors.py
+ M src/net/data/parse_certificate_unittest/regenerate_pem_from_ascii.py
+ M src/net/data/parse_ocsp_unittest/annotate_test_data.py
+ M src/net/data/ssl/scripts/crlsetutil.py
+ M src/net/data/verify_certificate_chain_unittest/rebase-errors.py
+ M src/net/data/verify_signed_data_unittest/annotate_test_data.py
+ M src/net/data/websocket/close_wsh.py
+ M src/net/data/websocket/echo-request-headers_wsh.py
+ M src/net/data/websocket/echo-with-no-extension_wsh.py
+ M src/net/log/stitch_net_log_files.py
+ M src/net/tools/build_hpack_constants.py
+ M src/net/tools/ct_log_list/make_ct_known_logs_list.py
+ M src/net/tools/dafsa/make_dafsa.py
+ M src/net/tools/testserver/asn1.py
+ M src/net/tools/testserver/backoff_server.py
+ M src/net/tools/testserver/echo_message.py
+ M src/net/tools/testserver/minica.py
+ M src/net/tools/testserver/testserver.py
+ M src/net/tools/testserver/testserver_base.py
+ M src/net/tools/update_ios_bundle_data.py
+ M src/testing/buildbot/manage.py
+ M src/testing/buildbot/timeouts.py
+ M src/testing/chromoting/browser_tests_launcher.py
+ M src/testing/chromoting/chromoting_test_driver_launcher.py
+ M src/testing/chromoting/chromoting_test_utilities.py
+ M src/testing/chromoting/download_test_files.py
+ M src/testing/clusterfuzz/common/fuzzy_types.py
+ M src/testing/clusterfuzz/common/utils.py
+ M src/testing/legion/examples/comm_server/task.py
+ M src/testing/legion/examples/hello_world/controller_test.py
+ M src/testing/legion/examples/hello_world/task_test.py
+ M src/testing/legion/examples/http_example/http_client.py
+ M src/testing/legion/examples/http_example/http_server.py
+ M src/testing/legion/examples/http_example/http_test.py
+ M src/testing/legion/examples/subprocess/subprocess_test.py
+ M src/testing/legion/legion_test_case.py
+ M src/testing/legion/lib/comm_server/comm_server.py
+ M src/testing/legion/lib/comm_server/server_handler.py
+ M src/testing/legion/lib/common_lib.py
+ M src/testing/legion/lib/rpc/SimpleJSONRPCServer.py
+ M src/testing/legion/lib/rpc/jsonrpclib.py
+ M src/testing/legion/lib/rpc/rpc_server.py
+ M src/testing/legion/lib/task_controller.py
+ M src/testing/legion/run_task.py
+ M src/testing/legion/tools/legion.py
+ M src/testing/legion/unittests/comm_server_test.py
+ M src/testing/libfuzzer/archive_corpus.py
+ M src/testing/libfuzzer/dictionary_generator.py
+ M src/testing/libfuzzer/tests/check_fuzzer_config.py
+ M src/testing/libfuzzer/tests/check_seed_corpus_archive.py
+ M src/testing/libfuzzer/zip_sources.py
+ M src/testing/scripts/common.py
+ M src/testing/scripts/headless_python_unittests.py
+ M src/testing/scripts/host_info.py
+ M src/testing/scripts/run_telemetry_benchmark_as_googletest.py
+ M src/testing/scripts/sizes.py
+ M src/testing/scripts/telemetry_gpu_unittests.py
+ M src/testing/scripts/telemetry_perf_unittests.py
+ M src/testing/scripts/telemetry_unittests.py
+ M src/testing/scripts/webkit_python_tests.py
+ M src/testing/test_env.py
+ M src/testing/variations/PRESUBMIT.py
+ M src/testing/xvfb.py
+ M src/third_party/binutils/download.py
+ M src/third_party/boringssl/roll_boringssl.py
+ M src/third_party/boringssl/src/third_party/googletest/scripts/fuse_gtest_files.py
+ M src/third_party/boringssl/src/third_party/googletest/scripts/gen_gtest_pred_impl.py
+ M src/third_party/boringssl/src/third_party/googletest/scripts/pump.py
+ M src/third_party/boringssl/src/third_party/googletest/scripts/release_docs.py
+ M src/third_party/boringssl/src/third_party/googletest/scripts/upload.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_break_on_failure_unittest.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_catch_exceptions_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_color_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_env_var_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_filter_unittest.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_help_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_list_tests_unittest.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_shuffle_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_test_utils.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_throw_on_failure_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_uninitialized_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_xml_outfiles_test.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_xml_output_unittest.py
+ M src/third_party/boringssl/src/third_party/googletest/test/gtest_xml_test_utils.py
+ M src/third_party/boringssl/src/third_party/googletest/xcode/Scripts/versiongenerate.py
+ M src/third_party/boringssl/src/util/bot/extract.py
+ M src/third_party/boringssl/src/util/bot/go/bootstrap.py
+ M src/third_party/boringssl/src/util/bot/go/env.py
+ M src/third_party/boringssl/src/util/bot/update_clang.py
+ M src/third_party/boringssl/src/util/bot/vs_env.py
+ M src/third_party/boringssl/src/util/bot/vs_toolchain.py
+ M src/third_party/boringssl/src/util/generate-asm-lcov.py
+ M src/third_party/boringssl/src/util/generate_build_files.py
+ M src/third_party/closure_compiler/build/get_includes.py
+ M src/third_party/closure_compiler/build/outputs.py
+ M src/third_party/closure_compiler/compile2.py
+ M src/third_party/closure_compiler/compiler_test.py
+ M src/third_party/closure_compiler/js_binary.py
+ M src/third_party/closure_compiler/js_minify.py
+ M src/third_party/closure_compiler/processor_test.py
+ M src/third_party/closure_compiler/tools/create_include_gyp.py
+ M src/third_party/googletest/src/googlemock/scripts/fuse_gmock_files.py
+ M src/third_party/googletest/src/googlemock/scripts/generator/cpp/ast.py
+ M src/third_party/googletest/src/googlemock/scripts/generator/cpp/gmock_class.py
+ M src/third_party/googletest/src/googlemock/scripts/generator/cpp/keywords.py
+ M src/third_party/googletest/src/googlemock/scripts/generator/cpp/tokenize.py
+ M src/third_party/googletest/src/googlemock/scripts/generator/cpp/utils.py
+ M src/third_party/googletest/src/googlemock/scripts/gmock_doctor.py
+ M src/third_party/googletest/src/googlemock/scripts/upload.py
+ M src/third_party/googletest/src/googlemock/test/gmock_leak_test.py
+ M src/third_party/googletest/src/googlemock/test/gmock_output_test.py
+ M src/third_party/googletest/src/googletest/scripts/fuse_gtest_files.py
+ M src/third_party/googletest/src/googletest/scripts/gen_gtest_pred_impl.py
+ M src/third_party/googletest/src/googletest/scripts/pump.py
+ M src/third_party/googletest/src/googletest/scripts/release_docs.py
+ M src/third_party/googletest/src/googletest/scripts/upload.py
+ M src/third_party/googletest/src/googletest/test/gtest_break_on_failure_unittest.py
+ M src/third_party/googletest/src/googletest/test/gtest_catch_exceptions_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_color_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_env_var_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_filter_unittest.py
+ M src/third_party/googletest/src/googletest/test/gtest_help_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_list_tests_unittest.py
+ M src/third_party/googletest/src/googletest/test/gtest_shuffle_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_test_utils.py
+ M src/third_party/googletest/src/googletest/test/gtest_throw_on_failure_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_uninitialized_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_xml_outfiles_test.py
+ M src/third_party/googletest/src/googletest/test/gtest_xml_output_unittest.py
+ M src/third_party/googletest/src/googletest/test/gtest_xml_test_utils.py
+ M src/third_party/googletest/src/googletest/xcode/Scripts/versiongenerate.py
+ M src/third_party/icu/scripts/make_data_assembly.py
+ M src/third_party/icu/source/tools/icu-svnprops-check.py
+ M src/third_party/instrumented_libraries/scripts/build_and_package.py
+ M src/third_party/instrumented_libraries/scripts/download_build_install.py
+ M src/third_party/libxml/chromium/roll.py
+ M src/third_party/libxml/src/check-relaxng-test-suite.py
+ M src/third_party/libxml/src/check-relaxng-test-suite2.py
+ M src/third_party/libxml/src/check-xinclude-test-suite.py
+ M src/third_party/libxml/src/check-xml-test-suite.py
+ M src/third_party/libxml/src/check-xsddata-test-suite.py
+ M src/third_party/libxml/src/genUnicode.py
+ M src/third_party/libxml/src/gentest.py
+ M src/third_party/libxml/src/regressions.py
+ M src/third_party/protobuf/examples/add_person.py
+ M src/third_party/protobuf/examples/list_people.py
+ M src/third_party/protobuf/jenkins/make_test_output.py
+ M src/third_party/protobuf/objectivec/DevTools/pddm.py
+ M src/third_party/protobuf/objectivec/DevTools/pddm_tests.py
+ M src/third_party/protobuf/python/google/protobuf/descriptor_pool.py
+ M src/third_party/protobuf/python/google/protobuf/internal/_parameterized.py
+ M src/third_party/protobuf/python/google/protobuf/internal/containers.py
+ M src/third_party/protobuf/python/google/protobuf/internal/decoder.py
+ M src/third_party/protobuf/python/google/protobuf/internal/descriptor_pool_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/descriptor_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/generator_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/json_format_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/message_factory_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/message_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/python_message.py
+ M src/third_party/protobuf/python/google/protobuf/internal/reflection_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/test_util.py
+ M src/third_party/protobuf/python/google/protobuf/internal/text_format_test.py
+ M src/third_party/protobuf/python/google/protobuf/internal/type_checkers.py
+ M src/third_party/protobuf/python/google/protobuf/internal/well_known_types_test.py
+ M src/third_party/protobuf/python/google/protobuf/message_factory.py
+ M src/third_party/protobuf/python/google/protobuf/proto_builder.py
+ M src/third_party/protobuf/python/google/protobuf/reflection.py
+ M src/third_party/protobuf/python/google/protobuf/text_format.py
+ M src/third_party/protobuf/python/mox.py
+ M src/third_party/protobuf/python/setup.py
+ M src/third_party/protobuf/python/stubout.py
+ M src/third_party/protobuf/third_party/six/six.py
+ M src/third_party/pyftpdlib/src/demo/unix_daemon.py
+ M src/third_party/pyftpdlib/src/pyftpdlib/contrib/authorizers.py
+ M src/third_party/pyftpdlib/src/pyftpdlib/contrib/handlers.py
+ M src/third_party/pyftpdlib/src/pyftpdlib/ftpserver.py
+ M src/third_party/pyftpdlib/src/test/bench.py
+ M src/third_party/pyftpdlib/src/test/test_contrib.py
+ M src/third_party/pyftpdlib/src/test/test_ftpd.py
+ M src/third_party/pywebsocket/src/example/bench_wsh.py
+ M src/third_party/pywebsocket/src/example/benchmark_helper_wsh.py
+ M src/third_party/pywebsocket/src/example/cookie_wsh.py
+ M src/third_party/pywebsocket/src/example/echo_client.py
+ M src/third_party/pywebsocket/src/example/echo_noext_wsh.py
+ M src/third_party/pywebsocket/src/example/echo_wsh.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/_stream_base.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/_stream_hybi.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/common.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/dispatch.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/extensions.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/handshake/__init__.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/handshake/_base.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/handshake/hybi.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/headerparserhandler.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/http_header_util.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/memorizingfile.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/msgutil.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/mux.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/standalone.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/util.py
+ M src/third_party/pywebsocket/src/mod_pywebsocket/xhr_benchmark_handler.py
+ M src/third_party/pywebsocket/src/setup.py
+ M src/third_party/pywebsocket/src/test/client_for_testing.py
+ M src/third_party/pywebsocket/src/test/mock.py
+ M src/third_party/pywebsocket/src/test/mux_client_for_testing.py
+ M src/third_party/pywebsocket/src/test/test_dispatch.py
+ M src/third_party/pywebsocket/src/test/test_endtoend.py
+ M src/third_party/pywebsocket/src/test/test_extensions.py
+ M src/third_party/pywebsocket/src/test/test_handshake.py
+ M src/third_party/pywebsocket/src/test/test_handshake_hybi.py
+ M src/third_party/pywebsocket/src/test/test_handshake_hybi00.py
+ M src/third_party/pywebsocket/src/test/test_memorizingfile.py
+ M src/third_party/pywebsocket/src/test/test_mock.py
+ M src/third_party/pywebsocket/src/test/test_msgutil.py
+ M src/third_party/pywebsocket/src/test/test_mux.py
+ M src/third_party/pywebsocket/src/test/test_stream.py
+ M src/third_party/pywebsocket/src/test/test_stream_hixie75.py
+ M src/third_party/pywebsocket/src/test/test_util.py
+ M src/third_party/tlslite/scripts/tls.py
+ M src/third_party/tlslite/scripts/tlsdb.py
+ M src/third_party/tlslite/tests/httpsclient.py
+ M src/third_party/tlslite/tests/tlstest.py
+ M src/third_party/tlslite/tlslite/basedb.py
+ M src/third_party/tlslite/tlslite/integration/asyncstatemachine.py
+ M src/third_party/tlslite/tlslite/integration/httptlsconnection.py
+ M src/third_party/tlslite/tlslite/integration/xmlrpcserver.py
+ M src/third_party/tlslite/tlslite/integration/xmlrpctransport.py
+ M src/third_party/tlslite/tlslite/tlsconnection.py
+ M src/third_party/tlslite/tlslite/tlsrecordlayer.py
+ M src/third_party/tlslite/tlslite/utils/compat.py
+ M src/third_party/tlslite/tlslite/utils/cryptomath.py
+ M src/third_party/tlslite/tlslite/utils/pycrypto_rsakey.py
+ M src/third_party/yasm/source/patched-yasm/Mkfiles/vc9/vc98_swap.py
+ M src/third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py
+ M src/third_party/yasm/source/patched-yasm/modules/arch/x86/tests/gen-fma-test.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/cparse.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/genpyx.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/ir.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/lexer.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/node.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/pyxelator/work_unit.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/tests/__init__.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/tests/test_expr.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/tests/test_intnum.py
+ M src/third_party/yasm/source/patched-yasm/tools/python-yasm/tests/test_symrec.py
+ M src/tools/accessibility/dump_accessibility_tree_auralinux.py
+ M src/tools/accessibility/nvda/nvda_chrome_tests.py
+ M src/tools/accessibility/rebase_dump_accessibility_tree_test.py
+ M src/tools/android/appstats.py
+ M src/tools/android/customtabs_benchmark/scripts/run_benchmark.py
+ M src/tools/android/dexdiffer/dexdiffer.py
+ M src/tools/android/eclipse/generate_cdt_clang_settings.py
+ M src/tools/android/find_annotated_tests.py
+ M src/tools/android/find_unused_resources.py
+ M src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py
+ M src/tools/android/kerberos/negotiate_test_server.py
+ M src/tools/android/loading/activity_lens.py
+ M src/tools/android/loading/activity_lens_unittest.py
+ M src/tools/android/loading/analyze.py
+ M src/tools/android/loading/chrome_cache.py
+ M src/tools/android/loading/chrome_cache_unittest.py
+ M src/tools/android/loading/cloud/backend/clovis_task_handler.py
+ M src/tools/android/loading/cloud/backend/multiprocessing_helper.py
+ M src/tools/android/loading/cloud/backend/report_task_handler.py
+ M src/tools/android/loading/cloud/common/loading_trace_database.py
+ M src/tools/android/loading/cloud/frontend/memory_logs.py
+ M src/tools/android/loading/common_util.py
+ M src/tools/android/loading/common_util_unittest.py
+ M src/tools/android/loading/content_classification_lens.py
+ M src/tools/android/loading/content_classification_lens_unittest.py
+ M src/tools/android/loading/controller.py
+ M src/tools/android/loading/core_set.py
+ M src/tools/android/loading/cost_to_csv.py
+ M src/tools/android/loading/dag_unittest.py
+ M src/tools/android/loading/dependency_graph.py
+ M src/tools/android/loading/devtools_monitor.py
+ M src/tools/android/loading/emulation_unittest.py
+ M src/tools/android/loading/frame_load_lens.py
+ M src/tools/android/loading/graph.py
+ M src/tools/android/loading/graph_unittest.py
+ M src/tools/android/loading/loading_graph_view_visualization.py
+ M src/tools/android/loading/loading_trace_analyzer.py
+ M src/tools/android/loading/metrics.py
+ M src/tools/android/loading/metrics_unittest.py
+ M src/tools/android/loading/network_activity_lens.py
+ M src/tools/android/loading/network_activity_lens_unittest.py
+ M src/tools/android/loading/network_cpu_activity_view.py
+ M src/tools/android/loading/node_cost_csv.py
+ M src/tools/android/loading/page_track_unittest.py
+ M src/tools/android/loading/prefetch_view.py
+ M src/tools/android/loading/queuing_lens.py
+ M src/tools/android/loading/report.py
+ M src/tools/android/loading/request_dependencies_lens.py
+ M src/tools/android/loading/request_dependencies_lens_unittest.py
+ M src/tools/android/loading/request_track.py
+ M src/tools/android/loading/request_track_unittest.py
+ M src/tools/android/loading/resource_sack.py
+ M src/tools/android/loading/resource_sack_unittest.py
+ M src/tools/android/loading/sandwich.py
+ M src/tools/android/loading/sandwich_metrics.py
+ M src/tools/android/loading/sandwich_metrics_unittest.py
+ M src/tools/android/loading/sandwich_prefetch.py
+ M src/tools/android/loading/sandwich_prefetch_unittest.py
+ M src/tools/android/loading/sandwich_runner.py
+ M src/tools/android/loading/sandwich_swr.py
+ M src/tools/android/loading/sandwich_utils.py
+ M src/tools/android/loading/task_manager.py
+ M src/tools/android/loading/task_manager_unittest.py
+ M src/tools/android/loading/trace_test/webserver_test.py
+ M src/tools/android/loading/trace_test/webserver_unittest.py
+ M src/tools/android/loading/tracing_track.py
+ M src/tools/android/loading/tracing_track_unittest.py
+ M src/tools/android/loading/user_satisfied_lens.py
+ M src/tools/android/loading/wpr_backend.py
+ M src/tools/android/loading/wpr_backend_unittest.py
+ M src/tools/android/memdump/memsymbols.py
+ M src/tools/android/mempressure.py
+ M src/tools/android/remove_strings.py
+ M src/tools/android/roll/update_support_library.py
+ M src/tools/auto_bisect/PRESUBMIT.py
+ M src/tools/auto_bisect/bisect_perf_regression.py
+ M src/tools/auto_bisect/bisect_perf_regression_test.py
+ M src/tools/auto_bisect/bisect_printer.py
+ M src/tools/auto_bisect/bisect_results.py
+ M src/tools/auto_bisect/bisect_results_json.py
+ M src/tools/auto_bisect/bisect_results_test.py
+ M src/tools/auto_bisect/bisect_state_test.py
+ M src/tools/auto_bisect/bisect_utils.py
+ M src/tools/auto_bisect/builder.py
+ M src/tools/auto_bisect/configs/try.py
+ M src/tools/auto_bisect/fetch_build.py
+ M src/tools/auto_bisect/fetch_build_test.py
+ M src/tools/auto_bisect/math_utils.py
+ M src/tools/auto_bisect/math_utils_test.py
+ M src/tools/auto_bisect/query_crbug.py
+ M src/tools/auto_bisect/query_crbug_test.py
+ M src/tools/auto_bisect/request_build.py
+ M src/tools/auto_bisect/source_control.py
+ M src/tools/auto_bisect/source_control_test.py
+ M src/tools/auto_bisect/ttest.py
+ M src/tools/auto_bisect/ttest_test.py
+ M src/tools/binary_size/diagnose_bloat.py
+ M src/tools/binary_size/libsupersize/archive.py
+ M src/tools/binary_size/libsupersize/concurrent.py
+ M src/tools/binary_size/libsupersize/console.py
+ M src/tools/binary_size/libsupersize/describe.py
+ M src/tools/binary_size/libsupersize/diff.py
+ M src/tools/binary_size/libsupersize/file_format.py
+ M src/tools/binary_size/libsupersize/html_report.py
+ M src/tools/binary_size/libsupersize/integration_test.py
+ M src/tools/binary_size/libsupersize/main.py
+ M src/tools/binary_size/libsupersize/models.py
+ M src/tools/binary_size/libsupersize/nm.py
+ M src/tools/bisect-builds.py
+ M src/tools/bisect-manual-test.py
+ M src/tools/bisect_repackage/bisect_repackage.py
+ M src/tools/bisect_repackage/bisect_repackage_utils.py
+ M src/tools/bisect_test.py
+ M src/tools/blink_rename_merge_helper/pylib/blink_rename_merge_helper/driver.py
+ M src/tools/blink_rename_merge_helper/pylib/blink_rename_merge_helper/merge.py
+ M src/tools/blink_rename_merge_helper/run.py
+ M src/tools/boilerplate.py
+ M src/tools/check_ecs_deps/check_ecs_deps.py
+ M src/tools/check_git_config.py
+ M src/tools/check_grd_for_unused_strings.py
+ M src/tools/checkbins/checkbins.py
+ M src/tools/checklicenses/checklicenses.py
+ M src/tools/checkperms/checkperms.py
+ M src/tools/checkteamtags/checkteamtags.py
+ M src/tools/checkteamtags/extract_components.py
+ M src/tools/checkteamtags/extract_components_test.py
+ M src/tools/chrome_proxy/common/inspector_network.py
+ M src/tools/chrome_proxy/common/inspector_network_unittest.py
+ M src/tools/chrome_proxy/common/network_metrics.py
+ M src/tools/chrome_proxy/integration_tests/chrome_proxy_measurements.py
+ M src/tools/chrome_proxy/integration_tests/chrome_proxy_metrics.py
+ M src/tools/chrome_proxy/integration_tests/chrome_proxy_pagesets/__init__.py
+ M src/tools/chrome_proxy/live_tests/chrome_proxy_measurements.py
+ M src/tools/chrome_proxy/live_tests/chrome_proxy_metrics.py
+ M src/tools/chrome_proxy/live_tests/pagesets/__init__.py
+ M src/tools/chrome_proxy/webdriver/bypass.py
+ M src/tools/chrome_proxy/webdriver/common.py
+ M src/tools/chrome_proxy/webdriver/compression_regression.py
+ M src/tools/chrome_proxy/webdriver/data_use.py
+ M src/tools/chrome_proxy/webdriver/decorator_smoke.py
+ M src/tools/chrome_proxy/webdriver/decorators.py
+ M src/tools/chrome_proxy/webdriver/examples.py
+ M src/tools/chrome_proxy/webdriver/fallback.py
+ M src/tools/chrome_proxy/webdriver/html5.py
+ M src/tools/chrome_proxy/webdriver/lite_page.py
+ M src/tools/chrome_proxy/webdriver/lofi.py
+ M src/tools/chrome_proxy/webdriver/quic.py
+ M src/tools/chrome_proxy/webdriver/reenable_after_bypass.py
+ M src/tools/chrome_proxy/webdriver/run_all_tests.py
+ M src/tools/chrome_proxy/webdriver/safebrowsing.py
+ M src/tools/chrome_proxy/webdriver/smoke.py
+ M src/tools/chrome_proxy/webdriver/variations_combinations.py
+ M src/tools/chrome_proxy/webdriver/video.py
+ M src/tools/clang/blink_gc_plugin/process-graph.py
+ M src/tools/clang/blink_gc_plugin/tests/test.py
+ M src/tools/clang/pylib/clang/compile_db.py
+ M src/tools/clang/pylib/clang/plugin_testing.py
+ M src/tools/clang/scripts/apply_edits.py
+ M src/tools/clang/scripts/apply_fixits.py
+ M src/tools/clang/scripts/build_file.py
+ M src/tools/clang/scripts/extract_edits.py
+ M src/tools/clang/scripts/generate_compdb.py
+ M src/tools/clang/scripts/package.py
+ M src/tools/clang/scripts/run_tool.py
+ M src/tools/clang/scripts/test_tool.py
+ M src/tools/clang/scripts/update.py
+ M src/tools/clang/scripts/upload_revision.py
+ M src/tools/clang/translation_unit/test_translation_unit.py
+ M src/tools/code_coverage/croc.py
+ M src/tools/code_coverage/croc_html.py
+ M src/tools/code_coverage/croc_test.py
+ M src/tools/codesearch/codesearch/__init__.py
+ M src/tools/codesearch/codesearch/__main__.py
+ M src/tools/codesearch/codesearch/client_api.py
+ M src/tools/codesearch/codesearch/file_cache.py
+ M src/tools/codesearch/codesearch/messages.py
+ M src/tools/codesearch/codesearch/test_file_cache.py
+ M src/tools/codesearch/codesearch/test_messages.py
+ M src/tools/compile_test/compile_test.py
+ M src/tools/copyright_scanner/copyright_scanner.py
+ M src/tools/copyright_scanner/copyright_scanner_unittest.py
+ M src/tools/coverity/coverity.py
+ M src/tools/cr/cr/actions/adb.py
+ M src/tools/cr/cr/actions/gn.py
+ M src/tools/cr/cr/actions/gyp.py
+ M src/tools/cr/cr/autocomplete.py
+ M src/tools/cr/cr/base/android.py
+ M src/tools/cr/cr/base/client.py
+ M src/tools/cr/cr/base/context.py
+ M src/tools/cr/cr/base/host.py
+ M src/tools/cr/cr/commands/args.py
+ M src/tools/cr/cr/commands/clobber.py
+ M src/tools/cr/cr/commands/info.py
+ M src/tools/cr/cr/commands/init.py
+ M src/tools/cr/cr/commands/shell.py
+ M src/tools/cr/cr/config.py
+ M src/tools/cr/cr/fixups/arch.py
+ M src/tools/cr/cr/loader.py
+ M src/tools/cr/cr/plugin.py
+ M src/tools/cr/cr/targets/target.py
+ M src/tools/cr/cr/visitor.py
+ M src/tools/cr/main.py
+ M src/tools/cygprofile/check_orderfile_unittest.py
+ M src/tools/cygprofile/cyglog_to_orderfile.py
+ M src/tools/cygprofile/cyglog_to_orderfile_unittest.py
+ M src/tools/cygprofile/cygprofile_utils.py
+ M src/tools/cygprofile/mergetraces.py
+ M src/tools/cygprofile/patch_orderfile.py
+ M src/tools/cygprofile/patch_orderfile_unittest.py
+ M src/tools/cygprofile/profile_android_startup.py
+ M src/tools/cygprofile/symbol_extractor.py
+ M src/tools/cygprofile/symbol_extractor_unittest.py
+ M src/tools/determinism/compare_build_artifacts.py
+ M src/tools/determinism/remove_build_metadata.py
+ M src/tools/diagnose-me.py
+ M src/tools/dromaeo_benchmark_runner/dromaeo_benchmark_runner.py
+ M src/tools/find_runtime_symbols/find_runtime_symbols.py
+ M src/tools/find_runtime_symbols/prepare_symbol_info.py
+ M src/tools/find_runtime_symbols/reduce_debugline.py
+ M src/tools/find_runtime_symbols/tests/reduce_debugline_test.py
+ M src/tools/flakiness/find_flakiness.py
+ M src/tools/flakiness/is_flaky.py
+ M src/tools/gen_keyboard_overlay_data/gen_keyboard_overlay_data.py
+ M src/tools/generate_stubs/generate_stubs_unittest.py
+ M src/tools/git/for-all-touched-files.py
+ M src/tools/git/git-diff-ide.py
+ M src/tools/git/mass-rename.py
+ M src/tools/git/mffr.py
+ M src/tools/git/move_source_file.py
+ M src/tools/gn/bin/compare_test_lists.py
+ M src/tools/gn/bin/gn-format.py
+ M src/tools/gn/bin/help_as_html.py
+ M src/tools/gn/bin/roll_gn.py
+ M src/tools/gn/bootstrap/bootstrap.py
+ M src/tools/gn/last_commit_position.py
+ M src/tools/grit/grit/clique.py
+ M src/tools/grit/grit/clique_unittest.py
+ M src/tools/grit/grit/constants.py
+ M src/tools/grit/grit/extern/FP.py
+ M src/tools/grit/grit/extern/tclib.py
+ M src/tools/grit/grit/format/android_xml.py
+ M src/tools/grit/grit/format/android_xml_unittest.py
+ M src/tools/grit/grit/format/c_format.py
+ M src/tools/grit/grit/format/c_format_unittest.py
+ M src/tools/grit/grit/format/chrome_messages_json_unittest.py
+ M src/tools/grit/grit/format/data_pack.py
+ M src/tools/grit/grit/format/data_pack_unittest.py
+ M src/tools/grit/grit/format/gen_predetermined_ids.py
+ M src/tools/grit/grit/format/gen_predetermined_ids_unittest.py
+ M src/tools/grit/grit/format/gzip_string.py
+ M src/tools/grit/grit/format/gzip_string_unittest.py
+ M src/tools/grit/grit/format/html_inline.py
+ M src/tools/grit/grit/format/html_inline_unittest.py
+ M src/tools/grit/grit/format/js_map_format_unittest.py
+ M src/tools/grit/grit/format/minifier.py
+ M src/tools/grit/grit/format/policy_templates/policy_template_generator.py
+ M src/tools/grit/grit/format/policy_templates/policy_template_generator_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/adm_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/admx_writer.py
+ M src/tools/grit/grit/format/policy_templates/writers/android_policy_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/doc_writer.py
+ M src/tools/grit/grit/format/policy_templates/writers/doc_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/json_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/mock_writer.py
+ M src/tools/grit/grit/format/policy_templates/writers/plist_strings_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/plist_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/reg_writer_unittest.py
+ M src/tools/grit/grit/format/policy_templates/writers/template_writer.py
+ M src/tools/grit/grit/format/policy_templates/writers/writer_unittest_common.py
+ M src/tools/grit/grit/format/policy_templates/writers/xml_formatted_writer.py
+ M src/tools/grit/grit/format/policy_templates/writers/xml_writer_base_unittest.py
+ M src/tools/grit/grit/format/rc.py
+ M src/tools/grit/grit/format/rc_header.py
+ M src/tools/grit/grit/format/rc_header_unittest.py
+ M src/tools/grit/grit/format/rc_unittest.py
+ M src/tools/grit/grit/format/resource_map_unittest.py
+ M src/tools/grit/grit/gather/admin_template_unittest.py
+ M src/tools/grit/grit/gather/chrome_html_unittest.py
+ M src/tools/grit/grit/gather/chrome_scaled_image.py
+ M src/tools/grit/grit/gather/chrome_scaled_image_unittest.py
+ M src/tools/grit/grit/gather/igoogle_strings.py
+ M src/tools/grit/grit/gather/igoogle_strings_unittest.py
+ M src/tools/grit/grit/gather/interface.py
+ M src/tools/grit/grit/gather/muppet_strings.py
+ M src/tools/grit/grit/gather/muppet_strings_unittest.py
+ M src/tools/grit/grit/gather/policy_json.py
+ M src/tools/grit/grit/gather/policy_json_unittest.py
+ M src/tools/grit/grit/gather/rc.py
+ M src/tools/grit/grit/gather/rc_unittest.py
+ M src/tools/grit/grit/gather/regexp.py
+ M src/tools/grit/grit/gather/skeleton_gatherer.py
+ M src/tools/grit/grit/gather/tr_html.py
+ M src/tools/grit/grit/gather/tr_html_unittest.py
+ M src/tools/grit/grit/gather/txt_unittest.py
+ M src/tools/grit/grit/grd_reader.py
+ M src/tools/grit/grit/grd_reader_unittest.py
+ M src/tools/grit/grit/grit_runner.py
+ M src/tools/grit/grit/grit_runner_unittest.py
+ M src/tools/grit/grit/node/base.py
+ M src/tools/grit/grit/node/base_unittest.py
+ M src/tools/grit/grit/node/custom/filename_unittest.py
+ M src/tools/grit/grit/node/include_unittest.py
+ M src/tools/grit/grit/node/io.py
+ M src/tools/grit/grit/node/io_unittest.py
+ M src/tools/grit/grit/node/message.py
+ M src/tools/grit/grit/node/message_unittest.py
+ M src/tools/grit/grit/node/misc.py
+ M src/tools/grit/grit/node/misc_unittest.py
+ M src/tools/grit/grit/node/structure.py
+ M src/tools/grit/grit/node/structure_unittest.py
+ M src/tools/grit/grit/node/variant.py
+ M src/tools/grit/grit/pseudo.py
+ M src/tools/grit/grit/pseudo_rtl.py
+ M src/tools/grit/grit/pseudo_unittest.py
+ M src/tools/grit/grit/scons.py
+ M src/tools/grit/grit/shortcuts.py
+ M src/tools/grit/grit/shortcuts_unittests.py
+ M src/tools/grit/grit/tclib.py
+ M src/tools/grit/grit/tclib_unittest.py
+ M src/tools/grit/grit/tool/android2grd.py
+ M src/tools/grit/grit/tool/android2grd_unittest.py
+ M src/tools/grit/grit/tool/build.py
+ M src/tools/grit/grit/tool/build_unittest.py
+ M src/tools/grit/grit/tool/buildinfo.py
+ M src/tools/grit/grit/tool/buildinfo_unittest.py
+ M src/tools/grit/grit/tool/count.py
+ M src/tools/grit/grit/tool/diff_structures.py
+ M src/tools/grit/grit/tool/menu_from_parts.py
+ M src/tools/grit/grit/tool/newgrd.py
+ M src/tools/grit/grit/tool/postprocess_unittest.py
+ M src/tools/grit/grit/tool/preprocess_unittest.py
+ M src/tools/grit/grit/tool/rc2grd.py
+ M src/tools/grit/grit/tool/rc2grd_unittest.py
+ M src/tools/grit/grit/tool/resize.py
+ M src/tools/grit/grit/tool/test.py
+ M src/tools/grit/grit/tool/toolbar_postprocess.py
+ M src/tools/grit/grit/tool/toolbar_preprocess.py
+ M src/tools/grit/grit/tool/transl2tc.py
+ M src/tools/grit/grit/tool/transl2tc_unittest.py
+ M src/tools/grit/grit/tool/xmb.py
+ M src/tools/grit/grit/tool/xmb_unittest.py
+ M src/tools/grit/grit/util.py
+ M src/tools/grit/grit/util_unittest.py
+ M src/tools/grit/grit/xtb_reader_unittest.py
+ M src/tools/grit/grit_info.py
+ M src/tools/grit/stamp_grit_sources.py
+ M src/tools/gyp/PRESUBMIT.py
+ M src/tools/gyp/buildbot/buildbot_run.py
+ M src/tools/gyp/gyptest.py
+ M src/tools/gyp/pylib/gyp/MSVSSettings.py
+ M src/tools/gyp/pylib/gyp/MSVSSettings_test.py
+ M src/tools/gyp/pylib/gyp/MSVSUserFile.py
+ M src/tools/gyp/pylib/gyp/MSVSUtil.py
+ M src/tools/gyp/pylib/gyp/MSVSVersion.py
+ M src/tools/gyp/pylib/gyp/__init__.py
+ M src/tools/gyp/pylib/gyp/common.py
+ M src/tools/gyp/pylib/gyp/common_test.py
+ M src/tools/gyp/pylib/gyp/easy_xml.py
+ M src/tools/gyp/pylib/gyp/easy_xml_test.py
+ M src/tools/gyp/pylib/gyp/flock_tool.py
+ M src/tools/gyp/pylib/gyp/generator/analyzer.py
+ M src/tools/gyp/pylib/gyp/generator/cmake.py
+ M src/tools/gyp/pylib/gyp/generator/dump_dependency_json.py
+ M src/tools/gyp/pylib/gyp/generator/eclipse.py
+ M src/tools/gyp/pylib/gyp/generator/gypd.py
+ M src/tools/gyp/pylib/gyp/generator/make.py
+ M src/tools/gyp/pylib/gyp/generator/msvs.py
+ M src/tools/gyp/pylib/gyp/generator/msvs_test.py
+ M src/tools/gyp/pylib/gyp/generator/ninja.py
+ M src/tools/gyp/pylib/gyp/generator/ninja_test.py
+ M src/tools/gyp/pylib/gyp/generator/xcode.py
+ M src/tools/gyp/pylib/gyp/input.py
+ M src/tools/gyp/pylib/gyp/input_test.py
+ M src/tools/gyp/pylib/gyp/mac_tool.py
+ M src/tools/gyp/pylib/gyp/msvs_emulation.py
+ M src/tools/gyp/pylib/gyp/ninja_syntax.py
+ M src/tools/gyp/pylib/gyp/ordered_dict.py
+ M src/tools/gyp/pylib/gyp/simple_copy.py
+ M src/tools/gyp/pylib/gyp/win_tool.py
+ M src/tools/gyp/pylib/gyp/xcode_emulation.py
+ M src/tools/gyp/pylib/gyp/xcode_ninja.py
+ M src/tools/gyp/pylib/gyp/xcodeproj_file.py
+ M src/tools/gyp/pylib/gyp/xml_fix.py
+ M src/tools/gyp/test/actions-multiple-outputs-with-dependencies/gyptest-action.py
+ M src/tools/gyp/test/actions-multiple-outputs/gyptest-multiple-outputs.py
+ M src/tools/gyp/test/analyzer/gyptest-analyzer.py
+ M src/tools/gyp/test/arflags/gyptest-arflags.py
+ M src/tools/gyp/test/compiler-override/my_cc.py
+ M src/tools/gyp/test/compiler-override/my_cxx.py
+ M src/tools/gyp/test/compiler-override/my_ld.py
+ M src/tools/gyp/test/compiler-override/my_nm.py
+ M src/tools/gyp/test/compiler-override/my_readelf.py
+ M src/tools/gyp/test/configurations/inheritance/gyptest-duplicates.py
+ M src/tools/gyp/test/configurations/target_platform/gyptest-target_platform.py
+ M src/tools/gyp/test/copies/gyptest-updir.py
+ M src/tools/gyp/test/determinism/gyptest-solibs.py
+ M src/tools/gyp/test/determinism/rule.py
+ M src/tools/gyp/test/escaping/gyptest-colon.py
+ M src/tools/gyp/test/generator-output/gyptest-mac-bundle.py
+ M src/tools/gyp/test/ios/gyptest-app-ios.py
+ M src/tools/gyp/test/ios/gyptest-extension.py
+ M src/tools/gyp/test/ios/gyptest-per-config-settings.py
+ M src/tools/gyp/test/ios/gyptest-watch.py
+ M src/tools/gyp/test/lib/TestCmd.py
+ M src/tools/gyp/test/lib/TestCommon.py
+ M src/tools/gyp/test/lib/TestGyp.py
+ M src/tools/gyp/test/lib/TestMac.py
+ M src/tools/gyp/test/lib/TestWin.py
+ M src/tools/gyp/test/library/gyptest-shared-obj-install-path.py
+ M src/tools/gyp/test/linux/ldflags-duplicates/check-ldflags.py
+ M src/tools/gyp/test/mac/gyptest-app-assets-catalog.py
+ M src/tools/gyp/test/mac/gyptest-app-error.py
+ M src/tools/gyp/test/mac/gyptest-app.py
+ M src/tools/gyp/test/mac/gyptest-bundle-resources.py
+ M src/tools/gyp/test/mac/gyptest-copies.py
+ M src/tools/gyp/test/mac/gyptest-depend-on-bundle.py
+ M src/tools/gyp/test/mac/gyptest-framework.py
+ M src/tools/gyp/test/mac/gyptest-infoplist-process.py
+ M src/tools/gyp/test/mac/gyptest-installname.py
+ M src/tools/gyp/test/mac/gyptest-ldflags-passed-to-libtool.py
+ M src/tools/gyp/test/mac/gyptest-loadable-module.py
+ M src/tools/gyp/test/mac/gyptest-lto.py
+ M src/tools/gyp/test/mac/gyptest-missing-cfbundlesignature.py
+ M src/tools/gyp/test/mac/gyptest-non-strs-flattened-to-env.py
+ M src/tools/gyp/test/mac/gyptest-postbuild-defaults.py
+ M src/tools/gyp/test/mac/gyptest-postbuild-fail.py
+ M src/tools/gyp/test/mac/gyptest-rebuild.py
+ M src/tools/gyp/test/mac/gyptest-sdkroot.py
+ M src/tools/gyp/test/mac/gyptest-sourceless-module.py
+ M src/tools/gyp/test/mac/gyptest-strip-default.py
+ M src/tools/gyp/test/mac/gyptest-strip.py
+ M src/tools/gyp/test/mac/gyptest-swift-library.py
+ M src/tools/gyp/test/mac/gyptest-xcode-env-order.py
+ M src/tools/gyp/test/make/gyptest-noload.py
+ M src/tools/gyp/test/make_global_settings/full-toolchain/my_nm.py
+ M src/tools/gyp/test/make_global_settings/full-toolchain/my_readelf.py
+ M src/tools/gyp/test/many-actions/gyptest-many-actions-unsorted.py
+ M src/tools/gyp/test/many-actions/gyptest-many-actions.py
+ M src/tools/gyp/test/msvs/config_attrs/gyptest-config_attrs.py
+ M src/tools/gyp/test/msvs/rules_stdout_stderr/rule_stderr.py
+ M src/tools/gyp/test/msvs/rules_stdout_stderr/rule_stdout.py
+ M src/tools/gyp/test/ninja/action_dependencies/gyptest-action-dependencies.py
+ M src/tools/gyp/test/ninja/solibs_avoid_relinking/gyptest-solibs-avoid-relinking.py
+ M src/tools/gyp/test/rules-dirname/gyptest-dirname.py
+ M src/tools/gyp/test/rules-variables/gyptest-rules-variables.py
+ M src/tools/gyp/test/rules/gyptest-all.py
+ M src/tools/gyp/test/rules/gyptest-default.py
+ M src/tools/gyp/test/standalone/gyptest-standalone.py
+ M src/tools/gyp/test/variables/commands/gyptest-commands-ignore-env.py
+ M src/tools/gyp/test/variables/commands/gyptest-commands-repeated.py
+ M src/tools/gyp/test/variables/commands/gyptest-commands.py
+ M src/tools/gyp/test/variables/commands/repeated_multidir/print_cwd_basename.py
+ M src/tools/gyp/test/variables/commands/test.py
+ M src/tools/gyp/test/variables/filelist/gyptest-filelist-golden.py
+ M src/tools/gyp/test/variables/filelist/gyptest-filelist.py
+ M src/tools/gyp/test/win/gyptest-cl-enable-enhanced-instruction-set.py
+ M src/tools/gyp/test/win/gyptest-cl-function-level-linking.py
+ M src/tools/gyp/test/win/gyptest-command-quote.py
+ M src/tools/gyp/test/win/gyptest-link-defrelink.py
+ M src/tools/gyp/test/win/gyptest-link-enable-uac.py
+ M src/tools/gyp/test/win/gyptest-link-enable-winrt-app-revision.py
+ M src/tools/gyp/test/win/gyptest-link-enable-winrt-target-platform-version.py
+ M src/tools/gyp/test/win/gyptest-link-enable-winrt.py
+ M src/tools/gyp/test/win/gyptest-link-large-pdb.py
+ M src/tools/gyp/test/win/gyptest-link-ordering.py
+ M src/tools/gyp/test/win/gyptest-link-restat-importlib.py
+ M src/tools/gyp/test/win/gyptest-macro-targetfilename.py
+ M src/tools/gyp/test/win/gyptest-rc-build.py
+ M src/tools/gyp/test/win/vs-macros/as.py
+ M src/tools/gyp/tools/graphviz.py
+ M src/tools/gyp/tools/pretty_gyp.py
+ M src/tools/gyp/tools/pretty_sln.py
+ M src/tools/gyp/tools/pretty_vcproj.py
+ M src/tools/gypv8sh.py
+ M src/tools/idl_parser/idl_lexer_test.py
+ M src/tools/idl_parser/idl_node.py
+ M src/tools/idl_parser/idl_parser.py
+ M src/tools/idl_parser/idl_parser_test.py
+ M src/tools/idl_parser/idl_ppapi_lexer.py
+ M src/tools/idl_parser/idl_ppapi_parser.py
+ M src/tools/idl_parser/run_tests.py
+ M src/tools/include_tracer.py
+ M src/tools/ipc_fuzzer/scripts/cf_package_builder.py
+ M src/tools/ipc_fuzzer/scripts/ipc_fuzzer_gen.py
+ M src/tools/ipc_fuzzer/scripts/ipc_fuzzer_mut.py
+ M src/tools/ipc_fuzzer/scripts/play_testcase.py
+ M src/tools/ipc_fuzzer/scripts/remove_close_messages.py
+ M src/tools/ipc_messages_log.py
+ M src/tools/json_comment_eater/json_comment_eater.py
+ M src/tools/json_schema_compiler/cc_generator.py
+ M src/tools/json_schema_compiler/code_test.py
+ M src/tools/json_schema_compiler/compiler.py
+ M src/tools/json_schema_compiler/cpp_bundle_generator.py
+ M src/tools/json_schema_compiler/cpp_bundle_generator_test.py
+ M src/tools/json_schema_compiler/cpp_type_generator.py
+ M src/tools/json_schema_compiler/cpp_type_generator_test.py
+ M src/tools/json_schema_compiler/cpp_util_test.py
+ M src/tools/json_schema_compiler/feature_compiler.py
+ M src/tools/json_schema_compiler/feature_compiler_test.py
+ M src/tools/json_schema_compiler/features_compiler.py
+ M src/tools/json_schema_compiler/h_generator.py
+ M src/tools/json_schema_compiler/highlighters/hilite_me_highlighter.py
+ M src/tools/json_schema_compiler/idl_schema.py
+ M src/tools/json_schema_compiler/idl_schema_test.py
+ M src/tools/json_schema_compiler/js_externs_generator.py
+ M src/tools/json_schema_compiler/js_interface_generator.py
+ M src/tools/json_schema_compiler/js_util.py
+ M src/tools/json_schema_compiler/json_schema.py
+ M src/tools/json_schema_compiler/json_schema_test.py
+ M src/tools/json_schema_compiler/memoize.py
+ M src/tools/json_schema_compiler/model.py
+ M src/tools/json_schema_compiler/model_test.py
+ M src/tools/json_schema_compiler/preview.py
+ M src/tools/json_schema_compiler/schema_util_test.py
+ M src/tools/json_to_struct/element_generator.py
+ M src/tools/json_to_struct/element_generator_test.py
+ M src/tools/json_to_struct/json_to_struct.py
+ M src/tools/json_to_struct/struct_generator_test.py
+ M src/tools/licenses.py
+ M src/tools/linux/dump-static-initializers.py
+ M src/tools/linux/procfs.py
+ M src/tools/linux/tests/procfs_tests.py
+ M src/tools/mac/dump-static-initializers.py
+ M src/tools/mac/show_mod_init_func.py
+ M src/tools/mac/symbolicate_crash.py
+ M src/tools/mb/mb.py
+ M src/tools/mb/mb_unittest.py
+ M src/tools/md_browser/gitiles_smart_quotes.py
+ M src/tools/md_browser/md_browser.py
+ M src/tools/memory_inspector/PRESUBMIT.py
+ M src/tools/memory_inspector/memory_inspector/backends/adb_client.py
+ M src/tools/memory_inspector/memory_inspector/backends/android_backend.py
+ M src/tools/memory_inspector/memory_inspector/backends/android_backend_unittest.py
+ M src/tools/memory_inspector/memory_inspector/backends/native_heap_dump_parser.py
+ M src/tools/memory_inspector/memory_inspector/backends/prebuilts_fetcher.py
+ M src/tools/memory_inspector/memory_inspector/classification/mmap_classifier.py
+ M src/tools/memory_inspector/memory_inspector/classification/native_heap_classifier.py
+ M src/tools/memory_inspector/memory_inspector/classification/native_heap_classifier_unittest.py
+ M src/tools/memory_inspector/memory_inspector/classification/results.py
+ M src/tools/memory_inspector/memory_inspector/classification/rules.py
+ M src/tools/memory_inspector/memory_inspector/core/backends.py
+ M src/tools/memory_inspector/memory_inspector/core/memory_map.py
+ M src/tools/memory_inspector/memory_inspector/core/native_heap.py
+ M src/tools/memory_inspector/memory_inspector/core/stacktrace.py
+ M src/tools/memory_inspector/memory_inspector/data/file_storage_unittest.py
+ M src/tools/memory_inspector/memory_inspector/data/serialization.py
+ M src/tools/memory_inspector/memory_inspector/frontends/background_tasks.py
+ M src/tools/memory_inspector/memory_inspector/frontends/command_line.py
+ M src/tools/memory_inspector/memory_inspector/frontends/www_server.py
+ M src/tools/metrics/actions/action_utils.py
+ M src/tools/metrics/actions/extract_actions.py
+ M src/tools/metrics/common/diff_util.py
+ M src/tools/metrics/common/models.py
+ M src/tools/metrics/common/presubmit_util.py
+ M src/tools/metrics/common/pretty_print_xml.py
+ M src/tools/metrics/histograms/extract_histograms.py
+ M src/tools/metrics/histograms/find_unmapped_histograms.py
+ M src/tools/metrics/histograms/histogram_ownership.py
+ M src/tools/metrics/histograms/pretty_print.py
+ M src/tools/metrics/histograms/update_bad_message_reasons.py
+ M src/tools/metrics/histograms/update_editor_commands.py
+ M src/tools/metrics/histograms/update_extension_histograms.py
+ M src/tools/metrics/histograms/update_extension_permission.py
+ M src/tools/metrics/histograms/update_gpu_driver_bug_workaround_entries.py
+ M src/tools/metrics/histograms/update_histogram_enum.py
+ M src/tools/metrics/histograms/update_net_error_codes.py
+ M src/tools/metrics/histograms/update_policies.py
+ M src/tools/metrics/histograms/update_should_allow_open_url_histograms.py
+ M src/tools/metrics/histograms/update_use_counter_feature_enum.py
+ M src/tools/metrics/rappor/model.py
+ M src/tools/metrics/ukm/model.py
+ M src/tools/multi_process_rss.py
+ M src/tools/nocompile_driver.py
+ M src/tools/omahaproxy.py
+ M src/tools/oopif/iframe_server.py
+ M src/tools/origin_trials/check_token.py
+ M src/tools/origin_trials/generate_token.py
+ M src/tools/perf/PRESUBMIT.py
+ M src/tools/perf/benchmarks/benchmark_smoke_unittest.py
+ M src/tools/perf/benchmarks/benchmark_unittest.py
+ M src/tools/perf/benchmarks/blink_perf.py
+ M src/tools/perf/benchmarks/blink_perf_unittest.py
+ M src/tools/perf/benchmarks/dromaeo.py
+ M src/tools/perf/benchmarks/jetstream.py
+ M src/tools/perf/benchmarks/service_worker.py
+ M src/tools/perf/benchmarks/system_health_smoke_test.py
+ M src/tools/perf/benchmarks/system_health_unittest.py
+ M src/tools/perf/contrib/blink_perf_cmdline/blink_perf_cmdline.py
+ M src/tools/perf/contrib/cluster_telemetry/ct_benchmarks_unittest.py
+ M src/tools/perf/contrib/cluster_telemetry/loading_ct.py
+ M src/tools/perf/contrib/cluster_telemetry/multipage_skpicture_printer.py
+ M src/tools/perf/contrib/cluster_telemetry/repaint_unittest.py
+ M src/tools/perf/contrib/cluster_telemetry/skpicture_printer.py
+ M src/tools/perf/contrib/oilpan/oilpan_gc_times_unittest.py
+ M src/tools/perf/core/benchmark_finders.py
+ M src/tools/perf/core/benchmark_finders_unittest.py
+ M src/tools/perf/core/bootstrap.py
+ M src/tools/perf/core/find_dependencies.py
+ M src/tools/perf/core/find_dependencies_unittest.py
+ M src/tools/perf/core/perf_data_generator.py
+ M src/tools/perf/core/perf_data_generator_unittest.py
+ M src/tools/perf/core/sharding_map_generator.py
+ M src/tools/perf/core/trybot_command.py
+ M src/tools/perf/core/trybot_command_unittest.py
+ M src/tools/perf/fetch_benchmark_deps.py
+ M src/tools/perf/fetch_benchmark_deps_unittest.py
+ M src/tools/perf/generate_legacy_perf_dashboard_json.py
+ M src/tools/perf/measurements/measurement_smoke_test.py
+ M src/tools/perf/measurements/rasterize_and_record_micro_unittest.py
+ M src/tools/perf/measurements/skpicture_printer_unittest.py
+ M src/tools/perf/measurements/smoothness_unittest.py
+ M src/tools/perf/measurements/tab_switching_unittest.py
+ M src/tools/perf/measurements/task_execution_time.py
+ M src/tools/perf/measurements/task_execution_time_unittest.py
+ M src/tools/perf/measurements/thread_times_unittest.py
+ M src/tools/perf/measurements/v8_detached_context_age_in_gc.py
+ M src/tools/perf/measurements/v8_detached_context_age_in_gc_unittest.py
+ M src/tools/perf/measurements/v8_gc_times.py
+ M src/tools/perf/measurements/v8_gc_times_unittest.py
+ M src/tools/perf/metrics/power.py
+ M src/tools/perf/metrics/startup_metric.py
+ M src/tools/perf/metrics/timeline.py
+ M src/tools/perf/metrics/timeline_unittest.py
+ M src/tools/perf/metrics/webrtc_stats.py
+ M src/tools/perf/page_sets/__init__.py
+ M src/tools/perf/page_sets/dual_browser_story.py
+ M src/tools/perf/page_sets/infinite_scroll_cases.py
+ M src/tools/perf/page_sets/key_hit_test_cases.py
+ M src/tools/perf/page_sets/key_silk_cases.py
+ M src/tools/perf/page_sets/long_running_idle_google_cases.py
+ M src/tools/perf/page_sets/mobile_memory.py
+ M src/tools/perf/page_sets/page_reload_cases.py
+ M src/tools/perf/page_sets/system_health/browsing_stories.py
+ M src/tools/perf/page_sets/system_health/long_running_stories.py
+ M src/tools/perf/page_sets/system_health/story_tags.py
+ M src/tools/perf/page_sets/system_health/system_health_stories.py
+ M src/tools/perf/page_sets/system_health/system_health_story.py
+ M src/tools/perf/page_sets/tough_pinch_zoom_cases.py
+ M src/tools/perf/page_sets/tough_scheduling_cases/_second_batch_js_generator.py
+ M src/tools/perf/profile_creators/cookie_profile_extender_unittest.py
+ M src/tools/perf/profile_creators/extension_profile_extender.py
+ M src/tools/perf/profile_creators/fast_navigation_profile_extender.py
+ M src/tools/perf/profile_creators/profile_generator.py
+ M src/tools/perf/profile_creators/profile_safe_url_generator.py
+ M src/tools/perf/profile_creators/update_remote_extensions.py
+ M src/tools/perf/record_android_profile.py
+ M src/tools/perf/scripts_smoke_unittest.py
+ M src/tools/perf/third_party/davclient/davclient.py
+ M src/tools/perf_expectations/make_expectations.py
+ M src/tools/perf_expectations/tests/perf_expectations_unittest.py
+ M src/tools/perf_expectations/update_perf_expectations.py
+ M src/tools/perf_expectations/update_perf_expectations_unittest.py
+ M src/tools/polymer/generate_compiled_resources_gyp.py
+ M src/tools/polymer/polymer_grdp_to_txt.py
+ M src/tools/polymer/txt_to_polymer_grdp.py
+ M src/tools/prepare-bisect-perf-regression.py
+ M src/tools/protoc_wrapper/protoc_wrapper.py
+ M src/tools/python/google/gethash_timer.py
+ M src/tools/python/google/httpd_utils.py
+ M src/tools/python/google/path_utils.py
+ M src/tools/python/google/platform_utils.py
+ M src/tools/python/google/process_utils.py
+ M src/tools/real_world_impact/real_world_impact.py
+ M src/tools/remove_duplicate_includes.py
+ M src/tools/resource_prefetch_predictor/prefetch_predictor_tool.py
+ M src/tools/resources/find_unused_resources.py
+ M src/tools/resources/list_resources_removed_by_repack.py
+ M src/tools/resources/list_unused_grit_header.py
+ M src/tools/resources/optimize-ico-files.py
+ M src/tools/roll_angle.py
+ M src/tools/roll_swiftshader.py
+ M src/tools/roll_webgl_conformance.py
+ M src/tools/roll_webrtc.py
+ M src/tools/run-bisect-manual-test.py
+ M src/tools/run-bisect-perf-regression.py
+ M src/tools/safely-roll-deps.py
+ M src/tools/screenshot_testing/update_golden_screenshots.py
+ M src/tools/security/check_message_owners.py
+ M src/tools/security/idn_test_case_generator.py
+ M src/tools/site_compare/command_line.py
+ M src/tools/site_compare/commands/compare2.py
+ M src/tools/site_compare/commands/maskmaker.py
+ M src/tools/site_compare/commands/timeload.py
+ M src/tools/site_compare/drivers/win32/windowing.py
+ M src/tools/site_compare/scrapers/__init__.py
+ M src/tools/site_compare/scrapers/chrome/__init__.py
+ M src/tools/site_compare/scrapers/chrome/chrome011010.py
+ M src/tools/site_compare/scrapers/chrome/chrome01970.py
+ M src/tools/site_compare/scrapers/chrome/chromebase.py
+ M src/tools/site_compare/scrapers/firefox/__init__.py
+ M src/tools/site_compare/scrapers/firefox/firefox2.py
+ M src/tools/site_compare/scrapers/ie/__init__.py
+ M src/tools/site_compare/scrapers/ie/ie7.py
+ M src/tools/site_compare/site_compare.py
+ M src/tools/site_compare/utils/browser_iterate.py
+ M src/tools/sort-headers.py
+ M src/tools/sort_sources.py
+ M src/tools/strict_enum_value_checker/strict_enum_value_checker_test.py
+ M src/tools/sublime/ninja_options_script.py
+ M src/tools/swarming_client/README.py
+ M src/tools/swarming_client/auth.py
+ M src/tools/swarming_client/cipd.py
+ M src/tools/swarming_client/example/1_isolate_server.py
+ M src/tools/swarming_client/example/2_swarming_run.py
+ M src/tools/swarming_client/example/3_swarming_trigger_collect.py
+ M src/tools/swarming_client/example/4_swarming_run_manual_upload.py
+ M src/tools/swarming_client/example/common.py
+ M src/tools/swarming_client/example/payload/hello_world.py
+ M src/tools/swarming_client/isolate.py
+ M src/tools/swarming_client/isolate_format.py
+ M src/tools/swarming_client/isolate_storage.py
+ M src/tools/swarming_client/isolated_format.py
+ M src/tools/swarming_client/isolateserver.py
+ M src/tools/swarming_client/libs/arfile/__init__.py
+ M src/tools/swarming_client/libs/arfile/arfile.py
+ M src/tools/swarming_client/libs/arfile/arfile_test.py
+ M src/tools/swarming_client/libs/arfile/cli.py
+ M src/tools/swarming_client/libs/logdog/stream.py
+ M src/tools/swarming_client/libs/logdog/streamname.py
+ M src/tools/swarming_client/libs/logdog/tests/stream_test.py
+ M src/tools/swarming_client/libs/logdog/tests/streamname_test.py
+ M src/tools/swarming_client/libs/logdog/tests/varint_test.py
+ M src/tools/swarming_client/libs/luci_context/__init__.py
+ M src/tools/swarming_client/libs/luci_context/luci_context.py
+ M src/tools/swarming_client/named_cache.py
+ M src/tools/swarming_client/proto/isolate_bot_pb2_grpc.py
+ M src/tools/swarming_client/run_isolated.py
+ M src/tools/swarming_client/swarming.py
+ M src/tools/swarming_client/tests/auth_server_test.py
+ M src/tools/swarming_client/tests/cipdserver_mock.py
+ M src/tools/swarming_client/tests/file_path_test.py
+ M src/tools/swarming_client/tests/httpserver_mock.py
+ M src/tools/swarming_client/tests/isolate_format_test.py
+ M src/tools/swarming_client/tests/isolate_smoke_test.py
+ M src/tools/swarming_client/tests/isolate_storage_test.py
+ M src/tools/swarming_client/tests/isolate_test.py
+ M src/tools/swarming_client/tests/isolated_format_test.py
+ M src/tools/swarming_client/tests/isolateserver_smoke_test.py
+ M src/tools/swarming_client/tests/isolateserver_test.py
+ M src/tools/swarming_client/tests/large_test.py
+ M src/tools/swarming_client/tests/lru_test.py
+ M src/tools/swarming_client/tests/named_cache_test.py
+ M src/tools/swarming_client/tests/net_test.py
+ M src/tools/swarming_client/tests/on_error_test.py
+ M src/tools/swarming_client/tests/run_isolated_smoke_test.py
+ M src/tools/swarming_client/tests/run_isolated_test.py
+ M src/tools/swarming_client/tests/subprocess42_test.py
+ M src/tools/swarming_client/tests/swarming_test.py
+ M src/tools/swarming_client/tests/test_utils.py
+ M src/tools/swarming_client/tests/threading_utils_test.py
+ M src/tools/swarming_client/tests/trace_inputs/child1.py
+ M src/tools/swarming_client/tests/trace_inputs/child2.py
+ M src/tools/swarming_client/tests/trace_inputs/symlink.py
+ M src/tools/swarming_client/tests/trace_inputs/touch_only.py
+ M src/tools/swarming_client/tests/trace_inputs/tricky_filename.py
+ M src/tools/swarming_client/tests/trace_inputs_smoke_test.py
+ M src/tools/swarming_client/tests/trace_inputs_test.py
+ M src/tools/swarming_client/tests/url_open_timeout_test.py
+ M src/tools/swarming_client/tests/zip_package_test.py
+ M src/tools/swarming_client/third_party/chromium/natsort.py
+ M src/tools/swarming_client/third_party/chromium/natsort_test.py
+ M src/tools/swarming_client/third_party/depot_tools/auto_stub.py
+ M src/tools/swarming_client/third_party/depot_tools/fix_encoding.py
+ M src/tools/swarming_client/third_party/depot_tools/subcommand.py
+ M src/tools/swarming_client/third_party/google/protobuf/descriptor_pool.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/_parameterized.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/containers.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/decoder.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/python_message.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/test_util.py
+ M src/tools/swarming_client/third_party/google/protobuf/internal/type_checkers.py
+ M src/tools/swarming_client/third_party/google/protobuf/message_factory.py
+ M src/tools/swarming_client/third_party/google/protobuf/proto_builder.py
+ M src/tools/swarming_client/third_party/google/protobuf/reflection.py
+ M src/tools/swarming_client/third_party/google/protobuf/symbol_database.py
+ M src/tools/swarming_client/third_party/google/protobuf/text_format.py
+ M src/tools/swarming_client/third_party/googleapiclient/channel.py
+ M src/tools/swarming_client/third_party/googleapiclient/discovery.py
+ M src/tools/swarming_client/third_party/googleapiclient/discovery_cache/__init__.py
+ M src/tools/swarming_client/third_party/googleapiclient/discovery_cache/base.py
+ M src/tools/swarming_client/third_party/googleapiclient/discovery_cache/file_cache.py
+ M src/tools/swarming_client/third_party/googleapiclient/errors.py
+ M src/tools/swarming_client/third_party/googleapiclient/http.py
+ M src/tools/swarming_client/third_party/googleapiclient/mimeparse.py
+ M src/tools/swarming_client/third_party/googleapiclient/model.py
+ M src/tools/swarming_client/third_party/googleapiclient/sample_tools.py
+ M src/tools/swarming_client/third_party/googleapiclient/schema.py
+ M src/tools/swarming_client/third_party/httplib2/__init__.py
+ M src/tools/swarming_client/third_party/httplib2/iri2uri.py
+ M src/tools/swarming_client/third_party/httplib2/socks.py
+ M src/tools/swarming_client/third_party/infra_libs/_command_line_linux.py
+ M src/tools/swarming_client/third_party/infra_libs/event_mon/monitoring.py
+ M src/tools/swarming_client/third_party/infra_libs/event_mon/protos/chrome_infra_log_pb2.py
+ M src/tools/swarming_client/third_party/infra_libs/event_mon/protos/goma_stats_pb2.py
+ M src/tools/swarming_client/third_party/infra_libs/event_mon/protos/log_request_lite_pb2.py
+ M src/tools/swarming_client/third_party/infra_libs/event_mon/router.py
+ M src/tools/swarming_client/third_party/infra_libs/experiments.py
+ M src/tools/swarming_client/third_party/infra_libs/httplib2_utils.py
+ M src/tools/swarming_client/third_party/infra_libs/infra_types/infra_types.py
+ M src/tools/swarming_client/third_party/infra_libs/memoize.py
+ M src/tools/swarming_client/third_party/infra_libs/time_functions/testing.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/distribution.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/interface.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/metric_store.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/metrics.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/pb_to_popo.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/common/targets.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/config.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/protos/current/metrics_pb2.py
+ M src/tools/swarming_client/third_party/infra_libs/ts_mon/protos/new/metrics_pb2.py
+ M src/tools/swarming_client/third_party/infra_libs/utils.py
+ M src/tools/swarming_client/third_party/oauth2client/client.py
+ M src/tools/swarming_client/third_party/oauth2client/clientsecrets.py
+ M src/tools/swarming_client/third_party/oauth2client/crypt.py
+ M src/tools/swarming_client/third_party/oauth2client/locked_file.py
+ M src/tools/swarming_client/third_party/oauth2client/multistore_file.py
+ M src/tools/swarming_client/third_party/oauth2client/tools.py
+ M src/tools/swarming_client/third_party/pyasn1-modules/pyasn1_modules/pem.py
+ M src/tools/swarming_client/third_party/pyasn1/pyasn1/codec/ber/decoder.py
+ M src/tools/swarming_client/third_party/pyasn1/pyasn1/compat/octets.py
+ M src/tools/swarming_client/third_party/pyasn1/pyasn1/debug.py
+ M src/tools/swarming_client/third_party/pyasn1/pyasn1/type/tagmap.py
+ M src/tools/swarming_client/third_party/pyasn1/pyasn1/type/univ.py
+ M src/tools/swarming_client/third_party/requests/adapters.py
+ M src/tools/swarming_client/third_party/requests/certs.py
+ M src/tools/swarming_client/third_party/requests/compat.py
+ M src/tools/swarming_client/third_party/requests/cookies.py
+ M src/tools/swarming_client/third_party/requests/models.py
+ M src/tools/swarming_client/third_party/requests/packages/__init__.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/__init__.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/_collections.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/connection.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/connectionpool.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/contrib/appengine.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/contrib/ntlmpool.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/contrib/pyopenssl.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/exceptions.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/fields.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/filepost.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/packages/__init__.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/packages/ordered_dict.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/packages/six.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/poolmanager.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/request.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/response.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/__init__.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/connection.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/request.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/response.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/retry.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/ssl_.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/timeout.py
+ M src/tools/swarming_client/third_party/requests/packages/urllib3/util/url.py
+ M src/tools/swarming_client/third_party/requests/sessions.py
+ M src/tools/swarming_client/third_party/requests/status_codes.py
+ M src/tools/swarming_client/third_party/requests/structures.py
+ M src/tools/swarming_client/third_party/requests/utils.py
+ M src/tools/swarming_client/third_party/rsa/rsa/_compat.py
+ M src/tools/swarming_client/third_party/rsa/rsa/_version133.py
+ M src/tools/swarming_client/third_party/rsa/rsa/_version200.py
+ M src/tools/swarming_client/third_party/rsa/rsa/cli.py
+ M src/tools/swarming_client/third_party/rsa/rsa/key.py
+ M src/tools/swarming_client/third_party/rsa/rsa/parallel.py
+ M src/tools/swarming_client/third_party/rsa/rsa/pkcs1.py
+ M src/tools/swarming_client/third_party/rsa/rsa/prime.py
+ M src/tools/swarming_client/third_party/rsa/rsa/transform.py
+ M src/tools/swarming_client/third_party/rsa/rsa/util.py
+ M src/tools/swarming_client/third_party/six/__init__.py
+ M src/tools/swarming_client/third_party/uritemplate/__init__.py
+ M src/tools/swarming_client/tools/cost.py
+ M src/tools/swarming_client/tools/fleet.py
+ M src/tools/swarming_client/tools/harvest_buildbot.py
+ M src/tools/swarming_client/tools/isolateserver_load_test.py
+ M src/tools/swarming_client/tools/parallel_execution.py
+ M src/tools/swarming_client/tools/run_on_bots.py
+ M src/tools/swarming_client/tools/run_swarming_tests_on_swarming.py
+ M src/tools/swarming_client/tools/spam.py
+ M src/tools/swarming_client/tools/swarming_count_tasks.py
+ M src/tools/swarming_client/tools/swarming_load_test_bot.py
+ M src/tools/swarming_client/tools/swarming_load_test_client.py
+ M src/tools/swarming_client/tools/zip_profiler.py
+ M src/tools/swarming_client/trace_inputs.py
+ M src/tools/swarming_client/utils/auth_server.py
+ M src/tools/swarming_client/utils/file_path.py
+ M src/tools/swarming_client/utils/fs.py
+ M src/tools/swarming_client/utils/graph.py
+ M src/tools/swarming_client/utils/large.py
+ M src/tools/swarming_client/utils/logging_utils.py
+ M src/tools/swarming_client/utils/lru.py
+ M src/tools/swarming_client/utils/net.py
+ M src/tools/swarming_client/utils/oauth.py
+ M src/tools/swarming_client/utils/on_error.py
+ M src/tools/swarming_client/utils/subprocess42.py
+ M src/tools/swarming_client/utils/threading_utils.py
+ M src/tools/swarming_client/utils/tools.py
+ M src/tools/swarming_client/utils/zip_package.py
+ M src/tools/symsrc/img_fingerprint.py
+ M src/tools/symsrc/pdb_fingerprint_from_img.py
+ M src/tools/symsrc/pefile.py
+ M src/tools/symsrc/source_index.py
+ M src/tools/tcmalloc/print-live-objects.py
+ M src/tools/traceline/traceline/scripts/alloc.py
+ M src/tools/traceline/traceline/scripts/crit_sec.py
+ M src/tools/traceline/traceline/scripts/filter_short.py
+ M src/tools/traceline/traceline/scripts/scstats.py
+ M src/tools/traffic_annotation/auditor/traffic_annotation_auditor.py
+ M src/tools/unused-symbols-report.py
+ M src/tools/usb_gadget/__main__.py
+ M src/tools/usb_gadget/composite_echo_gadget.py
+ M src/tools/usb_gadget/composite_gadget.py
+ M src/tools/usb_gadget/default_gadget.py
+ M src/tools/usb_gadget/echo_gadget.py
+ M src/tools/usb_gadget/echo_gadget_test.py
+ M src/tools/usb_gadget/gadget.py
+ M src/tools/usb_gadget/gadget_test.py
+ M src/tools/usb_gadget/hid_constants.py
+ M src/tools/usb_gadget/hid_descriptors.py
+ M src/tools/usb_gadget/hid_descriptors_test.py
+ M src/tools/usb_gadget/hid_echo_gadget.py
+ M src/tools/usb_gadget/hid_gadget.py
+ M src/tools/usb_gadget/hid_gadget_test.py
+ M src/tools/usb_gadget/keyboard_gadget.py
+ M src/tools/usb_gadget/keyboard_gadget_test.py
+ M src/tools/usb_gadget/linux_gadgetfs.py
+ M src/tools/usb_gadget/mouse_gadget.py
+ M src/tools/usb_gadget/mouse_gadget_test.py
+ M src/tools/usb_gadget/msos20_descriptors.py
+ M src/tools/usb_gadget/package.py
+ M src/tools/usb_gadget/server.py
+ M src/tools/usb_gadget/usb_descriptors.py
+ M src/tools/usb_gadget/usb_descriptors_test.py
+ M src/tools/valgrind/asan/asan_symbolize.py
+ M src/tools/valgrind/asan/third_party/asan_symbolize.py
+ M src/tools/valgrind/browser_wrapper_win.py
+ M src/tools/valgrind/chrome_tests.py
+ M src/tools/valgrind/common.py
+ M src/tools/valgrind/drmemory_analyze.py
+ M src/tools/valgrind/gdb_helper.py
+ M src/tools/valgrind/memcheck/PRESUBMIT.py
+ M src/tools/valgrind/memcheck_analyze.py
+ M src/tools/valgrind/scan-build.py
+ M src/tools/valgrind/suppressions.py
+ M src/tools/valgrind/test_suppressions.py
+ M src/tools/valgrind/unused_suppressions.py
+ M src/tools/valgrind/valgrind_test.py
+ M src/tools/variations/fieldtrial_util.py
+ M src/tools/vim/ninja_output.py
+ M src/tools/vim/tests/chromium.ycm_extra_conf_unittest.py
+ M src/tools/web_bluetooth/compact_blocklist.py
+ M src/tools/web_dev_style/css_checker.py
+ M src/tools/web_dev_style/css_checker_test.py
+ M src/tools/web_dev_style/html_checker.py
+ M src/tools/web_dev_style/html_checker_test.py
+ M src/tools/web_dev_style/js_checker.py
+ M src/tools/web_dev_style/js_checker_test.py
+ M src/tools/web_dev_style/presubmit_support.py
+ M src/tools/web_dev_style/resource_checker.py
+ M src/tools/web_dev_style/resource_checker_test.py
+ M src/tools/win/link_limiter/build_link_limiter.py
+ M src/tools/win/linker_verbose_tracking.py
+ M src/tools/win/new_analyze_warnings/retrieve_warnings.py
+ M src/tools/win/new_analyze_warnings/warning_diff.py
+ M src/tools/win/new_analyze_warnings/warnings_by_type.py
+ M src/tools/win/pdb_compare_globals.py
+ M src/tools/win/pe_summarize.py
+ M src/tools/win/setenv.py
+ M src/tools/win/sizeviewer/sizeviewer.py
+ M src/tools/win/subtract_time.py
+ M src/tools/yes_no.py
+third_party/scream-reproduce @ f099118d1421aa3131bf11ff1964974e1da3bdb2
+ M src/ScreamClient
+ M src/ScreamServer
+third_party/sprout @ 366e35c6178b01e31d4a46ad18c74f9415f19a26
+ M src/examples/cellsim.cc
+ M src/examples/sproutbt2.cc
+ M src/network/sproutconn.cc
+third_party/verus @ d4b447ea74c6c60a261149af2629562939f9a494
+ M src/verus_server.cpp
+third_party/vivace @ 2baf86211435ae071a32f96b7d8c504587f5d7f4
+third_party/webrtc @ 3f0cc2a9061a41b6f9dde4735770d143a1fa2851
+\end{verbatim}
+
+\newpage
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pantheon_summary_mean.pdf}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pantheon_summary.pdf}
+
+\newpage
+
+\begin{landscape}
+\centering
+\begin{tabularx}{0.9\linewidth}{ c | c | Y | Y | Y }
+& & \multicolumn{1}{c|}{mean avg tput (Mbit/s)} & \multicolumn{1}{c|}{mean 95th-\%ile delay (ms)} & \multicolumn{1}{c}{mean loss rate (\%)} \\
+scheme & \# runs & flow 1 & flow 1 & flow 1 \\
+\hline
+TCP BBR & 0 & N/A & N/A & N/A \\
+TCP Cubic & 1 & 2.71 & 627.12 & 5.18 \\
+FillP & 0 & N/A & N/A & N/A \\
+FillP-Sheep & 1 & 3.14 & 4270.57 & 23.25 \\
+Indigo & 0 & N/A & N/A & N/A \\
+LEDBAT & 0 & N/A & N/A & N/A \\
+PCC-Allegro & 0 & N/A & N/A & N/A \\
+PCC-Expr & 1 & 3.21 & 3221.46 & 44.25 \\
+SCReAM & 0 & N/A & N/A & N/A \\
+TCP Vegas & 0 & N/A & N/A & N/A \\
+PCC-Vivace & 1 & 2.98 & 1339.49 & 1.67 \\
+WebRTC media & 1 & 0.00 & 477.44 & 0.00 \\
+\end{tabularx}
+\end{landscape}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP BBR
+
+Start at: 2022-11-28 16:49:29
+End at: 2022-11-28 16:49:39
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP BBR --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/bbr_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/bbr_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Cubic
+
+Start at: 2022-11-28 16:48:53
+End at: 2022-11-28 16:49:03
+
+# Below is generated by plot.py at 2022-11-28 17:02:51
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 4.01 Mbit/s
+Average throughput: 2.71 Mbit/s (67.5% utilization)
+95th percentile per-packet one-way delay: 627.119 ms
+Loss rate: 5.18%
+-- Flow 1:
+Average throughput: 2.71 Mbit/s
+95th percentile per-packet one-way delay: 627.119 ms
+Loss rate: 5.18%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Cubic --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/cubic_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/cubic_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP
+
+Start at: 2022-11-28 16:51:08
+End at: 2022-11-28 16:51:18
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP-Sheep
+
+Start at: 2022-11-28 16:51:36
+End at: 2022-11-28 16:51:46
+
+# Below is generated by plot.py at 2022-11-28 17:02:51
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 4.03 Mbit/s
+Average throughput: 3.14 Mbit/s (77.9% utilization)
+95th percentile per-packet one-way delay: 4270.572 ms
+Loss rate: 23.25%
+-- Flow 1:
+Average throughput: 3.14 Mbit/s
+95th percentile per-packet one-way delay: 4270.572 ms
+Loss rate: 23.25%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP-Sheep --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_sheep_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/fillp_sheep_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of Indigo
+
+Start at: 2022-11-28 16:51:22
+End at: 2022-11-28 16:51:32
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of Indigo --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/indigo_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/indigo_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of LEDBAT
+
+Start at: 2022-11-28 16:49:44
+End at: 2022-11-28 16:49:54
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of LEDBAT --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/ledbat_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/ledbat_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Allegro
+
+Start at: 2022-11-28 16:49:57
+End at: 2022-11-28 16:50:07
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Allegro --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Expr
+
+Start at: 2022-11-28 16:50:53
+End at: 2022-11-28 16:51:03
+
+# Below is generated by plot.py at 2022-11-28 17:02:51
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 4.02 Mbit/s
+Average throughput: 3.21 Mbit/s (79.7% utilization)
+95th percentile per-packet one-way delay: 3221.462 ms
+Loss rate: 44.25%
+-- Flow 1:
+Average throughput: 3.21 Mbit/s
+95th percentile per-packet one-way delay: 3221.462 ms
+Loss rate: 44.25%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Expr --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_experimental_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/pcc_experimental_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of SCReAM
+
+Start at: 2022-11-28 16:50:11
+End at: 2022-11-28 16:50:21
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of SCReAM --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/scream_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/scream_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Vegas
+
+Start at: 2022-11-28 16:49:12
+End at: 2022-11-28 16:49:22
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Vegas --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vegas_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vegas_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Vivace
+
+Start at: 2022-11-28 16:50:39
+End at: 2022-11-28 16:50:49
+
+# Below is generated by plot.py at 2022-11-28 17:02:51
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 3.98 Mbit/s
+Average throughput: 2.98 Mbit/s (75.0% utilization)
+95th percentile per-packet one-way delay: 1339.487 ms
+Loss rate: 1.67%
+-- Flow 1:
+Average throughput: 2.98 Mbit/s
+95th percentile per-packet one-way delay: 1339.487 ms
+Loss rate: 1.67%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Vivace --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vivace_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/vivace_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of WebRTC media
+
+Start at: 2022-11-28 16:50:25
+End at: 2022-11-28 16:50:35
+
+# Below is generated by plot.py at 2022-11-28 17:02:51
+# Datalink statistics
+-- Total of 1 flow:
+Average capacity: 4.02 Mbit/s
+Average throughput: 0.00 Mbit/s (0.1% utilization)
+95th percentile per-packet one-way delay: 477.445 ms
+Loss rate: 0.00%
+-- Flow 1:
+Average throughput: 0.00 Mbit/s
+95th percentile per-packet one-way delay: 477.445 ms
+Loss rate: 0.00%
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of WebRTC media --- Data Link
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/webrtc_datalink_throughput_run1.png}
+
+\PantheonFig{/capstone/Congestion-control-emulator/out/webrtc_datalink_delay_run1.png}
+
+\newpage
+
+\end{document}

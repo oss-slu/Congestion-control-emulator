@@ -41,7 +41,7 @@ def generate_html(output_dir, size):
     block_size = 100 * 1024 * 1024
     block = 'x' * block_size
     num_blocks = int(size) / block_size + 1
-    for _ in xrange(num_blocks):
+    for _ in range(num_blocks):
         html.write(block + '\n')
 
     html.write(foot_text)
