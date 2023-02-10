@@ -1,3 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/capstone/Congestion-control-emulator/tmp/cubic_acklink_run1_flow1_uide38ea264-5a62-4c72-b25d-6d43f57605db.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/cubic_datalink_run1_flow1_uide38ea264-5a62-4c72-b25d-6d43f57605db.log.egress' '100.64.0.1' '60177' '100.64.0.4' '100.64.0.3' ingress: 1668376085036.890
-5224.126 - 0 - 121
-5226.467 - 1 - 93

@@ -1,1 +1,0 @@
-# 'mm-tunnelserver' '--ingress-log=/capstone/Congestion-control-emulator/tmp/cubic_datalink_run1_flow1_uid1fc1a2cb-d257-4571-b56c-8110d7bf0850.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/cubic_acklink_run1_flow1_uid1fc1a2cb-d257-4571-b56c-8110d7bf0850.log.egress' ingress: 1668373607321.428
