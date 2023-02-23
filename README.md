@@ -1,4 +1,5 @@
-# Pantheon of Congestion Control [![Build Status](https://travis-ci.org/StanfordSNR/pantheon.svg?branch=master)](https://travis-ci.org/StanfordSNR/pantheon)
+# Network Congestion Control Emulator
+
 The Pantheon contains wrappers for many popular practical and research
 congestion control schemes. The Pantheon enables them to run on a common
 interface, and has tools to benchmark and compare their performances.
@@ -12,7 +13,7 @@ This repo was forked from [Pantheon of Congestion Control](https://github.com/St
 Follow the guidelines from the original repo
 
 ```
-git clone https://github.com/Principe92/pantheon.git
+git clone https://github.com/oss-slu/Congestion-control-emulator.git
 ```
 
 Add submodules after cloning by running:
@@ -45,30 +46,26 @@ Traceback (most recent call last):
 OSError: [Errno 2] No such file or directory
 ```
 
-### 2. C++ errors during src/experiments/setup.py
-Some of the warnings were marked as errors during some set ups. So, I manually edited some of the third_party files as follows:
-
-In [third_party/pantheon-tunnel/configure.ac](third_party/pantheon-tunnel/configure.ac) change line 12 to:
-```text
-PICKY_CXXFLAGS="-pedantic -Wall -Wextra -Weffc++ -Wno-error"
+### Docker Usage
+Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds the dependencies.
+Get yourself familiar with [Docker](https://docs.docker.com/config/daemon/start/)
+Start a docker daemon
+Then,
+```bash
+docker pull a8nguyen/oss-slu-congestion:mahimahi
 ```
-
-In [third_party/genericCC/makefile](third_party/genericCC/makefile) change line 4 to:
-```text
-CXXFLAGS := -DHAVE_CONFIG_H -std=c++11 -pthread -pedantic -Wall -Wextra -Weffc++ -Wno-error -fno-default-inline -g -O2 -fPIC
+Once you download the image, you can run with. To learn more about the arguments used, refer to [Docker's documentation](https://docs.docker.com/engine/reference/run/) 
 ```
-
-In [third_party/verus/src/verus_server.cpp](third_party/verus/src/verus_server.cpp) change line 187 to:
-```cplusplus
-timer.expires_from_now (boost::posix_time::milliseconds(int(timeouttimer)));
+docker run --privileged \
+--device /dev/net/tun -it \
+-v /this/project/on/your/local/machine:/working/dir/inside/docker \
+a8nguyen/oss-slu-congestion:mahimahi
 ```
-
-Also on line 649, set it to:
-```cplusplus
-timer.expires_from_now (boost::posix_time::milliseconds(int(timeouttimer)));
-```
+Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su a8nguyen`
+Voila, now you can run pantheon inside the container!
 
 ### Pantheon Testing
+
 
 Some pantheon testing and analysis commands
 ```bash
