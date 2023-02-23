@@ -27,8 +27,11 @@ Follow the remaining of the set-up guidelines [here](https://github.com/Stanford
 
 ### Docker Usage
 Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds the dependencies.
+
 Get yourself familiar with [Docker](https://docs.docker.com/config/daemon/start/)
+
 Start a docker daemon
+
 Then,
 ```bash
 docker pull a8nguyen/oss-slu-congestion:mahimahi
