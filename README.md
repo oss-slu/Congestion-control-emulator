@@ -24,27 +24,6 @@ git submodule update --init --recursive  # or tools/fetch_submodules.sh
 
 Follow the remaining of the set-up guidelines [here](https://github.com/StanfordSNR/pantheon)
 
-## How to fix common errors
-
-### 1. Unable to run verus, quic, copa, and taova
-I ran into the following error for verus. Similar errors occur for quic, copa, and taova. This happens because the set-up failed for each of these protocols. As such, the needed folders were not created. They are currently disabled in [src/config.yml](src/config.yml)
-
-```python
-Traceback (most recent call last):
-  File "/home/pokorie/Documents/repos/pantheon/src/wrappers/verus.py", line 42, in <module>
-    main()
-  File "/home/pokorie/Documents/repos/pantheon/src/wrappers/verus.py", line 32, in main
-    check_call(cmd, cwd=utils.tmp_dir)
-  File "/usr/lib/python2.7/subprocess.py", line 185, in check_call
-    retcode = call(*popenargs, **kwargs)
-  File "/usr/lib/python2.7/subprocess.py", line 172, in call
-    return Popen(*popenargs, **kwargs).wait()
-  File "/usr/lib/python2.7/subprocess.py", line 394, in __init__
-    errread, errwrite)
-  File "/usr/lib/python2.7/subprocess.py", line 1047, in _execute_child
-    raise child_exception
-OSError: [Errno 2] No such file or directory
-```
 
 ### Docker Usage
 Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds the dependencies.
