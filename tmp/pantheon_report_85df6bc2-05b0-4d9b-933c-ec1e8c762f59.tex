@@ -1,0 +1,274 @@
+\documentclass{article}
+\usepackage{pdfpages, graphicx, float}
+\usepackage{tabularx, pdflscape}
+\usepackage{textcomp}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\PantheonFig}[1]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{#1}{\includegraphics[width=\textwidth]{#1}}{Figure is missing}
+\end{figure}}
+
+\begin{document}
+\centerline{\textbf{\large{Pantheon Report}}}
+\vspace{20pt}
+
+Generated at 2023-02-28 21:58:49 (UTC).
+
+Tested in mahimahi: \texttt{mm-link ATT-LTE-driving-2016.up ATT-LTE-driving-2016.down}
+
+Repeated the test of 11 congestion control schemes once.
+
+Each test lasted for 5 seconds running 1 flow.
+
+\begin{verbatim}
+System info:
+Linux 6.1.13-200.fc37.x86_64
+net.ipv4.tcp_rmem = 4096	131072	6291456
+net.ipv4.tcp_wmem = 4096	16384	4194304
+\end{verbatim}
+
+\begin{verbatim}
+Git summary:
+branch: main @ ade5018ae794fdbcc5b69e2de5e23b637f1984aa
+third_party/fillp @ d6da1459332fcee56963885d7eba17e6a32d4519
+third_party/fillp-sheep @ 0e5bb722943babcd2b090d2c64fcd45e12e923f9
+third_party/genericCC @ d0153f8e594aa89e93b032143cedbdfe58e562f4
+third_party/indigo @ 463d89b09699a57bfdfbae351646df6a60040b90
+third_party/libutp @ b3465b942e2826f2b179eaab4a906ce6bb7cf3cf
+third_party/pantheon-tunnel @ f866d3f58d27afd942717625ee3a354cc2e802bd
+third_party/pcc @ 1afc958fa0d66d18b623c091a55fec872b4981e1
+ M receiver/src/buffer.h
+ M receiver/src/core.cpp
+ M sender/src/buffer.h
+ M sender/src/core.cpp
+third_party/pcc-experimental @ cd43e34e3f5f5613e8acd08fab92c4eb24f974ab
+third_party/proto-quic @ 77961f1a82733a86b42f1bc8143ebc978f3cff42
+third_party/scream-reproduce @ f099118d1421aa3131bf11ff1964974e1da3bdb2
+ M src/ScreamClient
+ M src/ScreamServer
+third_party/sprout @ 366e35c6178b01e31d4a46ad18c74f9415f19a26
+third_party/verus @ d4b447ea74c6c60a261149af2629562939f9a494
+third_party/vivace @ 2baf86211435ae071a32f96b7d8c504587f5d7f4
+third_party/webrtc @ 3f0cc2a9061a41b6f9dde4735770d143a1fa2851
+\end{verbatim}
+
+\newpage
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/pantheon_summary_mean.pdf}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/pantheon_summary.pdf}
+
+\newpage
+
+\begin{landscape}
+\centering
+\begin{tabularx}{0.9\linewidth}{ c | c | Y | Y | Y }
+& & \multicolumn{1}{c|}{mean avg tput (Mbit/s)} & \multicolumn{1}{c|}{mean 95th-\%ile delay (ms)} & \multicolumn{1}{c}{mean loss rate (\%)} \\
+scheme & \# runs & flow 1 & flow 1 & flow 1 \\
+\hline
+TCP BBR & 0 & N/A & N/A & N/A \\
+TCP Cubic & 0 & N/A & N/A & N/A \\
+FillP & 0 & N/A & N/A & N/A \\
+FillP-Sheep & 0 & N/A & N/A & N/A \\
+Indigo & 0 & N/A & N/A & N/A \\
+LEDBAT & 0 & N/A & N/A & N/A \\
+PCC-Allegro & 0 & N/A & N/A & N/A \\
+SCReAM & 0 & N/A & N/A & N/A \\
+TCP Vegas & 0 & N/A & N/A & N/A \\
+PCC-Vivace & 0 & N/A & N/A & N/A \\
+WebRTC media & 0 & N/A & N/A & N/A \\
+\end{tabularx}
+\end{landscape}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP BBR
+
+Start at: 2023-02-28 21:45:05
+End at: 2023-02-28 21:45:10
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP BBR --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/bbr_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/bbr_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Cubic
+
+Start at: 2023-02-28 21:44:48
+End at: 2023-02-28 21:44:53
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Cubic --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/cubic_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/cubic_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP
+
+Start at: 2023-02-28 21:45:55
+End at: 2023-02-28 21:46:00
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/fillp_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/fillp_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of FillP-Sheep
+
+Start at: 2023-02-28 21:46:12
+End at: 2023-02-28 21:46:17
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of FillP-Sheep --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/fillp_sheep_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/fillp_sheep_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of Indigo
+
+Start at: 2023-02-28 21:46:04
+End at: 2023-02-28 21:46:09
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of Indigo --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/indigo_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/indigo_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of LEDBAT
+
+Start at: 2023-02-28 21:45:13
+End at: 2023-02-28 21:45:18
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of LEDBAT --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/ledbat_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/ledbat_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Allegro
+
+Start at: 2023-02-28 21:45:22
+End at: 2023-02-28 21:45:27
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Allegro --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/pcc_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/pcc_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of SCReAM
+
+Start at: 2023-02-28 21:45:30
+End at: 2023-02-28 21:45:35
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of SCReAM --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/scream_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/scream_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of TCP Vegas
+
+Start at: 2023-02-28 21:44:56
+End at: 2023-02-28 21:45:01
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of TCP Vegas --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/vegas_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/vegas_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of PCC-Vivace
+
+Start at: 2023-02-28 21:45:47
+End at: 2023-02-28 21:45:52
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of PCC-Vivace --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/vivace_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/vivace_datalink_delay_run1.png}
+
+\newpage
+
+\begin{verbatim}
+Run 1: Statistics of WebRTC media
+
+Start at: 2023-02-28 21:45:39
+End at: 2023-02-28 21:45:44
+\end{verbatim}
+
+\newpage
+
+Run 1: Report of WebRTC media --- Data Link
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/webrtc_datalink_throughput_run1.png}
+
+\PantheonFig{/home/anh/Congestion-control-emulator/out/webrtc_datalink_delay_run1.png}
+
+\newpage
+
+\end{document}

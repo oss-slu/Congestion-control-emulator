@@ -51,10 +51,10 @@ schemes:
     name: PCC-Vivace
     color: blue
     marker: '<'
-  pcc_experimental:
-    name: PCC-Expr
-    color: olive
-    marker: '<'
+  #pcc_experimental:
+  #  name: PCC-Expr
+  #  color: olive
+  #  marker: '<'
   fillp:
     name: FillP
     color: violet

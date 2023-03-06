@@ -12,7 +12,7 @@
 using namespace std;
 
 LinkQueue::LinkQueue(const string &link_name, const string &filename, const string &logfile,
-                     const bool repeat, const bool graph_throughput, const bool graph_delay,
+                     const bool repeat,
                      unique_ptr<AbstractPacketQueue> &&packet_queue,
                      const string &command_line)
     : next_delivery_(0),
@@ -23,8 +23,6 @@ LinkQueue::LinkQueue(const string &link_name, const string &filename, const stri
       packet_in_transit_bytes_left_(0),
       output_queue_(),
       log_(),
-      throughput_graph_(nullptr),
-      delay_graph_(nullptr),
       repeat_(repeat),
       finished_(false)
 {
@@ -91,30 +89,6 @@ LinkQueue::LinkQueue(const string &link_name, const string &filename, const stri
         }
     }
 
-    /* create graphs if called for */
-    if (graph_throughput)
-    {
-        throughput_graph_.reset(new BinnedLiveGraph(link_name + " [" + filename + "]",
-                                                    {make_tuple(1.0, 0.0, 0.0, 0.25, true),
-                                                     make_tuple(0.0, 0.0, 0.4, 1.0, false),
-                                                     make_tuple(1.0, 0.0, 0.0, 0.5, false)},
-                                                    "throughput (Mbps)",
-                                                    8.0 / 1000000.0,
-                                                    true,
-                                                    500,
-                                                    [](int, int &x)
-                                                    { x = 0; }));
-    }
-
-    if (graph_delay)
-    {
-        delay_graph_.reset(new BinnedLiveGraph(link_name + " delay [" + filename + "]",
-                                               {make_tuple(0.0, 0.25, 0.0, 1.0, false)},
-                                               "queueing delay (ms)",
-                                               1, false, 250,
-                                               [](int, int &x)
-                                               { x = -1; }));
-    }
 }
 
 void LinkQueue::record_arrival(const uint64_t arrival_time, const size_t pkt_size)
@@ -125,11 +99,6 @@ void LinkQueue::record_arrival(const uint64_t arrival_time, const size_t pkt_siz
         *log_ << arrival_time << " + " << pkt_size << endl;
     }
 
-    /* meter it */
-    if (throughput_graph_)
-    {
-        throughput_graph_->add_value_now(1, pkt_size);
-    }
 }
 
 void LinkQueue::record_drop(const uint64_t time, const size_t pkts_dropped, const size_t bytes_dropped)
@@ -149,11 +118,6 @@ void LinkQueue::record_departure_opportunity(void)
         *log_ << next_delivery_time() << " # " << PACKET_SIZE << endl;
     }
 
-    /* meter the delivery opportunity */
-    if (throughput_graph_)
-    {
-        throughput_graph_->add_value_now(0, PACKET_SIZE);
-    }
 }
 
 void LinkQueue::record_departure(const uint64_t departure_time, const QueuedPacket &packet)
@@ -165,16 +129,7 @@ void LinkQueue::record_departure(const uint64_t departure_time, const QueuedPack
               << " " << departure_time - packet.arrival_time << endl;
     }
 
-    /* meter the delivery */
-    if (throughput_graph_)
-    {
-        throughput_graph_->add_value_now(2, packet.contents.size());
-    }
-
-    if (delay_graph_)
-    {
-        delay_graph_->set_max_value_now(0, departure_time - packet.arrival_time);
-    }
+   
 }
 
 void LinkQueue::read_packet(const string &contents)

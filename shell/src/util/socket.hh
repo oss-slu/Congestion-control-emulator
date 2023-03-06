@@ -8,6 +8,7 @@
 #include "address.hh"
 #include "file_descriptor.hh"
 
+
 /* class for network sockets (UDP, TCP, etc.) */
 class Socket : public FileDescriptor
 {
@@ -82,6 +83,9 @@ public:
 
     /* original destination of a DNAT connection */
     Address original_dest( void ) const;
+
+    /*trace congestion control window*/
+    void trace_tcp_cwnd (void) ;
 };
 
 #endif /* SOCKET_HH */

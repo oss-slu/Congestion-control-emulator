@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "../util/file_descriptor.hh"
-#include "../graphing/binned_livegraph.hh"
+
 #include "../packet/abstract_packet_queue.hh"
 
 class LinkQueue
@@ -28,8 +28,7 @@ private:
     std::queue<std::string> output_queue_;
 
     std::unique_ptr<std::ofstream> log_;
-    std::unique_ptr<BinnedLiveGraph> throughput_graph_;
-    std::unique_ptr<BinnedLiveGraph> delay_graph_;
+
 
     bool repeat_;
     bool finished_;
@@ -48,7 +47,7 @@ private:
 
 public:
     LinkQueue(const std::string &link_name, const std::string &filename, const std::string &logfile,
-              const bool repeat, const bool graph_throughput, const bool graph_delay,
+              const bool repeat, 
               std::unique_ptr<AbstractPacketQueue> &&packet_queue,
               const std::string &command_line);
 

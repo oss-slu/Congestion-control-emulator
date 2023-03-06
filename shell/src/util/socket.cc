@@ -8,6 +8,10 @@
 #include "timestamp.hh"
 #include "exception.hh"
 
+#include <linux/tcp.h>
+#include <linux/bpf.h>
+//#include <bcc/proto.h>
+
 using namespace std;
 
 /* default constructor for socket of (subclassed) domain and type */
@@ -187,3 +191,10 @@ Address TCPSocket::original_dest( void ) const
 
     return Address( dstaddr, len );
 }
+/*
+void TCPSocket::trace_tcp_cwnd(void){
+    Address::raw address;
+    struct tcp_sock * tcps = &address;//address-> as_sockaddr;
+    bpf_trace_printk("%d\n", sizeof(tcps), tcps->snd_cwnd);
+    //BPF_FUNC_trace_printk("%d\n", sizeof(tcps), tcps->snd_cwnd);
+}*/

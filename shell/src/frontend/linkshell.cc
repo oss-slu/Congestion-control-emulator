@@ -21,9 +21,9 @@ void usage_error(const string &program_name)
     cerr << endl;
     cerr << "Options = --once" << endl;
     cerr << "          --uplink-log=FILENAME --downlink-log=FILENAME" << endl;
-    cerr << "          --meter-uplink --meter-uplink-delay" << endl;
-    cerr << "          --meter-downlink --meter-downlink-delay" << endl;
-    cerr << "          --meter-all" << endl;
+    //cerr << "          --meter-uplink --meter-uplink-delay" << endl;
+    //cerr << "          --meter-downlink --meter-downlink-delay" << endl;
+    //cerr << "          --meter-all" << endl;
     cerr << "          --uplink-queue=QUEUE_TYPE --downlink-queue=QUEUE_TYPE" << endl;
     cerr << "          --uplink-queue-args=QUEUE_ARGS --downlink-queue-args=QUEUE_ARGS" << endl;
     cerr << endl;
@@ -112,11 +112,11 @@ int main(int argc, char *argv[])
             {"uplink-log", required_argument, nullptr, 'u'},
             {"downlink-log", required_argument, nullptr, 'd'},
             {"once", no_argument, nullptr, 'o'},
-            {"meter-uplink", no_argument, nullptr, 'm'},
-            {"meter-downlink", no_argument, nullptr, 'n'},
-            {"meter-uplink-delay", no_argument, nullptr, 'x'},
-            {"meter-downlink-delay", no_argument, nullptr, 'y'},
-            {"meter-all", no_argument, nullptr, 'z'},
+            //{"meter-uplink", no_argument, nullptr, 'm'},
+            //{"meter-downlink", no_argument, nullptr, 'n'},
+            //{"meter-uplink-delay", no_argument, nullptr, 'x'},
+            //{"meter-downlink-delay", no_argument, nullptr, 'y'},
+            //{"meter-all", no_argument, nullptr, 'z'},
             {"uplink-queue", required_argument, nullptr, 'q'},
             {"downlink-queue", required_argument, nullptr, 'w'},
             {"uplink-queue-args", required_argument, nullptr, 'a'},
@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
 
         string uplink_logfile, downlink_logfile;
         bool repeat = true;
-        bool meter_uplink = false, meter_downlink = false;
-        bool meter_uplink_delay = false, meter_downlink_delay = false;
+        //bool meter_uplink = false, meter_downlink = false;
+        //bool meter_uplink_delay = false, meter_downlink_delay = false;
         string uplink_queue_type = "infinite", downlink_queue_type = "infinite",
                uplink_queue_args, downlink_queue_args;
 
@@ -149,21 +149,21 @@ int main(int argc, char *argv[])
             case 'o':
                 repeat = false;
                 break;
-            case 'm':
-                meter_uplink = true;
-                break;
-            case 'n':
-                meter_downlink = true;
-                break;
-            case 'x':
-                meter_uplink_delay = true;
-                break;
-            case 'y':
-                meter_downlink_delay = true;
-                break;
-            case 'z':
-                meter_uplink = meter_downlink = meter_uplink_delay = meter_downlink_delay = true;
-                break;
+            //case 'm':
+            //    meter_uplink = true;
+            //    break;
+            //case 'n':
+            //    meter_downlink = true;
+            //    break;
+            //case 'x':
+            //    meter_uplink_delay = true;
+            //    break;
+            //case 'y':
+            //    meter_downlink_delay = true;
+            //    break;
+            //case 'z':
+            //    meter_uplink = meter_downlink = meter_uplink_delay = meter_downlink_delay = true;
+            //    break;
             case 'q':
                 uplink_queue_type = optarg;
                 break;
@@ -209,11 +209,11 @@ int main(int argc, char *argv[])
         PacketShell<LinkQueue> link_shell_app("link", user_environment);
 
         link_shell_app.start_uplink("[link] ", command,
-                                    "Uplink", uplink_filename, uplink_logfile, repeat, meter_uplink, meter_uplink_delay,
+                                    "Uplink", uplink_filename, uplink_logfile, repeat,
                                     get_packet_queue(uplink_queue_type, uplink_queue_args, argv[0]),
                                     command_line);
 
-        link_shell_app.start_downlink("Downlink", downlink_filename, downlink_logfile, repeat, meter_downlink, meter_downlink_delay,
+        link_shell_app.start_downlink("Downlink", downlink_filename, downlink_logfile, repeat, 
                                       get_packet_queue(downlink_queue_type, downlink_queue_args, argv[0]),
                                       command_line);
 
