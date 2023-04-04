@@ -276,7 +276,7 @@ class TunnelGraph(object):
                 x_values = self.ingress_t[flow_id]
                 y_values = self.ingress_tput[flow_id]
 
-                with open('data.csv', 'w') as f:
+                with open('./LSTM/data.csv', 'w') as f:
                     fields = ["Time","Throughput"]
                     writer = csv.writer(f)
                     writer.writerow(fields)
