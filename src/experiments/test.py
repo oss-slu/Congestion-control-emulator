@@ -814,6 +814,7 @@ def main():
     args = arg_parser.parse_test()
 
     try:
+        
         run_tests(args)
     except:  # intended to catch all exceptions
         # dump traceback ahead in case pkill kills the program
@@ -828,4 +829,22 @@ def main():
 
 
 if __name__ == '__main__':
+    from bcc import BPF
+    with open("trace/cwnd.c", "r") as f:
+        program = f.read()
+    #load bpf program
+    b = BPF(text=program)
+    #attaching probing for tcp setsocket
+    b.attach_kprobe(event="tcp_setsockopt", fn_name="trace_tcp_cong")
+    #TODO: socket filter
+    def handle_event(cpu, data, size):
+        event = b["events"].event(data)
+        print(f"CWND: {event.cwnd}")
+
+    b["events"].open_perf_buffer(handle_event)
+
     main()
+
+    while True:
+        b.kprobe_poll()
+
