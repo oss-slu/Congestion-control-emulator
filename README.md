@@ -74,3 +74,13 @@ $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pa
 $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.driving'
 $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.short'
 ```
+
+### LSTM Analysis
+
+To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder 
+
+Run: 
+```bash
+$ /Congestion-control/LSTM python3 lstm_network_emulator.py
+
+```
