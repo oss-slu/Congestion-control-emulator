@@ -77,10 +77,10 @@ $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pa
 
 ### LSTM Analysis
 
-To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder 
+To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder. You can specify the amount of epochs and activation functions with the command line arguments (Default 10 epochs and tangent activation function)
 
 Run: 
 ```bash
-$ /Congestion-control/LSTM python3 lstm_network_emulator.py
+$ /Congestion-control/LSTM python3 lstm_network_emulator.py --epochs "# of epochs" --activation "0 for tangent 1 for signmoid" 
 
 ```
