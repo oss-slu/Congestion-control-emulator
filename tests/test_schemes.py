@@ -20,17 +20,20 @@ def test_schemes(args):
         schemes = utils.parse_config()['schemes'].keys()
     elif args.schemes is not None:
         schemes = args.schemes.split()
+    
 
     for scheme in schemes:
         sys.stderr.write('Testing %s...\n' % scheme)
+        
         src = path.join(wrappers_dir, scheme + '.py')
 
         run_first = check_output([src, 'run_first']).strip()
         run_second = 'receiver' if run_first == 'sender' else 'sender'
 
         port = utils.get_open_port()
-        #tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt"]
-        #subprocess.check_call(tcp_bpf_call)
+        tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt", str(port), ">>", "tcp_out.txt"]
+        print(tcp_bpf_call)
+        subprocess.run(tcp_bpf_call, shell = True)
         
 
         # run first to run
@@ -46,6 +49,7 @@ def test_schemes(args):
         # run second to run
         cmd = [src, run_second, '127.0.0.1', port]
         second_proc = Popen(cmd, preexec_fn=os.setsid)
+        second_proc.stdin.write(trace_proc.encode("utf-8"))
 
         # test lasts for 3 seconds
         signal.signal(signal.SIGALRM, utils.timeout_handler)

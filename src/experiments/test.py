@@ -439,14 +439,14 @@ class Test(object):
                     first_src = self.r['cc_src']
 
             port = utils.get_open_port()
-            tcp_bpf_call = "sudo bpftrace ../../../ebpf/tcp.bt\n"
+  
             first_cmd = 'tunnel %s python %s sender %s\n' % (
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s receiver %s %s\n' % (
                 tun_id, second_src, send_pri_ip, port)
 
             send_manager.stdin.write(first_cmd.encode("utf-8"))
-            send_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
+            #send_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
             send_manager.stdin.flush()
 
         # get run_first and run_second from the flow object
@@ -465,6 +465,7 @@ class Test(object):
                         second_src = flow.cc_src_remote
 
                 port = utils.get_open_port()
+                #tcp_bpf_call = "sudo bpftrace ../../../ebpf/tcp.bt\n"
 
                 first_cmd = 'tunnel %s python %s receiver %s\n' % (
                     tun_id, first_src, port)
@@ -472,6 +473,7 @@ class Test(object):
                     tun_id, second_src, recv_pri_ip, port)
 
                 recv_manager.stdin.write(first_cmd)
+                #recv_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
                 recv_manager.stdin.flush()
             else:  # flow.run_first == 'sender'
                 if self.mode == 'remote':
@@ -533,6 +535,7 @@ class Test(object):
     # test congestion control using tunnel client and tunnel server
     def run_with_tunnel(self):
         # run pantheon tunnel server and client managers
+        
         ts_manager, tc_manager = self.run_tunnel_managers()
 
         # create alias for ts_manager and tc_manager using sender or receiver
@@ -829,22 +832,6 @@ def main():
 
 
 if __name__ == '__main__':
-    """from bcc import BPF
-    with open("/home/anh/Congestion-control-emulator/src/experiments/trace/cwnd.c", "r") as f:
-        program = f.read()
-    #load bpf program
-    b = BPF(text=program)
-    #attaching probing for tcp setsocket
-    b.attach_kprobe(event="tcp_setsockopt", fn_name="trace_tcp_cong")
-    #TODO: socket filter
-    def handle_event(cpu, data, size):
-        event = b["events"].event(data)
-        print(f"CWND: {event.cwnd}")
-
-    b["events"].open_perf_buffer(handle_event)
-"""
+    
     main()
-
-   #while True:
-    #    b.kprobe_poll()
 

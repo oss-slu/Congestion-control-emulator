@@ -4,12 +4,12 @@
     ],
     "downlink_trace": "ATT-LTE-driving-2016.down",
     "flows": 1,
-    "git_summary": "branch: cwnd_ebpf @ 19407b67d4473d6ab2fafcf38395e0c171035d66\nthird_party/fillp @ d6da1459332fcee56963885d7eba17e6a32d4519\nthird_party/fillp-sheep @ 0e5bb722943babcd2b090d2c64fcd45e12e923f9\nthird_party/genericCC @ d0153f8e594aa89e93b032143cedbdfe58e562f4\nthird_party/indigo @ 463d89b09699a57bfdfbae351646df6a60040b90\nthird_party/libutp @ b3465b942e2826f2b179eaab4a906ce6bb7cf3cf\nthird_party/pantheon-tunnel @ f866d3f58d27afd942717625ee3a354cc2e802bd\nthird_party/pcc @ 1afc958fa0d66d18b623c091a55fec872b4981e1\n M receiver/src/buffer.h\n M receiver/src/core.cpp\n M sender/src/buffer.h\n M sender/src/core.cpp\nthird_party/pcc-experimental @ cd43e34e3f5f5613e8acd08fab92c4eb24f974ab\nthird_party/proto-quic @ 77961f1a82733a86b42f1bc8143ebc978f3cff42\nthird_party/scream-reproduce @ f099118d1421aa3131bf11ff1964974e1da3bdb2\n M src/ScreamClient\n M src/ScreamServer\nthird_party/sprout @ 366e35c6178b01e31d4a46ad18c74f9415f19a26\nthird_party/verus @ d4b447ea74c6c60a261149af2629562939f9a494\nthird_party/vivace @ 2baf86211435ae071a32f96b7d8c504587f5d7f4\nthird_party/webrtc @ 3f0cc2a9061a41b6f9dde4735770d143a1fa2851\n",
+    "git_summary": "branch: cwnd_ebpf @ c9b85850dc84558770eb50b33ffcb974a07a2ef3\nthird_party/fillp @ d6da1459332fcee56963885d7eba17e6a32d4519\nthird_party/fillp-sheep @ 0e5bb722943babcd2b090d2c64fcd45e12e923f9\nthird_party/genericCC @ d0153f8e594aa89e93b032143cedbdfe58e562f4\nthird_party/indigo @ 463d89b09699a57bfdfbae351646df6a60040b90\nthird_party/libutp @ b3465b942e2826f2b179eaab4a906ce6bb7cf3cf\nthird_party/pantheon-tunnel @ f866d3f58d27afd942717625ee3a354cc2e802bd\nthird_party/pcc @ 1afc958fa0d66d18b623c091a55fec872b4981e1\n M receiver/src/buffer.h\n M receiver/src/core.cpp\n M sender/src/buffer.h\n M sender/src/core.cpp\nthird_party/pcc-experimental @ cd43e34e3f5f5613e8acd08fab92c4eb24f974ab\nthird_party/proto-quic @ 77961f1a82733a86b42f1bc8143ebc978f3cff42\nthird_party/scream-reproduce @ f099118d1421aa3131bf11ff1964974e1da3bdb2\n M src/ScreamClient\n M src/ScreamServer\nthird_party/sprout @ 366e35c6178b01e31d4a46ad18c74f9415f19a26\nthird_party/verus @ d4b447ea74c6c60a261149af2629562939f9a494\nthird_party/vivace @ 2baf86211435ae071a32f96b7d8c504587f5d7f4\nthird_party/webrtc @ 3f0cc2a9061a41b6f9dde4735770d143a1fa2851\n",
     "interval": 0,
     "mode": "local",
     "random_order": false,
     "run_times": 1,
-    "runtime": 5,
+    "runtime": 10,
     "start_run_id": 1,
     "uplink_trace": "ATT-LTE-driving-2016.up"
 }
