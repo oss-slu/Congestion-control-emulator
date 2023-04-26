@@ -77,10 +77,35 @@ $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pa
 
 ### LSTM Analysis
 
-To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder. You can specify the amount of epochs and activation functions with the command line arguments (Default 10 epochs and tangent activation function)
+To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder. You can specify the amount of epochs and how many predictions you want the LSTM to make past the emulation runtime
+
+make sure you have python libraries pandas and scikit-learn installed
 
 Run: 
 ```bash
-$ /Congestion-control/LSTM python3 lstm_network_emulator.py --epochs "# of epochs" --activation "0 for tangent 1 for signmoid" 
+$ /Congestion-control/LSTM python3 lstm_network_emulator.py --epochs "# of epochs" --predictions "# of predictions" 
 
 ```
+
+## State of the LSTM 
+
+At present, the LSTM model performs well on a limited number of trace files, such as Verizon LTE and T-Mobile LTE. To improve the model's performance, several adjustments have been experimented with, including:
+
+1. n_input: Increasing the n_input value provides the LSTM's short-term memory with more data to work with. This value should be adjusted depending on the network emulation runtime (e.g., for a 60-second runtime, use n_input = 10).
+
+3. epochs: Adjusting the number of epochs can be time-consuming but is essential for determining the model's accuracy. Adjust the epoch count to best fit your emulation data.
+
+4. batch_size: batch_size can be modified to help the model fit your data more effectively (optimal results are typically found between 30 and 100).
+
+5. dropout: Adding dropout layers was attempted, but it resulted in constant predictions.
+
+6. activation function: Both tanh and sigmoid activation functions work well for LSTM models. However, the tanh function seems to yield better results with our current model and data.
+
+7. Multiple RNN Layers: My attempt to add more LSTM layers were unsuccessful in improving predictions. Future exploration could involve using other types of RNN layers, such as GRU, or even combining LSTM and GRU layers.
+
+There is still much more work to be done to improve the LSTM's accuracy and make it compatible with all trace files and various emulation runtimes. The most successful model so far has been for the T-Mobile LTE trace file with an emulation runtime of 60 seconds. The corresponding data is saved in TMobile60Data.csv. By changing the file path from data.csv to TMobile60Data.csv and running the model with 120 epochs, a relatively accurate model can be obtained. Below is an example output from these settings:
+
+<img width="613" alt="image" src="https://user-images.githubusercontent.com/115129576/234693822-b9899b70-767f-4c19-a5c1-40ea2b52385d.png">
+
+
+
