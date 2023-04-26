@@ -87,6 +87,23 @@ $ /Congestion-control/LSTM python3 lstm_network_emulator.py --epochs "# of epoch
 
 ```
 
+## Metrics 
+
+Three metrics are used to test the accuracy of the model: 
+
+1. Mean Squared Error (MSE):
+MSE measures the average squared difference between the predicted values and the actual values. A lower MSE indicates better model performance. However, since the errors are squared, MSE is sensitive to outliers and larger errors have a disproportionally larger impact on the overall metric.
+Formula: MSE = (1/n) * Σ(actual_i - predicted_i)^2
+
+2. Root Mean Squared Error (RMSE):
+RMSE is the square root of MSE. It is also a measure of the average difference between predicted and actual values, but it is in the same unit as the target variable, making it more interpretable. Like MSE, a lower RMSE value indicates better model performance. RMSE is sensitive to outliers, similar to MSE.
+Formula: RMSE = √(MSE)
+
+3. Mean Absolute Error (MAE):
+MAE is the average of the absolute differences between the predicted and actual values. It measures the average magnitude of the errors in the predictions without considering their direction. Unlike MSE and RMSE, MAE is not sensitive to outliers, as it does not square the errors. A lower MAE value indicates better model performance.
+
+All 3 are printed at the end of the script
+
 ## State of the LSTM 
 
 At present, the LSTM model performs well on a limited number of trace files, such as Verizon LTE and T-Mobile LTE. To improve the model's performance, several adjustments have been experimented with, including:
