@@ -131,3 +131,14 @@ ax.plot(predictions_actual_size, label='Predictions')
 ax.plot(test_data_actual_scale, label='Actual')
 ax.legend()
 plt.savefig('./out/results_plot.png')
+
+# Truncate predictions_actual_size to match the length of test_data_actual_scale
+truncated_predictions_actual_size = predictions_actual_size[:len(test_data_actual_scale)]
+
+mse = mean_squared_error(test_data_actual_scale, truncated_predictions_actual_size)
+rmse = math.sqrt(mse)
+mae = mean_absolute_error(test_data_actual_scale, truncated_predictions_actual_size)
+
+print("Mean squared error (MSE): ", mse)
+print("Root mean squared error (RMSE): ", rmse)
+print("Mean absolute error (MAE): ", mae)
