@@ -424,12 +424,11 @@ class Test(object):
                     second_src = self.r['cc_src']
 
             port = utils.get_open_port()
-            print("PORT NUMBER IS: %s", port)
+
             first_cmd = 'tunnel %s python %s receiver %s\n' % (
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s sender %s %s\n' % (
                 tun_id, second_src, recv_pri_ip, port)
-
             recv_manager.stdin.write(first_cmd.encode("utf-8"))
             recv_manager.stdin.flush()
         elif self.run_first == 'sender':  # self.run_first == 'sender'
@@ -440,13 +439,14 @@ class Test(object):
                     first_src = self.r['cc_src']
 
             port = utils.get_open_port()
-
+            tcp_bpf_call = "sudo bpftrace ../../../ebpf/tcp.bt\n"
             first_cmd = 'tunnel %s python %s sender %s\n' % (
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s receiver %s %s\n' % (
                 tun_id, second_src, send_pri_ip, port)
 
             send_manager.stdin.write(first_cmd.encode("utf-8"))
+            send_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
             send_manager.stdin.flush()
 
         # get run_first and run_second from the flow object

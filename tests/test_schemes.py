@@ -29,13 +29,16 @@ def test_schemes(args):
         run_second = 'receiver' if run_first == 'sender' else 'sender'
 
         port = utils.get_open_port()
-        tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt"]
-        subprocess.check_call(tcp_bpf_call)
+        #tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt"]
+        #subprocess.check_call(tcp_bpf_call)
         
 
         # run first to run
         cmd = [src, run_first, port]
+        #trace_proc = "sudo bpftrace ../../../ebpf/tcp.bt\n"
+
         first_proc = Popen(cmd, preexec_fn=os.setsid)
+        #Popen.args(trace_proc, preexec_fn=os.setsid)
 
         # wait for 'run_first' to be ready
         time.sleep(3)

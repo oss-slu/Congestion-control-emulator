@@ -5,7 +5,7 @@ BEGIN
 {       printf("Tracing TCP accepts...");
         printf("%-8s %-6s %-14s ", "TIME", "PID", "SCHEME");
         printf("%-39s %-5s %-39s %-5s", "RADDR", "RPORT", "LADDR","LPORT");
-        printf("%-5s %-8s %-6s\n","SCWND", "SSTHRESH", "SNDBUF" )
+        printf("%-5s %-8s %-6s\n","SCWND", "SSTHRESH", "SNDBUF" );
        
 }
 
@@ -13,9 +13,20 @@ kprobe:tcp_rcv_established
 {
         $sock = (struct sock *) retVal;
         $tcps = (struct tcp_sock *) retVal; // see tcp_sk()
+        $inet_family = $sock->__sk_common.skc_family;
+
         //printf("rcv,0x%llx,%lld,%d,%d,%d,%d\n", arg0, elapsed / 1000,
         //    $tcps->snd_cwnd, $tcps->snd_ssthresh, $sock->sk_sndbuf,
         //    $sock->sk_wmem_queued);
+        if ($inet_family == AF_INET) {
+                $daddr = ntop($sk->__sk_common.skc_daddr);
+                $saddr = ntop($sk->__sk_common.skc_rcv_saddr);
+        } else {
+                $daddr = ntop(
+                        $sk->__sk_common.skc_v6_daddr.in6_u.u6_addr8);
+                $saddr = ntop(
+                        $sk->__sk_common.skc_v6_rcv_saddr.in6_u.u6_addr8);
+	}
 
         
 
@@ -32,5 +43,8 @@ kprobe:tcp_rcv_established
 
         time("%H:%M:%S ");
         printf("%-6d %-14s ", pid, comm);
+        printf("%-39s %-5s %-39s %-5s", daddr, dport, saddr,sport);
+        printf("%-5s %-8s %-6s\n", scwnd, ssthresh, sndbuf );
+
 
 }
