@@ -1,0 +1,18 @@
+# 'mm-tunnelclient' '--ingress-log=/home/anh/Congestion-control-emulator/tmp/fillp_sheep_acklink_run1_flow1_uidbc4869a6-0549-4672-9c89-7806deebfd52.log.ingress' '--egress-log=/home/anh/Congestion-control-emulator/tmp/fillp_sheep_datalink_run1_flow1_uidbc4869a6-0549-4672-9c89-7806deebfd52.log.egress' '100.64.0.3' '51189' '100.64.0.6' '100.64.0.5' ingress: 1681314654465.546
+5178.145 - 0 - 224
+5178.231 - 1 - 224
+5178.268 - 2 - 224
+5178.297 - 3 - 224
+5178.325 - 4 - 224
+5178.353 - 5 - 224
+5182.302 - 6 - 224
+5182.337 - 7 - 224
+5182.393 - 8 - 224
+5182.460 - 9 - 224
+5182.515 - 10 - 224
+5234.261 - 11 - 116
+5796.757 - 12 - 128
+6287.343 - 13 - 128
+6823.112 - 14 - 128
+7370.697 - 15 - 128
+7919.790 - 16 - 128

@@ -424,7 +424,7 @@ class Test(object):
                     second_src = self.r['cc_src']
 
             port = utils.get_open_port()
-
+            print("PORT NUMBER IS: %s", port)
             first_cmd = 'tunnel %s python %s receiver %s\n' % (
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s sender %s %s\n' % (
@@ -778,7 +778,7 @@ def run_tests(args):
     utils.save_test_metadata(meta, metadata_path)
 
     if args.mode == 'local':
-        setIPv4Forwarding();
+        setIPv4Forwarding()
 
     # run tests
     for run_id in range(args.start_run_id,
@@ -829,8 +829,8 @@ def main():
 
 
 if __name__ == '__main__':
-    from bcc import BPF
-    with open("trace/cwnd.c", "r") as f:
+    """from bcc import BPF
+    with open("/home/anh/Congestion-control-emulator/src/experiments/trace/cwnd.c", "r") as f:
         program = f.read()
     #load bpf program
     b = BPF(text=program)
@@ -842,9 +842,9 @@ if __name__ == '__main__':
         print(f"CWND: {event.cwnd}")
 
     b["events"].open_perf_buffer(handle_event)
-
+"""
     main()
 
-    while True:
-        b.kprobe_poll()
+   #while True:
+    #    b.kprobe_poll()
 

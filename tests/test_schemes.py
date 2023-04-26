@@ -6,6 +6,7 @@ import sys
 import time
 import signal
 import argparse
+import subprocess
 
 import context
 from helpers import utils
@@ -28,6 +29,9 @@ def test_schemes(args):
         run_second = 'receiver' if run_first == 'sender' else 'sender'
 
         port = utils.get_open_port()
+        tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt"]
+        subprocess.check_call(tcp_bpf_call)
+        
 
         # run first to run
         cmd = [src, run_first, port]
