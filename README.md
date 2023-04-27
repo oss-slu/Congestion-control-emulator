@@ -1,15 +1,15 @@
-# Network Congestion Control Emulator
+# ⚙️ Network Congestion Control Emulator
 1. [Software Overview](#software-overview)
 2. [Disclaimer](#disclaimer)
 3. [Installation](#installation)
-  1. [Operating System Prerequesites](#operating-system-prerequesites)
-  2. [Clone the Project](#clone-the-project)
-  3. [Evaluation Module](#install-evaluation-module)
-  4. [Emulation Moddule](#install-emulation-module)
-  5. [Docker Usage)(#docker-usage)
-  6. [Kernel Configuration Notes](#kernel-configuration)
+    1. [Operating System Prerequesites](#operating-system-prerequesites)
+    2. [Clone the Project](#clone-the-project)
+    3. [Evaluation Module](#install-evaluation-module)
+    4. [Emulation Moddule](#install-emulation-module)
+    5. [Docker Usage](#docker-usage)
+    6. [Kernel Configuration Notes](#kernel-configuration)
    
-
+----
 ## Software Overview
 
 Congestion Control (CC) Emulator is the CLI (command-line interface) application that allows users to define network conditions with (network delays, losses and links) to emulate and run congestion control algorithms in such user-defined environment. The software will output analytics that summarize the performance of all tested algorithms. The software supports real-time kernel tracing with eBPF/XDP and traffic prediction (right now based on throughput variable using Long Short Term Memory (LSTM) architecture).
@@ -19,6 +19,7 @@ Congestion Control (CC) Emulator is the CLI (command-line interface) application
 - The benchmarking system is forked from [Pantheon](https://github.com/StanfordSNR/pantheon).
 - The emulation system is based on [mahimahi](http://mahimahi.mit.edu/).
 
+---
 ## Installation
 
 ### Operating System Prerequesites
