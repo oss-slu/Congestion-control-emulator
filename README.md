@@ -8,6 +8,7 @@
     4. [Emulation Moddule](#install-emulation-module)
     5. [Docker Usage](#docker-usage)
     6. [Kernel Configuration Notes](#kernel-configuration)
+4. [Usage](#usage)
    
 ----
 ## Software Overview
@@ -97,4 +98,16 @@ Voila, now you can run pantheon inside the container!
 
 ### Kernel Configuration
 If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).
+---
+## Usage
+### Run Experiment [^2]
+You can run CLI arguments or use a config files to run the program. `src/experiments/test.py -h`. When you run the program, kernel tracing will log in text files [^3]. Summary of full local options is below:
+[^2]: As of now (4/27/23) kernel tracing only supports local mode.
+[^3]: As of now (4/27/23) TCP information is logged in `tcp_trace.txt`
 
+```src/experiments/test.py (local|remote) -f=<flow-rate-int> (default 1) -t=<duration-int>(default 30) --interval=<interval-between-flows-int>(default 0) --run-times=<int> (default 1) --start-run-id=<int> --random-order --data-dir=<output/path/for/results> --uplink-trace=<uplink/trace/path> --downlink-trace=<downlink/trace/path> (--all | --schemes "<cc1> <cc2> ...")```
+
+To run analysis
+```
+src/analysis/analyze.py --data-dir <directory/specified/in/last/step>
+```
