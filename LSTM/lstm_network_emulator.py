@@ -15,7 +15,7 @@ import math
 import matplotlib.pyplot as plt
 
 
-file_location = './data.csv'
+file_location = './data_ingress.csv'
 
 first_dataset = pd.read_csv(file_location)
 
