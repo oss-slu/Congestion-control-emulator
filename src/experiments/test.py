@@ -435,7 +435,8 @@ class Test(object):
             recv_manager.stdin.flush()
             
             tcp_file = open("tcp_trace.txt", "a")
-            daemon = Thread(target=subprocess.run, args =(["sudo", "bpftrace" ,"ebpf/tcp.bt", port]) ,daemon=True, name='Monitoring tcp packets')
+            daemon = Thread(target=subprocess.run, args =(["sudo", "bpftrace" ,"ebpf/tcp.bt", port],) ,
+                        kwargs = {"stdout": tcp_file}, daemon=True, name='Monitoring tcp packets')
             daemon.start()
         elif self.run_first == 'sender':  # self.run_first == 'sender'
             if self.mode == 'remote':
