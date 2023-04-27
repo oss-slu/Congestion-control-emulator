@@ -1,1 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/home/anh/Congestion-control-emulator/tmp/cubic_acklink_run1_flow1_uidc3d30e2e-89b2-4e53-99ed-83907f34a9a6.log.ingress' '--egress-log=/home/anh/Congestion-control-emulator/tmp/cubic_datalink_run1_flow1_uidc3d30e2e-89b2-4e53-99ed-83907f34a9a6.log.egress' '100.64.0.3' '35741' '100.64.0.6' '100.64.0.5' ingress: 1682562346842.380

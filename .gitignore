@@ -53,6 +53,8 @@ Makefile.in
 
 */tmp/*
 */out*/
+*/sample/*
+
 
 
 ##### Python
@@ -179,3 +181,4 @@ Session.vim
 
 # Auto-generated tag files
 tags
+
