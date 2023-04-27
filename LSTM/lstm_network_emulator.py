@@ -29,17 +29,19 @@ throughput = first_dataset_indexed["Throughput"]
 parser = argparse.ArgumentParser(description='Train an LSTM model with custom parameters.')
 parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training.')
 parser.add_argument('--predictions', type=int, default=10, help='# of predictions past runtime in seconds')
+parser.add_argument('--n_input', type=int, default=10, help='change this value based on how much data you have for more accurate predictions')
 args = parser.parse_args()
 
 epochs = args.epochs
 seconds_past = args.predictions
+ninput - args.n_input
 
 scaler = MinMaxScaler()
 first_dataset_scaled = scaler.fit_transform(first_dataset_indexed)
 
 train,test = train_test_split(first_dataset_scaled, test_size = 0.10, shuffle = False)
 
-n_input = 10
+n_input = ninput
 n_features = 1
 
 generatorTrain = TimeseriesGenerator(train, train, length=n_input, batch_size=2)
