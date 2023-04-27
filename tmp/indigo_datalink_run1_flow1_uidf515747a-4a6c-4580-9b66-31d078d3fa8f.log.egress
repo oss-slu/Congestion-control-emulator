@@ -1,1 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/capstone/Congestion-control-emulator/tmp/indigo_acklink_run1_flow1_uidf515747a-4a6c-4580-9b66-31d078d3fa8f.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/indigo_datalink_run1_flow1_uidf515747a-4a6c-4580-9b66-31d078d3fa8f.log.egress' '100.64.0.1' '42347' '100.64.0.4' '100.64.0.3' egress: 1669617571731.304

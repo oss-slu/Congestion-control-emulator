@@ -1,1 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/capstone/Congestion-control-emulator/tmp/bbr_acklink_run1_flow1_uidc1f7fd73-225c-4f3f-86b1-1b0c23561a7a.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/bbr_datalink_run1_flow1_uidc1f7fd73-225c-4f3f-86b1-1b0c23561a7a.log.egress' '100.64.0.1' '45947' '100.64.0.4' '100.64.0.3' egress: 1669653809713.133
