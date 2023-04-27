@@ -1,32 +1,68 @@
 # Network Congestion Control Emulator
 
-The Pantheon contains wrappers for many popular practical and research
-congestion control schemes. The Pantheon enables them to run on a common
-interface, and has tools to benchmark and compare their performances.
-Pantheon tests can be run locally over emulated links using
-[mahimahi](http://mahimahi.mit.edu/) or over the Internet to a remote machine.
+Congestion Control (CC) Emulator is the CLI (command-line interface) application that allows users to define network conditions with (network delays, losses and links) to emulate and run congestion control algorithms in such user-defined environment. The software will output analytics that summarize the performance of all tested algorithms. The software supports real-time kernel tracing with eBPF/XDP and traffic prediction (right now based on throughput variable using Long Short Term Memory (LSTM) architecture).
+
 
 ## Disclaimer
-This repo was forked from [Pantheon of Congestion Control](https://github.com/StanfordSNR/pantheon)
+- The benchmarking system is forked from [Pantheon](https://github.com/StanfordSNR/pantheon).
+- The emulation system is based on [mahimahi](http://mahimahi.mit.edu/).
 
 ## Installation
-Follow the guidelines from the original repo
 
+### Operating System Prerequesites
+To utilize the emulation and real-time traacing features, a Linux kernel version >= 4.1 is required.
+- Follow this [guide](https://github.com/iovisor/bcc/blob/master/INSTALL.md) to configure your kernel and environments for eBPF [^1]
+- The current emulation system is supported by Debian and Fedora. Please consult the [Docker section](#docker-usage) for full list of dependedencies.
+[^1]: As of now 04/27/2023 we recommend you build from source instead of using binary releases
+
+### Clone the Project
 ```
 git clone https://github.com/oss-slu/Congestion-control-emulator.git
 ```
-
-Add submodules after cloning by running:
-
+### Redirect to evaluation module
 ```
-git submodule update --init --recursive  # or tools/fetch_submodules.sh
+cd Congestion-control-emulator/src/
+```
+#### Link CC schemes to your project
+We use source implementations of the congestion control algorithms. Please link the submodules once you clone our project. Learn more about submodule [here](https://github.blog/2016-02-01-working-with-submodules/)
+```
+git submodule update --init --recursive 
+```
+#### Global Installation [^2]
+If you are uncomfortable with global installation, we provide Docker images for you to use. Please consult the [Docker section](#docker-usage) 
+Some dependencies require global installations to your system. You can do so with (*note well this script is Debian-based*):
+```
+sh tools/install_deps.sh
+```
+#### Set up Dependencies for CC schemes
+If you use our Docker image, please skip this step
+```
+src/experiments/setup.py --install-deps (--all | --schemes "<cc1> <cc2> ...")
 ```
 
-Follow the remaining of the set-up guidelines [here](https://github.com/StanfordSNR/pantheon)
+#### Set up CC schemes in your system
+If you use our Docker image, please skip this step
+```
+src/experiments/setup.py [--setup] [--all | --schemes "<cc1> <cc2> ..."]
+```
 
+### Redirect to emulation module
+If you use our Docker please skip this step.
+```
+cd shell
+```
+
+#### Build emulation shells
+```
+[path_of_the_shell]
+./autogen.sh
+./configure
+make
+sudo make install
+```
 
 ### Docker Usage
-Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds the dependencies.
+Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds all dependencies. Any contributions to make more docker images so our application can be supported in many Linux-based platforms is appreciated.
 
 Get yourself familiar with [Docker](https://docs.docker.com/config/daemon/start/)
 
@@ -43,34 +79,9 @@ docker run --privileged \
 -v /this/project/on/your/local/machine:/working/dir/inside/docker \
 a8nguyen/oss-slu-congestion:mahimahi
 ```
-Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su a8nguyen`
+Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su nonroot`
 Voila, now you can run pantheon inside the container!
 
-### Pantheon Testing
+### Kernel Configuration
+If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).
 
-
-Some pantheon testing and analysis commands
-```bash
-$ src/experiments/test.py local --all -f=20 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving.down'
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving.2016' --uplink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving-2016.up' --downlink-trace='/usr/share/mahimahi/traces/ATT-LTE-driving-2016.down'
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/TMobile-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-LTE-driving.down '
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.short' --uplink-trace='/usr/share/mahimahi/traces/TMobile-LTE-short.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-LTE-short.down'
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.umts.driving' --uplink-trace='/usr/share/mahimahi/traces/TMobile-UMTS-driving.up' --downlink-trace='/usr/share/mahimahi/traces/TMobile-UMTS-driving.down'
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.evdo.driving' --uplink-trace='/usr/share/mahimahi/traces/Verizon-EVDO-driving.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-EVDO-driving.down'
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.driving' --uplink-trace='/usr/share/mahimahi/traces/Verizon-LTE-driving.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-LTE-driving.down' 
-$ src/experiments/test.py local --all -f=1 -t=600 --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.short' --uplink-trace='/usr/share/mahimahi/traces/Verizon-LTE-short.up' --downlink-trace='/usr/share/mahimahi/traces/Verizon-LTE-short.down' 
-```
-
-### Pantheon Analysis
-
-Some pantheon analysis commands
-```bash
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/att.lte.driving.2016'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.driving'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.lte.short'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/tm.umts.driving'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.evdo.driving'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.driving'
-$ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pantheon/vz.lte.short'
-```
