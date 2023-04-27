@@ -77,7 +77,7 @@ $ src/analysis/analyze.py --data-dir='/home/pokorie/Documents/repos/mimic/log/pa
 
 ### LSTM Analysis
 
-To use the LSTM feature run through the emulation and analysis described above. Then cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder. You can specify the amount of epochs and how many predictions you want the LSTM to make past the emulation runtime
+To use the LSTM feature run through the emulation and analysis described above, cd to the LSTM folder, if you did the other steps correctly there should be a data.csv file in that folder. You can specify the amount of epochs and how many predictions you want the LSTM to make past the emulation runtime
 
 make sure you have python libraries pandas and scikit-learn installed
 
