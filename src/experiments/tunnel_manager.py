@@ -82,10 +82,14 @@ def main():
                 sys.stdout.write(
                     procs[tun_id].stdout.readline().decode('utf-8'))
                 sys.stdout.flush()
-            else:
-                sys.stderr.write('unknown command after "tunnel ID": %s\n'
-                                 % cmd_to_run)
-                continue
+            elif cmd[2] == "sudo" and cmd[3] == "bpftrace":
+                procs[tun_id].stdin.write(str(cmd_to_run + '\n').encode("utf-8"))
+                procs[tun_id].stdin.flush()
+            
+                #sys.stderr.write('unknown command after "tunnel ID": %s\n'
+                #                 % cmd_to_run)
+                #continue
+
         elif cmd[0] == 'prompt':  # set prompt in front of commands to print
             if len(cmd) != 2:
                 sys.stderr.write('error: usage: prompt PROMPT\n')

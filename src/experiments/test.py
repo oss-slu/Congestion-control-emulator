@@ -9,7 +9,9 @@ import random
 import signal
 import traceback
 from subprocess import PIPE
+import subprocess
 from collections import namedtuple
+from threading import Thread
 
 from matplotlib import cm
 
@@ -431,6 +433,10 @@ class Test(object):
                 tun_id, second_src, recv_pri_ip, port)
             recv_manager.stdin.write(first_cmd.encode("utf-8"))
             recv_manager.stdin.flush()
+            
+            tcp_file = open("tcp_trace.txt", "a")
+            daemon = Thread(target=subprocess.run, args =(["sudo", "bpftrace" ,"ebpf/tcp.bt", port]) ,daemon=True, name='Monitoring tcp packets')
+            daemon.start()
         elif self.run_first == 'sender':  # self.run_first == 'sender'
             if self.mode == 'remote':
                 if self.sender_side == 'local':
@@ -445,9 +451,12 @@ class Test(object):
             second_cmd = 'tunnel %s python %s receiver %s %s\n' % (
                 tun_id, second_src, send_pri_ip, port)
 
-            send_manager.stdin.write(first_cmd.encode("utf-8"))
-            #send_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
+            send_manager.stdin.write(first_cmd.encode("utf-8"))  
             send_manager.stdin.flush()
+
+            tcp_file = open("tcp_trace.txt", "a")
+            daemon = Thread(target=subprocess.run(["sudo", "bpftrace" ,"ebpf/tcp.bt"]), daemon=True, name='Monitoring tcp packets', stdout = tcp_file)
+            daemon.start()
 
         # get run_first and run_second from the flow object
         else:
@@ -465,7 +474,7 @@ class Test(object):
                         second_src = flow.cc_src_remote
 
                 port = utils.get_open_port()
-                #tcp_bpf_call = "sudo bpftrace ../../../ebpf/tcp.bt\n"
+                
 
                 first_cmd = 'tunnel %s python %s receiver %s\n' % (
                     tun_id, first_src, port)
@@ -473,7 +482,6 @@ class Test(object):
                     tun_id, second_src, recv_pri_ip, port)
 
                 recv_manager.stdin.write(first_cmd)
-                #recv_manager.stdin.write(tcp_bpf_call.encode("utf-8"))
                 recv_manager.stdin.flush()
             else:  # flow.run_first == 'sender'
                 if self.mode == 'remote':

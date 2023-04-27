@@ -51,7 +51,7 @@ Makefile.in
 .vscode/
 .DS_Store
 
-*/tmp/
+*/tmp/*
 */out*/
 
 

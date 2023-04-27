@@ -31,8 +31,7 @@ def test_schemes(args):
         run_second = 'receiver' if run_first == 'sender' else 'sender'
 
         port = utils.get_open_port()
-        tcp_bpf_call = ["sudo", "bpftrace", "../../ebpf/tcp.bt", str(port), ">>", "tcp_out.txt"]
-        print(tcp_bpf_call)
+        
         subprocess.run(tcp_bpf_call, shell = True)
         
 

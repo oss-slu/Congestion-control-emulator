@@ -1,1 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/capstone/Congestion-control-emulator/tmp/pcc_acklink_run1_flow1_uid91007df8-6940-45d3-b0fd-3a8aed6d0dc5.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/pcc_datalink_run1_flow1_uid91007df8-6940-45d3-b0fd-3a8aed6d0dc5.log.egress' '100.64.0.1' '41057' '100.64.0.4' '100.64.0.3' egress: 1668378898584.324

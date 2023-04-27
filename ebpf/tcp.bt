@@ -40,7 +40,7 @@ kprobe:tcp_rcv_established
         $sndbuf = $sock->sk_sndbuf;
 
 
-        if((uint64)($dport) == $1){
+        if((uint64)($sport) == $1){
                 time("%H:%M:%S ");
                 printf("%-6d %-14s ", pid, comm);
                 printf("%-39s %-5d %-39s %5d ", $daddr, $dport, $saddr,$sport);

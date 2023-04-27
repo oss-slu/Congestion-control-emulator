@@ -1,1 +1,0 @@
-# 'mm-tunnelclient' '--ingress-log=/capstone/Congestion-control-emulator/tmp/vegas_acklink_run1_flow1_uid02ad59ef-7a38-41f3-861a-f6d05717d47b.log.ingress' '--egress-log=/capstone/Congestion-control-emulator/tmp/vegas_datalink_run1_flow1_uid02ad59ef-7a38-41f3-861a-f6d05717d47b.log.egress' '100.64.0.1' '44877' '100.64.0.4' '100.64.0.3' egress: 1669617491853.334
