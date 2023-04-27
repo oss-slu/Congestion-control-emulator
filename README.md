@@ -42,7 +42,7 @@ We use source implementations of the congestion control algorithms. Please link 
 ```
 git submodule update --init --recursive 
 ```
-#### Global Installation [^2]
+#### Global Installation
 If you are uncomfortable with global installation, we provide Docker images for you to use. Please consult the [Docker section](#docker-usage) 
 Some dependencies require global installations to your system. You can do so with (*note well this script is Debian-based*):
 ```
