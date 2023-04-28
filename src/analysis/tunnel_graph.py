@@ -271,6 +271,17 @@ class TunnelGraph(object):
 
             if flow_id in self.ingress_tput and flow_id in self.ingress_t:
                 empty_graph = False
+                
+                #output data to csv file
+                x_values = self.ingress_t[flow_id]
+                y_values = self.ingress_tput[flow_id]
+
+                with open('./LSTM/data.csv', 'w') as f:
+                    fields = ["Time","Throughput"]
+                    writer = csv.writer(f)
+                    writer.writerow(fields)
+                    writer.writerows(zip(x_values,y_values))
+
                 ax.plot(self.ingress_t[flow_id], self.ingress_tput[flow_id],
                         label='Flow %s ingress (mean %.2f Mbit/s)'
                         % (flow_id, self.avg_ingress.get(flow_id, 0)),
