@@ -111,6 +111,8 @@ To run analysis
 ```
 src/analysis/analyze.py --data-dir <directory/specified/in/last/step>
 ```
+<!--not sure how this below belongs here-->
+---
 
 ### LSTM Analysis
 
