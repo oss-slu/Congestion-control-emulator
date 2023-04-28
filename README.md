@@ -76,7 +76,8 @@ sudo make install
 ```
 
 ### Docker Usage
-Getting the right environment for Pantheon can be tricky. So as of now (2/23/23), we have a docker image that holds all dependencies. Any contributions to make more docker images so our application can be supported in many Linux-based platforms is appreciated.
+**Please make sure your host machine is Linux so it can access the application can access the Linux kernel for tracing**
+Getting the right environment for Pantheon can be tricky. So as of now ($\today$), we have a docker image hosted [here](https://hub.docker.com/repository/docker/a8nguyen/oss-slu-congestion) that holds all dependencies. Any contributions to make more docker images so our application can be supported in many Linux-based platforms is appreciated. The
 
 Get yourself familiar with [Docker](https://docs.docker.com/config/daemon/start/)
 
@@ -84,17 +85,16 @@ Start a docker daemon
 
 Then,
 ```bash
-docker pull a8nguyen/oss-slu-congestion:mahimahi
+docker pull a8nguyen/oss-slu-congestion:latest
 ```
 Once you download the image, you can run with. To learn more about the arguments used, refer to [Docker's documentation](https://docs.docker.com/engine/reference/run/) 
 ```
 docker run --privileged \
---device /dev/net/tun -it \
--v /this/project/on/your/local/machine:/working/dir/inside/docker \
+-it \
 a8nguyen/oss-slu-congestion:mahimahi
 ```
-Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su nonroot`
-Voila, now you can run pantheon inside the container!
+Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su test`
+This image contains pre-built artifacts from [emulation module](#install-emulation-module), BCC dependencies for kernel tracing, and [evaluation module](#install-emulation-module).
 
 <!--### Kernel Configuration
 If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).-->
