@@ -2,7 +2,7 @@
 #include <linux/tcp.h>
 
 BEGIN
-{       printf("Tracing TCP accepts...");
+{       printf("Tracing TCP accepts...\n");
         printf("%-8s %-6s %-14s ", "TIME", "PID", "SCHEME");
         printf("%-39s %-5s %-39s %-5s", "RADDR", "RPORT", "LADDR","LPORT");
         printf("%-5s %-8s %-6s\n","SCWND", "SSTHRESH", "SNDBUF" );
