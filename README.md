@@ -7,7 +7,7 @@
     3. [Evaluation Module](#install-evaluation-module)
     4. [Emulation Moddule](#install-emulation-module)
     5. [Docker Usage](#docker-usage)
-    6. [Kernel Configuration Notes](#kernel-configuration)
+    <!--6. [Kernel Configuration Notes](#kernel-configuration)-->
 4. [Usage](#usage)
    
 ----
@@ -96,8 +96,8 @@ a8nguyen/oss-slu-congestion:mahimahi
 Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su nonroot`
 Voila, now you can run pantheon inside the container!
 
-### Kernel Configuration
-If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).
+<!--### Kernel Configuration
+If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).-->
 ---
 ## Usage
 ### Run Experiment [^2]
