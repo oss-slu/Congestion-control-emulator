@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 epochs = args.epochs
 seconds_past = args.predictions
-ninput - args.n_input
+ninput = args.n_input
 
 scaler = MinMaxScaler()
 first_dataset_scaled = scaler.fit_transform(first_dataset_indexed)
