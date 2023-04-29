@@ -434,7 +434,8 @@ class Test(object):
             recv_manager.stdin.write(first_cmd.encode("utf-8"))
             recv_manager.stdin.flush()
             
-            tcp_file = open("tcp_trace.txt", "a")
+            tcp_file = open(os.path.join(self.data_dir, "tcp_trace.txt"), "a")
+            subprocess.run(["echo", self.cc_src], stdout= tcp_file)
             daemon = Thread(target=subprocess.run, args =(["sudo", "bpftrace" ,"ebpf/tcp.bt", port],) ,
                         kwargs = {"stdout": tcp_file}, daemon=True, name='Monitoring tcp packets')
             daemon.start()
