@@ -9,7 +9,9 @@ import random
 import signal
 import traceback
 from subprocess import PIPE
+import subprocess
 from collections import namedtuple
+from threading import Thread
 
 from matplotlib import cm
 
@@ -429,9 +431,14 @@ class Test(object):
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s sender %s %s\n' % (
                 tun_id, second_src, recv_pri_ip, port)
-
             recv_manager.stdin.write(first_cmd.encode("utf-8"))
             recv_manager.stdin.flush()
+            
+            tcp_file = open(os.path.join(self.data_dir, "tcp_trace.txt"), "a")
+            subprocess.run(["echo", self.cc_src], stdout= tcp_file)
+            daemon = Thread(target=subprocess.run, args =(["sudo", "bpftrace" ,"ebpf/tcp.bt", port],) ,
+                        kwargs = {"stdout": tcp_file}, daemon=True, name='Monitoring tcp packets')
+            daemon.start()
         elif self.run_first == 'sender':  # self.run_first == 'sender'
             if self.mode == 'remote':
                 if self.sender_side == 'local':
@@ -440,14 +447,18 @@ class Test(object):
                     first_src = self.r['cc_src']
 
             port = utils.get_open_port()
-
+  
             first_cmd = 'tunnel %s python %s sender %s\n' % (
                 tun_id, first_src, port)
             second_cmd = 'tunnel %s python %s receiver %s %s\n' % (
                 tun_id, second_src, send_pri_ip, port)
 
-            send_manager.stdin.write(first_cmd.encode("utf-8"))
+            send_manager.stdin.write(first_cmd.encode("utf-8"))  
             send_manager.stdin.flush()
+
+            tcp_file = open("tcp_trace.txt", "a")
+            daemon = Thread(target=subprocess.run(["sudo", "bpftrace" ,"ebpf/tcp.bt"]), daemon=True, name='Monitoring tcp packets', stdout = tcp_file)
+            daemon.start()
 
         # get run_first and run_second from the flow object
         else:
@@ -465,6 +476,7 @@ class Test(object):
                         second_src = flow.cc_src_remote
 
                 port = utils.get_open_port()
+                
 
                 first_cmd = 'tunnel %s python %s receiver %s\n' % (
                     tun_id, first_src, port)
@@ -533,6 +545,7 @@ class Test(object):
     # test congestion control using tunnel client and tunnel server
     def run_with_tunnel(self):
         # run pantheon tunnel server and client managers
+        
         ts_manager, tc_manager = self.run_tunnel_managers()
 
         # create alias for ts_manager and tc_manager using sender or receiver
@@ -778,7 +791,7 @@ def run_tests(args):
     utils.save_test_metadata(meta, metadata_path)
 
     if args.mode == 'local':
-        setIPv4Forwarding();
+        setIPv4Forwarding()
 
     # run tests
     for run_id in range(args.start_run_id,
@@ -814,6 +827,7 @@ def main():
     args = arg_parser.parse_test()
 
     try:
+        
         run_tests(args)
     except:  # intended to catch all exceptions
         # dump traceback ahead in case pkill kills the program
@@ -828,4 +842,6 @@ def main():
 
 
 if __name__ == '__main__':
+    
     main()
+

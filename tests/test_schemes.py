@@ -6,6 +6,7 @@ import sys
 import time
 import signal
 import argparse
+import subprocess
 
 import context
 from helpers import utils
@@ -19,19 +20,27 @@ def test_schemes(args):
         schemes = utils.parse_config()['schemes'].keys()
     elif args.schemes is not None:
         schemes = args.schemes.split()
+    
 
     for scheme in schemes:
         sys.stderr.write('Testing %s...\n' % scheme)
+        
         src = path.join(wrappers_dir, scheme + '.py')
 
         run_first = check_output([src, 'run_first']).strip()
         run_second = 'receiver' if run_first == 'sender' else 'sender'
 
         port = utils.get_open_port()
+        
+        subprocess.run(tcp_bpf_call, shell = True)
+        
 
         # run first to run
         cmd = [src, run_first, port]
+        #trace_proc = "sudo bpftrace ../../../ebpf/tcp.bt\n"
+
         first_proc = Popen(cmd, preexec_fn=os.setsid)
+        #Popen.args(trace_proc, preexec_fn=os.setsid)
 
         # wait for 'run_first' to be ready
         time.sleep(3)
@@ -39,6 +48,7 @@ def test_schemes(args):
         # run second to run
         cmd = [src, run_second, '127.0.0.1', port]
         second_proc = Popen(cmd, preexec_fn=os.setsid)
+        second_proc.stdin.write(trace_proc.encode("utf-8"))
 
         # test lasts for 3 seconds
         signal.signal(signal.SIGALRM, utils.timeout_handler)

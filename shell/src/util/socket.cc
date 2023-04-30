@@ -10,8 +10,13 @@
 
 #include <linux/tcp.h>
 #include <linux/bpf.h>
-//#include <bcc/proto.h>
 
+#define bpf_printk(fmt, ...)					\
+({								\
+	       char ____fmt[] = fmt;				\
+	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+				##__VA_ARGS__);			\
+})
 using namespace std;
 
 /* default constructor for socket of (subclassed) domain and type */
@@ -191,10 +196,18 @@ Address TCPSocket::original_dest( void ) const
 
     return Address( dstaddr, len );
 }
-/*
+
 void TCPSocket::trace_tcp_cwnd(void){
     Address::raw address;
-    struct tcp_sock * tcps = &address;//address-> as_sockaddr;
-    bpf_trace_printk("%d\n", sizeof(tcps), tcps->snd_cwnd);
+    //struct tcp_sock * tcps = address.as_sockaddr;
+
+    const std::string BPF_PROGRAM = R"(
+        #include <net/sock.h> 
+        #include <uapi/linux/tcp.h>
+
+        //TODO: TCP Congestion Control Window size
+        // Step 1: get the address of TCP Socket
+    )";
+    //bpf_trace_printk("%d\n", sizeof(tcps), tcps->snd_cwnd);
     //BPF_FUNC_trace_printk("%d\n", sizeof(tcps), tcps->snd_cwnd);
-}*/
+}

@@ -1,0 +1,65 @@
+#include <net/sock.h>
+#include <linux/tcp.h>
+
+BEGIN
+{       
+        @start = nsecs; 
+        printf("Tracing TCP accepts...\n");
+        printf("%-9s %-6s %-20s ", "NSEC", "PID", "PROC");
+        printf("%20s %20s", "RADDR:RPORT", "LADDR:LPORT");
+        printf("%-8s %-8s %-8s","SCWND", "SSTHRESH", "SNDBUF" );
+        printf("%-8s %-8s", "AMSS", "REORDER" );
+        printf("%-8s %-8s %-8s", "SACKED", "LOST", "CFLAG" );
+        printf("%-8s \n", "UP");
+       
+}
+
+kprobe:tcp_rcv_established, kprobe:tcp_v4_rcv, kprobe:tcp_v6_rcv /@start != 0/
+{
+        $sock = (struct sock *) arg0;
+        $tcps = (struct tcp_sock *) arg0; // see tcp_sk()
+        $inet_family = $sock->__sk_common.skc_family;
+
+      
+
+        if ($inet_family == AF_INET) {
+                $daddr = ntop($sock->__sk_common.skc_daddr);
+                $saddr = ntop($sock->__sk_common.skc_rcv_saddr);
+        } else {
+                $daddr = ntop(
+                        $sock->__sk_common.skc_v6_daddr.in6_u.u6_addr8);
+                $saddr = ntop(
+                        $sock->__sk_common.skc_v6_rcv_saddr.in6_u.u6_addr8);
+	}
+
+        
+
+        $daddr = ntop($sock->__sk_common.skc_daddr);
+        $dport = $sock->__sk_common.skc_dport;
+        $saddr = ntop($sock->__sk_common.skc_rcv_saddr);
+        $sport = $sock->__sk_common.skc_num;
+
+        $scwnd = $tcps->snd_cwnd;
+        $ssthresh = $tcps->snd_ssthresh;
+        $sndbuf = $sock->sk_sndbuf;
+
+
+        $advmss = $tcps->advmss; //maximum segment size
+        $reordering = $tcps->reordering; //number of reordering
+        $sacked = $tcps->sacked_out; //send ack
+        $lost_out = $tcps->lost_out; //lost_out
+        $cflag = $tcps -> urg_data; // control flag
+        $urgnet = $tcps -> snd_up; //urgent pointer
+
+
+        if((uint64)($sport) == $1){
+                printf("%-9d %-14s ", pid, comm);
+                printf("%20s:%d %20s:%d ", $daddr, $dport, $saddr,$sport);
+                printf("%-8d %-8d %-8d", $scwnd, $ssthresh, $sndbuf );
+                printf("%-8d %-8d", $advmss, $reordering );
+                printf("%-8d %-8d %-8d", $sacked, $lost_out, $cflag );
+                printf("%-8d \n", $urgnet);
+        }
+
+
+}
