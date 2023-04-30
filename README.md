@@ -89,12 +89,16 @@ docker pull a8nguyen/oss-slu-congestion:latest
 ```
 Once you download the image, you can run with. To learn more about the arguments used, refer to [Docker's documentation](https://docs.docker.com/engine/reference/run/) 
 ```
-docker run --privileged \
--it \
-a8nguyen/oss-slu-congestion:mahimahi
+sudo docker run --privileged \
+-it -v /mount/towhere/your/cloned/is:/Congestion-control-emulator\
+ -v /lib/modules:/lib/modules\
+ -v /dev:/dev \
+-v  /usr/src/kernels/:/usr/src/kernels/  \
+-v /sys:/sys \
+a8nguyen/oss-slu-congestion:latest
 ```
 Once inside the container, please change into a non-root sudo user. I have created one living inside the docker machine with `su test`
-This image contains pre-built artifacts from [emulation module](#install-emulation-module), BCC dependencies for kernel tracing, and [evaluation module](#install-emulation-module).
+This image contains pre-built artifacts from [emulation module](#install-emulation-module), BCC dependencies for kernel tracing, and [evaluation module](#install-emulation-module). However, the image needs to be connected to the host kernel space for tracing. To do so, you can mount your containers at
 
 <!--### Kernel Configuration
 If you can't configure the kernel yourself and run into problem installing eBPF on your system. Please let me know, we have an OS image (Fedora).-->
